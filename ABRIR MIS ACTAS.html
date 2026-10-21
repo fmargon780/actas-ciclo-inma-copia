@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Abrir Mis actas</title>
+<style>
+  :root { --tinta: #1b2430; --suave: #5d6b7a; --linea: #dde3ea; --azul: #3B4A9E; --ambar: #fff4d6; --ambar-linea: #e0b34a; --rojo: #fdecec; --rojo-linea: #c0392b; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; font: 15px "Segoe UI", system-ui, Arial, sans-serif; color: var(--tinta); background: linear-gradient(160deg, #3B4A9E 0%, #5262b8 100%); }
+  .caja { background: #fff; border-radius: 14px; padding: 32px; max-width: 460px; width: 100%; box-shadow: 0 4px 12px rgba(20,30,45,.15); }
+  h1 { margin: 0 0 4px; font-size: 22px; color: var(--azul); }
+  p { line-height: 1.5; }
+  .suave { color: var(--suave); }
+  .aviso { border-radius: 10px; padding: 14px 16px; margin: 16px 0; }
+  .ambar { background: var(--ambar); border: 1px solid var(--ambar-linea); }
+  .rojo { background: var(--rojo); border: 1px solid var(--rojo-linea); }
+  .boton { font: inherit; border: 1px solid var(--linea); background: #fff; padding: 10px 18px; border-radius: 8px; cursor: pointer; margin-top: 8px; }
+  .principal { background: var(--azul); color: #fff; border-color: var(--azul); }
+  .barra { background: #e3e8ee; border-radius: 6px; height: 10px; overflow: hidden; margin: 14px 0 6px; }
+  .barra div { background: var(--azul); height: 100%; width: 0; transition: width .2s; }
+  .paso { display: none; }
+  .paso.visible { display: block; }
+</style>
+</head>
+<body>
+<div class="caja">
+  <h1>Mis actas</h1>
+  <p class="suave">La copia que funciona sin internet, para cuando la red del instituto bloquea la dirección de siempre.</p>
+
+  <div id="inicial" class="paso">
+    <p>Este fichero instala la página en <strong>esta misma carpeta</strong>: la que tiene dentro «ABRIR MIS ACTAS.html». Al pulsar el botón, Chrome te pedirá elegir una carpeta: elige <strong>esta misma</strong>.</p>
+    <p id="carpetaMala" style="color: var(--rojo-linea)"></p>
+    <button type="button" class="boton principal" id="empezar">Empezar</button>
+  </div>
+  <div id="progreso" class="paso">
+    <p id="textoProgreso">Descargando…</p>
+    <div class="barra"><div id="barraHecha"></div></div>
+  </div>
+  <div id="permiso" class="paso aviso ambar">
+    <strong>Hace falta tu permiso otra vez.</strong>
+    <p>Chrome pide confirmar cada cierto tiempo el acceso a la carpeta de la página.</p>
+    <button type="button" class="boton principal" id="darPermiso">Dar permiso</button>
+  </div>
+  <div id="error" class="paso aviso rojo">
+    <strong>No se ha podido instalar.</strong>
+    <p id="textoError"></p>
+    <button type="button" class="boton" id="reintentar">Volver a intentarlo</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  /* Instalador y actualizador de la copia sin internet (fila 43). Es autónomo: la primera vez no hay nada más en el disco.
+     Guarda la carpeta de la página en la misma IndexedDB que luego lee actualizar-copia.js. Esa carpeta es DISTINTA de «ACTAS»:
+     aquí solo se guarda el programa; los datos se leen (nunca se escriben) desde index.html. */
+  var BASE = window.__COPIA_BASE_REMOTO__ || 'https://raw.githubusercontent.com/fmargon780/actas-ciclo-inma-copia/main/';
+  var BD = 'actas-ciclo-inma-copia', ALMACEN = 'ajustes', CLAVE = 'copiaCarpeta';
+  var $ = function (id) { return document.getElementById(id); };
+
+  function abrirBD() {
+    return new Promise(function (ok, mal) {
+      var p = indexedDB.open(BD, 1);
+      p.onupgradeneeded = function () { if (!p.result.objectStoreNames.contains(ALMACEN)) p.result.createObjectStore(ALMACEN); };
+      p.onsuccess = function () { ok(p.result); };
+      p.onerror = function () { mal(p.error); };
+    });
+  }
+  function bdUso(modo, fn) {
+    return abrirBD().then(function (bd) {
+      return new Promise(function (ok, mal) {
+        var t = bd.transaction(ALMACEN, modo), q = fn(t.objectStore(ALMACEN));
+        t.oncomplete = function () { ok(q && q.result); };
+        t.onerror = function () { mal(t.error); };
+      });
+    });
+  }
+  var guardar = function (v) { return bdUso('readwrite', function (s) { return s.put(v, CLAVE); }); };
+  var leer = function () { return bdUso('readonly', function (s) { return s.get(CLAVE); }); };
+
+  function mostrar(id) { ['inicial', 'progreso', 'permiso', 'error'].forEach(function (x) { $(x).classList.toggle('visible', x === id); }); }
+  function progreso(texto, hecho, total) { mostrar('progreso'); $('textoProgreso').textContent = texto; $('barraHecha').style.width = (total ? Math.round(hecho / total * 100) : 0) + '%'; }
+  function fallo(m) { mostrar('error'); $('textoError').textContent = m; }
+
+  async function escribir(raiz, ruta, bytes) {
+    var t = ruta.split('/'), d = raiz;
+    for (var i = 0; i < t.length - 1; i++) d = await d.getDirectoryHandle(t[i], { create: true });
+    var w = await (await d.getFileHandle(t[t.length - 1], { create: true })).createWritable();
+    await w.write(new Blob([bytes]));
+    await w.close();
+  }
+  async function borrar(raiz, ruta) {
+    var t = ruta.split('/'), d = raiz;
+    try { for (var i = 0; i < t.length - 1; i++) d = await d.getDirectoryHandle(t[i]); await d.removeEntry(t[t.length - 1]); } catch (e) { /* ya no está */ }
+  }
+  async function versionLocal(raiz) {
+    try { return JSON.parse(await (await (await raiz.getFileHandle('version.json')).getFile()).text()); } catch (e) { return null; }
+  }
+  async function sha(bytes) {
+    return Array.prototype.map.call(new Uint8Array(await crypto.subtle.digest('SHA-256', bytes)), function (b) { return b.toString(16).padStart(2, '0'); }).join('');
+  }
+
+  /* Solo se bajan los ficheros cuyo sha256 cambió, se comprueba cada uno, se borran los que sobran y version.json va el último. */
+  async function instalar(raiz) {
+    progreso('Buscando la versión nueva…', 0, 1);
+    var r = await fetch(BASE + 'version.json', { cache: 'no-store' });
+    if (!r.ok) throw new Error('No encuentro la copia en internet (' + r.status + '). ¿Hay conexión?');
+    var nueva = await r.json();
+    if (!Object.keys(nueva.ficheros || {}).length) throw new Error('La lista de ficheros de la copia está vacía.');
+    var local = await versionLocal(raiz);
+    var rutas = Object.keys(nueva.ficheros).filter(function (x) { return !local || !local.ficheros || local.ficheros[x] !== nueva.ficheros[x]; });
+    for (var i = 0; i < rutas.length; i++) {
+      progreso('Descargando ' + rutas[i] + '…', i, rutas.length);
+      var f = await fetch(BASE + encodeURI(rutas[i]), { cache: 'no-store' });
+      if (!f.ok) throw new Error('No he podido descargar «' + rutas[i] + '» (' + f.status + ').');
+      var bytes = new Uint8Array(await f.arrayBuffer());
+      if ((await sha(bytes)) !== nueva.ficheros[rutas[i]]) throw new Error('«' + rutas[i] + '» ha llegado dañado. Vuelve a intentarlo.');
+      await escribir(raiz, rutas[i], bytes);
+    }
+    if (local && local.ficheros) for (var v in local.ficheros) if (!(v in nueva.ficheros)) await borrar(raiz, v);
+    await escribir(raiz, 'version.json', new TextEncoder().encode(JSON.stringify(nueva)));
+    progreso('Todo listo. Abriendo Mis actas…', rutas.length, rutas.length);
+  }
+
+  async function seguir(raiz) {
+    var p = await raiz.queryPermission({ mode: 'readwrite' });
+    if (p !== 'granted') {
+      mostrar('permiso');
+      $('darPermiso').onclick = async function () {
+        var r = 'denied';
+        try { r = await raiz.requestPermission({ mode: 'readwrite' }); } catch (e) { r = 'denied'; }
+        if (r === 'granted') seguir(raiz); else fallo('Sin permiso sobre la carpeta no puedo instalar ni actualizar nada.');
+      };
+      return;
+    }
+    try { await guardar(raiz); } catch (e) { /* se volverá a pedir */ }
+    var instalada = true;
+    try { await raiz.getFileHandle('index.html'); } catch (e) { instalada = false; }
+    try { await instalar(raiz); } catch (e) { if (!instalada) { fallo(e && e.message ? e.message : String(e)); return; } }
+    location.href = 'index.html';
+  }
+
+  async function empezar() {
+    var g = null;
+    try { g = await leer(); } catch (e) { g = null; }
+    if (g) await seguir(g); else mostrar('inicial');
+  }
+
+  $('empezar').onclick = async function () {
+    if (typeof window.showDirectoryPicker !== 'function') { fallo('Este navegador no puede instalar la copia: hace falta Google Chrome o Microsoft Edge.'); return; }
+    try {
+      var d = await window.showDirectoryPicker({ mode: 'readwrite', id: 'actas-ciclo-inma-copia' });
+      var buena = true;
+      for await (var par of d.entries()) { if (par[0] !== 'index.html' && par[0].indexOf('ABRIR MIS ACTAS') !== 0) { buena = false; } else { buena = true; break; } }
+      if (!buena) { $('carpetaMala').textContent = 'Esa no parece la carpeta donde guardaste este fichero. Pulsa «Empezar» otra vez y elige la que tiene «ABRIR MIS ACTAS.html».'; return; }
+      $('carpetaMala').textContent = '';
+      await seguir(d);
+    } catch (e) { if (e && e.name === 'AbortError') return; fallo(e && e.message ? e.message : String(e)); }
+  };
+  $('reintentar').onclick = function () { empezar(); };
+  empezar();
+})();
+</script>
+</body>
+</html>
