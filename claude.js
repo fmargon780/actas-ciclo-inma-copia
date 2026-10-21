@@ -14,7 +14,7 @@
     '- Un párrafo por punto. Si las notas traen una lista (varias cosas enumeradas), puedes escribir una frase de introducción y después las viñetas, cada una en su línea y empezando por «• ».',
     '- Usa solo lo que dicen las notas: no inventes fechas, cifras, nombres ni acuerdos. Si una nota no se entiende, redáctala tal cual, sin rellenar.',
     '- Escribe las abreviaturas en su forma completa para un colegio de Primaria andaluz: «Cono» = Conocimiento del Medio, «Lengua» = Lengua Castellana, «profe» = profesorado, «3.º» = 3.º EP.',
-    '- Las iniciales del alumnado se dejan como vienen.',
+    '- El alumnado aparece como marcas entre corchetes, por ejemplo [M.S.P.] o [L.G.R.2]. Copia cada marca exactamente igual, sin cambiarla ni añadirle nada, y no las uses para nada más.',
     '- No repitas el título del punto ni pongas numeración.',
     'Ejemplos del estilo:',
     '  notas: «faltan 2 guías profe: Lengua 3.º y Lengua 4.º» -> «Se hace constar que se precisa la reposición de dos guías didácticas para el profesorado (una de Lengua Castellana de 3.º EP y otra de 4.º EP).»',
@@ -63,5 +63,25 @@
     var f = new Error('Claude ha contestado algo que no he podido leer. Vuelve a intentarlo.'); f.tipo = 'formato'; f.detalle = ultimo; throw f;
   }
 
-  g.Claude = { MODELO: MODELO, cuerpo: cuerpo, redactar: redactar, FRASE_RED: FRASE_RED, FRASE_SIN_CLAVE: FRASE_SIN_CLAVE };
+  /* Como `redactar`, pero con el alumnado: a Claude van solo iniciales y los párrafos vuelven con «Nombre Apellidos (grupo)».
+     b: el borrador; todos: todo el alumnado de Rúbricas (o null). Devuelve { parrafos: { n: texto }, avisos: { n: texto }, notasMarcadas: { n: notas } }.
+     Si a un párrafo le falta una marca o trae una que no se envió, se pide otra vez ese párrafo; si sigue mal, se queda con las iniciales y un aviso. */
+  async function redactarConAlumnado(clave, b, indices, todos, opciones) {
+    var AC = g.AlumnadoClaude, prep = g.Redaccion.prepararPeticion(b, indices, todos);
+    var res = await redactar(clave, prep.puntos, opciones), mal = [];
+    prep.puntos.forEach(function (p) { if (!AC.marcasBien(res[p.n], prep.marcas[p.n])) mal.push(p); });
+    if (mal.length) {
+      var otra = await redactar(clave, mal, opciones);
+      mal.forEach(function (p) { res[p.n] = otra[p.n]; });
+    }
+    var parrafos = {}, avisos = {};
+    prep.puntos.forEach(function (p) {
+      if (AC.marcasBien(res[p.n], prep.marcas[p.n])) parrafos[p.n] = AC.restaurar(res[p.n], prep.marcas[p.n]);
+      else { parrafos[p.n] = res[p.n]; avisos[p.n] = AC.AVISO_NOMBRES; }
+      if (prep.avisos[p.n]) avisos[p.n] = avisos[p.n] ? avisos[p.n] + '. ' + prep.avisos[p.n] : prep.avisos[p.n];
+    });
+    return { parrafos: parrafos, avisos: avisos, notasMarcadas: prep.notasMarcadas };
+  }
+
+  g.Claude = { MODELO: MODELO, cuerpo: cuerpo, redactar: redactar, redactarConAlumnado: redactarConAlumnado, FRASE_RED: FRASE_RED, FRASE_SIN_CLAVE: FRASE_SIN_CLAVE };
 })(typeof window !== 'undefined' ? window : globalThis);

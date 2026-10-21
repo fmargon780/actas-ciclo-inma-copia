@@ -17,10 +17,11 @@
     } });
     var deRubricas = h('button', { type: 'button', class: 'boton', id: 'claveDeRubricas', texto: 'Usar la de Rúbricas', onclick: async function () {
       try {
-        var otra = await g.Carpeta.elegirOtra('rubricas-origen');
+        var otra = await g.Carpeta.elegirRubricas();
         var raiz = g.Carpeta.adaptador(otra);
         var marca = await raiz.leerJSON('rubricas.json');
-        if (!marca) { g.Dom.decir(aviso, 'Esa no es tu carpeta RÚBRICAS: está en Mi unidad › RÚBRICAS.'); return; }
+        if (!marca) { g.Dom.decir(aviso, g.Rubricas.FRASE_NO_ES); return; }
+        await g.Carpeta.guardarRubricas(otra); est.alumnado = null; /* la lista de alumnado usa esta misma carpeta */
         var c = await g.Datos.leerClave(raiz);
         if (!c) { g.Dom.decir(aviso, 'En Rúbricas todavía no hay ninguna clave guardada.'); return; }
         await g.Datos.guardarClave(est.raiz, c); campo.value = c; ok('Clave copiada de Rúbricas.');

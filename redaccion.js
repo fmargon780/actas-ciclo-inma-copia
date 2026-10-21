@@ -31,12 +31,15 @@
   /* ¿Hay que preguntar antes de sustituir el párrafo de este punto? Solo si Inma lo cambió a mano. */
   function hayQuePreguntar(p) { return !!p.manual && hayParrafo(p); }
 
-  /* Lo único que sale hacia Claude: el número de punto, su título y sus notas. Nada más (ni asistentes, ni ficha). */
-  function peticion(b, indices) {
-    return indices.map(function (i) {
+  /* Lo único que sale hacia Claude: el número de punto, su título y sus notas, con el alumnado solo en iniciales («[M.S.P.]»).
+     todos: todo el alumnado de Rúbricas (para la red de seguridad) o null. Devuelve { puntos, marcas, notasMarcadas, avisos } (ver alumnado-claude.js). */
+  function prepararPeticion(b, indices, todos) {
+    var crudos = indices.map(function (i) {
       return { n: i + 1, titulo: String(b.puntos[i].titulo || '').trim(), notas: String(b.puntos[i].notas || '').trim() };
     });
+    return g.AlumnadoClaude.preparar(crudos, todos);
   }
+  function peticion(b, indices, todos) { return prepararPeticion(b, indices, todos).puntos; }
 
   function ponerParrafo(p, texto) {
     p.parrafo = String(texto || '').trim();
@@ -111,7 +114,7 @@
 
   g.Redaccion = {
     TEXTO_PENDIENTE: TEXTO_PENDIENTE, estadoPunto: estadoPunto, indicesPorRedactar: indicesPorRedactar, hayQuePreguntar: hayQuePreguntar,
-    peticion: peticion, ponerParrafo: ponerParrafo, editarParrafo: editarParrafo, quitarParrafo: quitarParrafo,
+    peticion: peticion, prepararPeticion: prepararPeticion, ponerParrafo: ponerParrafo, editarParrafo: editarParrafo, quitarParrafo: quitarParrafo,
     motivoQueImpide: motivoQueImpide, leerRespuesta: leerRespuesta, armarEnvio: armarEnvio, fechaActaAnterior: fechaActaAnterior
   };
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -39,9 +39,34 @@
 
     /* Puntos */
     var contenedor = h('div', { class: 'puntos', id: 'puntos' });
+    var alumnadoVisto = [], avisoAlumnado = h('div', { class: 'aviso', id: 'avisoAlumnado', hidden: '' });
+    /* Lo que depende de la lista de alumnado (se carga aparte): el aviso de arriba, el recordatorio y el botón «+ Alumno» de cada punto. */
+    function pintarAlumnado() {
+      var a = est.alumnado, ok = !!(a && a.estado === 'ok'), cargando = !a;
+      alumnadoVisto.forEach(function (x) {
+        x.recordatorio.textContent = ok || cargando ? 'Alumnado: escríbelo y elígelo de la lista, o usa + Alumno' : 'Sin lista de alumnado: abre la carpeta RÚBRICAS';
+        x.masAlumno.disabled = !ok;
+      });
+      avisoAlumnado.textContent = '';
+      var texto = '', boton = 'Abrir la carpeta RÚBRICAS', permiso = false;
+      if (!a) { avisoAlumnado.hidden = true; return; }
+      if (a.estado === 'sinCarpeta') texto = a.texto || 'Para elegir alumnado de la lista, abre una vez la carpeta RÚBRICAS (Mi unidad › RÚBRICAS). Solo la leo: no escribo nada en ella.';
+      else if (a.estado === 'sinPermiso') { texto = 'Chrome pide confirmar el permiso sobre la carpeta RÚBRICAS.'; boton = 'Dar permiso'; permiso = true; }
+      else if (a.estado === 'vacia') texto = 'En la carpeta RÚBRICAS no hay alumnado de este ciclo todavía.';
+      else if (a.estado === 'error') texto = a.texto;
+      avisoAlumnado.hidden = !texto;
+      if (!texto) return;
+      avisoAlumnado.appendChild(h('span', { id: 'textoAvisoAlumnado', texto: texto + ' ' }));
+      avisoAlumnado.appendChild(h('button', { type: 'button', class: 'boton chico principal', id: 'abrirRubricas', texto: boton, onclick: async function () {
+        var mal = permiso ? (await g.Rubricas.darPermiso(est), '') : await g.Rubricas.abrir(est);
+        pintarAlumnado();
+        if (mal) { avisoAlumnado.hidden = false; avisoAlumnado.appendChild(h('div', { class: 'aviso error', id: 'errorRubricas', texto: mal })); }
+      } }));
+    }
     function pintarPuntos() {
-      contenedor.textContent = '';
+      contenedor.textContent = ''; alumnadoVisto = [];
       b.puntos.forEach(function (p, i) { contenedor.appendChild(tarjetaPunto(p, i)); });
+      pintarAlumnado();
     }
     function tarjetaPunto(p, i) {
       var fijo = B.esPuntoAnterior(p.titulo);
@@ -55,18 +80,22 @@
       ]);
       var cabeza = h('div', { class: 'cabeza-punto' }, [h('span', { class: 'numero', texto: (i + 1) + '.' }), titulo, botones]);
       if (fijo) return h('div', { class: 'punto fijo', 'data-punto': String(i) }, [cabeza, h('p', { class: 'suave', texto: 'Este punto no lleva notas: su texto es fijo y se escribe solo al crear el acta.' })]);
-      var notas = h('textarea', { class: 'notas', rows: '3', 'data-notas': String(i), placeholder: 'Notas cortas de lo tratado' }); notas.value = p.notas;
-      notas.oninput = function () { p.notas = notas.value; cambio(); };
-      var pie = [h('span', { class: 'iniciales', texto: 'Alumnado: solo iniciales' })];
+      var ed = g.EditorNotas.crear(i, p.notas, function () { return est.alumnado; }, function (t) { p.notas = t; cambio(); });
+      var recordatorio = h('span', { class: 'iniciales' });
+      var masAlumno = h('button', { type: 'button', class: 'boton chico', 'data-accion': 'anadir-alumno', texto: '+ Alumno', onclick: function () { ed.abrirBuscador(); } });
+      alumnadoVisto.push({ recordatorio: recordatorio, masAlumno: masAlumno });
+      var pie = [recordatorio, h('span', { class: 'suave', texto: 'Nunca un nombre suelto sin elegirlo de la lista.' }), masAlumno];
       if (g.Dictado.disponible()) {
         var mic = h('button', { type: 'button', class: 'boton chico mic', 'data-accion': 'dictar', title: 'Dictar', texto: '🎤 Dictar' });
-        var d = g.Dictado.crear(notas, function (t) { p.notas = t; cambio(); }, function (activo) { mic.classList.toggle('grabando', activo); mic.textContent = activo ? '⏹ Parar' : '🎤 Dictar'; });
+        var d = g.Dictado.crear(ed.comoCaja, function (t) { p.notas = t; cambio(); }, function (activo) { mic.classList.toggle('grabando', activo); mic.textContent = activo ? '⏹ Parar' : '🎤 Dictar'; });
         mic.onclick = function () { d.alternar(); };
         pie.push(mic);
       }
-      return h('div', { class: 'punto', 'data-punto': String(i) }, [cabeza, notas, h('div', { class: 'pie-punto' }, pie)]);
+      var tarjeta = h('div', { class: 'punto', 'data-punto': String(i) }, [cabeza, ed.elemento, h('div', { class: 'pie-punto' }, pie)]);
+      return tarjeta;
     }
     pintarPuntos();
+    g.Rubricas.cargar(est).then(pintarAlumnado);
 
     g.Dom.montar([
       h('div', { class: 'barra-form' }, [
@@ -79,7 +108,7 @@
       ]),
       h('section', { class: 'tarjeta ancha' }, [h('h3', { texto: 'Profesorado asistente' }), asistentes]),
       h('section', { class: 'tarjeta ancha' }, [
-        h('h3', { texto: 'Puntos del orden del día' }), contenedor,
+        h('h3', { texto: 'Puntos del orden del día' }), avisoAlumnado, contenedor,
         h('button', { type: 'button', class: 'boton', id: 'anadirPunto', texto: '+ Añadir punto', onclick: function () { B.anadirPunto(b); cambio(); pintarPuntos(); var t = contenedor.querySelector('.punto:last-child .titulo-punto'); if (t) t.focus(); } })
       ])
     ]);

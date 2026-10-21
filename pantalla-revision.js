@@ -7,7 +7,7 @@
   /* volverFormulario(): al formulario; volverInicio(): a la lista; redactarAlEntrar: empezar redactando lo que falte. */
   function pintarRevision(est, b, volverFormulario, volverInicio, redactarAlEntrar) {
     var cambio = g.Autoguardado.crear(est, b).cambio;
-    var ocupado = false, preguntas = {}, confirmando = false;
+    var ocupado = false, preguntas = {}, confirmando = false, avisosNombres = {};
     var avisoClaude = g.Dom.aviso(), estadoRedaccion = h('span', { class: 'suave', id: 'estadoRedaccion' });
     var contenedor = h('div', { class: 'puntos', id: 'puntosRevision' });
     var zonaCrear = h('div', { class: 'zona-crear' });
@@ -23,8 +23,14 @@
       ocupado = true; g.Dom.decir(avisoClaude, ''); estadoRedaccion.textContent = 'Claude está redactando…'; pintar();
       try {
         var clave = await g.Datos.leerClave(est.raiz);
-        var res = await g.Claude.redactar(clave, R.peticion(b, indices), { otraVersion: !!otraVersion });
-        indices.forEach(function (i) { R.ponerParrafo(b.puntos[i], res[i + 1]); });
+        var rub = await g.Rubricas.cargar(est);
+        var res = await g.Claude.redactarConAlumnado(clave, b, indices, rub.lista ? rub.lista.todos : null, { otraVersion: !!otraVersion });
+        indices.forEach(function (i) {
+          var p = b.puntos[i], n = i + 1;
+          p.notas = String(res.notasMarcadas[n] == null ? p.notas : res.notasMarcadas[n]); /* los nombres que Inma escribió sueltos quedan marcados */
+          R.ponerParrafo(p, res.parrafos[n]);
+          if (res.avisos[n]) avisosNombres[i] = res.avisos[n]; else delete avisosNombres[i];
+        });
         cambio();
         return true;
       } catch (e) { decirError(e); return false; }
@@ -56,7 +62,7 @@
       if (fijo) return h('div', { class: 'punto fijo', 'data-punto': String(i) }, [cabeza, h('p', { class: 'suave', texto: 'Este punto lleva su texto fijo (lectura del acta anterior): se escribe solo al crear el acta.' })]);
       var area = h('textarea', { class: 'parrafo', rows: '5', 'data-parrafo': String(i), placeholder: estado === 'sinNotas' ? 'Sin notas: si no escribes nada, saldrá «' + R.TEXTO_PENDIENTE + '» en gris.' : 'El párrafo del acta' });
       area.value = p.parrafo || '';
-      area.oninput = function () { R.editarParrafo(p, area.value); cambio(); };
+      area.oninput = function () { R.editarParrafo(p, area.value); delete avisosNombres[i]; cambio(); };
       area.readOnly = ocupado;
       var acciones = h('div', { class: 'fila' });
       var puede = !ocupado && String(p.notas || '').trim() !== '';
@@ -64,9 +70,11 @@
       Array.prototype.forEach.call(acciones.querySelectorAll('button'), function (x) { x.disabled = ocupado; });
       if ((estado === 'redactado' || estado === 'cambiadas') && puede) acciones.appendChild(h('button', { type: 'button', class: 'boton chico', 'data-accion': 'otra', texto: 'Otra versión', onclick: function () { pedirPunto(i, true, false); } }));
       var nodos = [cabeza, h('div', { class: 'dos' }, [
-        h('div', { class: 'izq' }, [h('div', { class: 'suave', texto: 'Tus notas' }), h('div', { class: 'notas-vistas', 'data-vistas': String(i), texto: p.notas || '(sin notas)' })]),
+        h('div', { class: 'izq' }, [h('div', { class: 'suave', texto: 'Tus notas' }), h('div', { class: 'notas-vistas', 'data-vistas': String(i), texto: g.Alumnado.aVisible(p.notas) || '(sin notas)' })]),
         h('div', { class: 'der' }, [h('div', { class: 'suave', texto: 'Párrafo del acta' }), area])
       ]), acciones];
+      var avisoNombres = avisosNombres[i] || (g.AlumnadoClaude.quedanMarcas(p.parrafo) ? g.AlumnadoClaude.AVISO_NOMBRES : '');
+      if (avisoNombres) nodos.push(h('div', { class: 'aviso', 'data-aviso-nombres': String(i), texto: avisoNombres }));
       if (preguntas[i]) {
         var otra = preguntas[i] === 'otra';
         nodos.push(h('div', { class: 'aviso pregunta', 'data-pregunta': String(i) }, [

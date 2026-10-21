@@ -90,7 +90,7 @@
       fecha: b.fecha, inicio: b.inicio, fin: b.fin, evaluacion: b.evaluacion,
       asistentes: b.asistentes.slice(),
       puntos: b.puntos.map(function (p) {
-        var o = { titulo: String(p.titulo || ''), notas: String(p.notas || '') };
+        var o = { titulo: String(p.titulo || ''), notas: String(p.notas || ''), alumnado: g.Alumnado ? g.Alumnado.alumnosCitados(p.notas) : [] };
         if (p.parrafo) { o.parrafo = String(p.parrafo); o.notasRedactadas = String(p.notasRedactadas == null ? p.notas || '' : p.notasRedactadas); o.manual = !!p.manual; }
         return o;
       })

@@ -66,3 +66,19 @@ button.mic.grabando { background: var(--rojo); color: #fff; border-color: var(--
 .estado-envio.hecha { color: var(--verde); }
 .detalle-enviada { flex-basis: 100%; display: flex; flex-direction: column; gap: 6px; }
 @media (max-width: 800px) { .dos { grid-template-columns: minmax(0, 1fr); } }
+
+/* Alumnado en las notas (fila 15) */
+.envoltorio-notas { position: relative; }
+.notas { min-height: 70px; white-space: pre-wrap; overflow-wrap: anywhere; background: #fff; border: 1px solid var(--linea); border-radius: 6px; padding: 5px 8px; }
+.notas:empty::before { content: attr(data-placeholder); color: #888; }
+.notas:focus { outline: 2px solid var(--azul); outline-offset: 0; }
+.alumno { background: var(--azul-claro); color: var(--azul); border-radius: 10px; padding: 1px 8px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+.alumno.fuera { background: #fff4d6; color: #7a5200; }
+.aviso-fuera { font-weight: 400; font-size: 12px; margin-left: 4px; }
+.sugerencias, .menu-alumno { position: absolute; z-index: 5; left: 0; background: #fff; border: 1px solid var(--linea); border-radius: 8px; box-shadow: 0 4px 14px rgba(0, 0, 0, .15); padding: 4px; display: flex; flex-direction: column; gap: 2px; min-width: 220px; }
+.sugerencias[hidden], .menu-alumno[hidden] { display: none; }
+.sugerencia { text-align: left; border: 0; background: transparent; border-radius: 6px; padding: 5px 8px; font: inherit; cursor: pointer; }
+.sugerencia:hover, .sugerencia.marcada { background: var(--azul-claro); }
+.buscador-alumno { border: 1px solid var(--linea); border-radius: 8px; padding: 8px; background: #fff; display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+.fuera-de-lista { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.pie-punto { flex-wrap: wrap; }

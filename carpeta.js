@@ -1,7 +1,7 @@
 /* La carpeta «ACTAS» elegida en el navegador (Chrome): elegirla, recordarla entre visitas y leer/escribir JSON en ella. */
 (function (g) {
   'use strict';
-  var BD = 'actas-inma', ALMACEN = 'ajustes', CLAVE = 'carpeta';
+  var BD = 'actas-inma', ALMACEN = 'ajustes', CLAVE = 'carpeta', CLAVE_RUBRICAS = 'carpetaRubricas';
 
   function abrirBD() {
     return new Promise(function (ok, mal) {
@@ -100,5 +100,18 @@
   async function pedirPermiso(h) { try { return (await h.requestPermission({ mode: 'readwrite' })) === 'granted'; } catch (e) { return false; } }
   async function olvidar() { try { await usarBD('readwrite', function (s) { return s.delete(CLAVE); }); } catch (e) { /* nada */ } }
 
-  g.Carpeta = { elegir: elegir, elegirOtra: elegirOtra, recordada: recordada, permiso: permiso, pedirPermiso: pedirPermiso, olvidar: olvidar, adaptador: adaptador };
+  /* La carpeta RÚBRICAS (solo se lee): se elige una vez, se recuerda aparte de ACTAS y no se vuelve a pedir. */
+  async function elegirRubricas() {
+    if (typeof g.showDirectoryPicker !== 'function') throw new Error('Este navegador no puede abrir carpetas. Hace falta Google Chrome en el ordenador.');
+    return g.showDirectoryPicker({ mode: 'read', id: 'rubricas-origen' });
+  }
+  async function guardarRubricas(h) { try { await usarBD('readwrite', function (s) { return s.put(h, CLAVE_RUBRICAS); }); } catch (e) { /* sin memoria: se pedirá cada vez */ } }
+  async function rubricasRecordada() {
+    try { return (await usarBD('readonly', function (s) { return s.get(CLAVE_RUBRICAS); })) || null; } catch (e) { return null; }
+  }
+  async function permisoLectura(h) { try { return await h.queryPermission({ mode: 'read' }); } catch (e) { return 'prompt'; } }
+  async function pedirPermisoLectura(h) { try { return (await h.requestPermission({ mode: 'read' })) === 'granted'; } catch (e) { return false; } }
+
+  g.Carpeta = { elegirRubricas: elegirRubricas, guardarRubricas: guardarRubricas, rubricasRecordada: rubricasRecordada, permisoLectura: permisoLectura, pedirPermisoLectura: pedirPermisoLectura,
+    elegir: elegir, elegirOtra: elegirOtra, recordada: recordada, permiso: permiso, pedirPermiso: pedirPermiso, olvidar: olvidar, adaptador: adaptador };
 })(window);
