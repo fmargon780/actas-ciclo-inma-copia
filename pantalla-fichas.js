@@ -60,6 +60,8 @@
       var mal = permiso ? (await g.Rubricas.darPermiso(est), '') : await g.Rubricas.abrir(est);
       if (mal) caja.appendChild(h('div', { class: 'aviso error', id: 'errorRubricas', texto: mal })); else repintar();
     } }));
+    var info = g.Ayuda.aviso('carpeta-rubricas');
+    if (info) caja.appendChild(info);
     return caja;
   }
 

@@ -156,3 +156,34 @@ button.enlace:hover { text-decoration: underline; }
 .tabla-docentes { display: flex; flex-direction: column; gap: 4px; width: 100%; }
 .docente { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto auto auto; gap: 6px; align-items: center; }
 .docente input { width: 100%; }
+
+/* Ayuda (fila 44): botón «?», avisos «i», guía de primeros pasos y página de ayuda */
+.boton-ayuda { font: inherit; font-weight: 700; width: 28px; height: 28px; border-radius: 50%; border: 1px solid rgba(255,255,255,.7); background: transparent; color: #fff; cursor: pointer; padding: 0; }
+.boton-ayuda:hover { background: #fff; color: var(--azul); }
+.info-caja { position: relative; display: inline-block; margin-left: 4px; font-weight: 400; font-size: 13px; vertical-align: middle; }
+button.info { font: 700 12px/1 "Figtree", system-ui, sans-serif; width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--azul); background: var(--azul-claro); color: var(--azul); cursor: pointer; padding: 0; }
+.burbuja { display: none; position: absolute; left: 0; top: 24px; z-index: 40; width: 300px; max-width: 80vw; background: #fff; color: var(--tinta); border: 1px solid var(--azul); border-radius: 8px; padding: 8px 10px; box-shadow: 0 3px 10px rgba(20,30,45,.2); text-align: left; white-space: normal; }
+.info-caja:hover .burbuja, .info-caja.abierta .burbuja { display: block; }
+.guia-fondo { position: fixed; inset: 0; z-index: 100; background: rgba(20,30,45,.5); display: flex; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 24px 12px; }
+.guia-caja { background: #fff; border-radius: 10px; padding: 18px 20px; width: 100%; max-width: 720px; display: flex; flex-direction: column; gap: 10px; }
+.guia-caja h2 { margin: 0; }
+.guia-pasos { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.guia-paso { display: flex; gap: 12px; align-items: flex-start; border: 1px solid var(--linea); border-radius: 8px; padding: 10px 12px; background: var(--fondo); }
+.guia-paso.hecho { background: #e4f3ea; border-color: var(--verde); }
+.guia-marca { flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--azul); color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.guia-paso.hecho .guia-marca { background: var(--verde); }
+.guia-cuerpo { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
+.guia-cuerpo p { margin: 0; }
+.guia-pie { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.guia-pie p { margin: 0; }
+a.boton { text-decoration: none; display: inline-block; }
+.ayuda-pagina { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 16px; align-items: start; }
+.ayuda-indice { display: flex; flex-direction: column; gap: 4px; background: #fff; border: 1px solid var(--linea); border-radius: 8px; padding: 8px; position: sticky; top: 8px; }
+.ayuda-enlace { font: inherit; text-align: left; border: 0; background: transparent; color: var(--tinta); padding: 6px 8px; border-radius: 6px; cursor: pointer; }
+.ayuda-enlace.activo { background: var(--azul-claro); color: var(--azul); font-weight: 700; }
+.ayuda-texto { background: #fff; border: 1px solid var(--linea); border-radius: 8px; padding: 14px 18px; }
+.ayuda-texto h2 { margin: 0 0 8px; font-size: 20px; }
+.ayuda-texto h3 { margin: 14px 0 2px; font-size: 16px; }
+.ayuda-texto p { margin: 6px 0; }
+@media (max-width: 800px) { .ayuda-pagina { grid-template-columns: 1fr; } .ayuda-indice { position: static; } }
+@media print { .boton-ayuda, .info-caja { display: none; } }

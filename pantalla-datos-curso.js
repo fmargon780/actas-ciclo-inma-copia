@@ -56,7 +56,7 @@
       h('p', { class: 'suave', texto: 'Se guardan en tu carpeta ACTAS. Las actas nuevas traen como asistentes al profesorado de esta tabla, en este orden, y el documento de Google Docs los recoge solo.' }),
       h('div', { class: 'cuatro' }, [curso.caja, ciclo.caja, localidad.caja]),
       h('div', { class: 'cuatro' }, [cCargo.caja, cNombre.caja]),
-      h('h3', { texto: 'Profesorado' }), lista, tabla,
+      h('h3', { texto: 'Profesorado ' }, [g.Ayuda.aviso('tabla-profesorado')]), lista, tabla,
       h('div', { class: 'fila' }, [anadir, guardar]), hecho, aviso
     ]);
   }

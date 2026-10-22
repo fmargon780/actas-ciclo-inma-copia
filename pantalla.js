@@ -5,7 +5,7 @@
 
   function pedirCarpeta(texto, alPulsar, etiqueta) {
     g.Dom.montar([h('div', { class: 'vacio' }, [
-      h('h2', { texto: 'Mi carpeta de actas' }),
+      h('h2', { texto: 'Mi carpeta de actas ' }, [g.Ayuda.aviso('carpeta-actas')]),
       h('p', { id: 'textoCarpeta', texto: texto }),
       h('button', { type: 'button', class: 'boton principal', id: 'botonCarpeta', texto: etiqueta || 'Elegir mi carpeta ACTAS', onclick: alPulsar })
     ])]);

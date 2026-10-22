@@ -126,6 +126,7 @@
       }
       zonaCrear.appendChild(h('button', { type: 'button', class: 'boton principal grande', id: 'crearActa', texto: 'Crear acta', onclick: function () { if (R.tieneActaAnterior(b)) confirmando = true; else faltaAnterior = true; pintar(); } }));
       zonaCrear.lastChild.disabled = !!motivo || ocupado;
+      var infoCrear = g.Ayuda.aviso('crear-acta'); if (infoCrear) zonaCrear.appendChild(infoCrear);
       if (motivo) zonaCrear.appendChild(h('p', { class: 'suave', id: 'motivoCrear', texto: motivo }));
     }
 
@@ -140,7 +141,8 @@
       h('div', { class: 'barra-form' }, [
         h('button', { type: 'button', class: 'boton', id: 'volverFormulario', texto: '← Cambiar las notas', onclick: async function () { await est.alSalir(); volverFormulario(); } }),
         h('h2', { class: 'subtitulo', texto: 'Revisar el acta' }), estadoRedaccion,
-        h('button', { type: 'button', class: 'boton principal derecha', id: 'redactarTodo', texto: 'Redactar con Claude', onclick: redactarTodo })
+        h('span', { class: 'derecha' }, [g.Ayuda.aviso('redactar-claude')]),
+        h('button', { type: 'button', class: 'boton principal', id: 'redactarTodo', texto: 'Redactar con Claude', onclick: redactarTodo })
       ]),
       avisoClaude, contenedor, zonaCrear
     ]);

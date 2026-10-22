@@ -59,11 +59,13 @@
       avisoAlumnado.hidden = !texto;
       if (!texto) return;
       avisoAlumnado.appendChild(h('span', { id: 'textoAvisoAlumnado', texto: texto + ' ' }));
+      var infoRub = g.Ayuda.aviso('carpeta-rubricas');
       avisoAlumnado.appendChild(h('button', { type: 'button', class: 'boton chico principal', id: 'abrirRubricas', texto: boton, onclick: async function () {
         var mal = permiso ? (await g.Rubricas.darPermiso(est), '') : await g.Rubricas.abrir(est);
         pintarAlumnado();
         if (mal) { avisoAlumnado.hidden = false; avisoAlumnado.appendChild(h('div', { class: 'aviso error', id: 'errorRubricas', texto: mal })); }
       } }));
+      if (infoRub) avisoAlumnado.appendChild(infoRub);
     }
     function pintarPuntos() {
       contenedor.textContent = ''; alumnadoVisto = [];
@@ -97,7 +99,7 @@
       alumnadoVisto.push({ recordatorio: recordatorio, masAlumno: masAlumno });
       var pie = [recordatorio];
       if (!compacto) pie.push(h('span', { class: 'suave', texto: 'Nunca un nombre suelto sin elegirlo de la lista.' }));
-      pie.push(masAlumno);
+      pie.push(masAlumno, g.Ayuda.aviso('alumnado-iniciales'));
       if (g.Dictado.disponible()) {
         var mic = h('button', { type: 'button', class: 'boton chico mic', 'data-accion': 'dictar', title: 'Dictar', texto: '🎤 Dictar' });
         var d = g.Dictado.crear(ed.comoCaja, guardar, function (activo) { mic.classList.toggle('grabando', activo); mic.textContent = activo ? '⏹ Parar' : '🎤 Dictar'; });
@@ -113,7 +115,8 @@
       h('div', { class: 'barra-form' }, [
         h('button', { type: 'button', class: 'boton', id: 'volverInicio', texto: '← Volver al inicio', onclick: async function () { await est.alSalir(); volver(); } }),
         h('h2', { class: 'subtitulo', texto: 'Acta del equipo de ciclo' }),
-        h('button', { type: 'button', class: 'boton principal derecha', id: 'redactarConClaude', texto: b.puntos.some(function (p) { return p.parrafo; }) ? 'Ir a la revisión' : 'Redactar con Claude', onclick: async function () { await est.alSalir(); redactar(); } })
+        h('span', { class: 'derecha' }, [g.Ayuda.aviso('redactar-claude')]),
+        h('button', { type: 'button', class: 'boton principal', id: 'redactarConClaude', texto: b.puntos.some(function (p) { return p.parrafo; }) ? 'Ir a la revisión' : 'Redactar con Claude', onclick: async function () { await est.alSalir(); redactar(); } })
       ]),
       h('section', { class: 'tarjeta ancha' }, [
         h('div', { class: 'cuatro' }, [campo('Fecha de la reunión', fecha), campo('Hora de inicio', inicio), campo('Hora de fin', fin), campo('Evaluación', evalu)])

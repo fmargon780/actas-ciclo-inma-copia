@@ -30,9 +30,9 @@
     var tutoria = await g.PantallaTutoria.tarjeta(est, function () { refrescar(); });
     var datosCurso = await g.PantallaDatosCurso.tarjeta(est);
     g.Dom.montar([datosCurso, h('section', { class: 'tarjeta ancha' }, [
-      h('h2', { texto: 'Clave de Claude' }),
+      h('h2', { texto: 'Clave de Claude ' }, [g.Ayuda.aviso('clave-claude')]),
       h('p', { class: 'suave', texto: 'Se guarda en tu carpeta ACTAS. La usará Claude para redactar las actas.' }),
-      campo, h('div', { class: 'fila' }, [guardar, deRubricas]), dicho, aviso
+      campo, h('div', { class: 'fila' }, [guardar, deRubricas, g.Ayuda.aviso('clave-rubricas')]), dicho, aviso
     ]), tutoria]);
   }
   g.PantallaAjustes = { pintarAjustes: pintarAjustes };

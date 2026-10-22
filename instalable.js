@@ -9,7 +9,7 @@
   /* Enlace de vuelta al panel. En la copia sin internet (file:) no se pone: sin red no llevaría a ningún sitio. */
   if (location.protocol !== 'file:') {
     var volver = document.createElement('a');
-    volver.id = 'volverApps'; volver.className = 'volver-apps'; volver.href = '/apps/'; volver.textContent = '← Apps de Inma';
+    volver.id = 'volverApps'; volver.className = 'volver-apps'; volver.href = '/apps/'; volver.textContent = '← Mis apps';
     document.body.insertBefore(volver, document.body.firstChild);
   }
   if (!('serviceWorker' in navigator) || location.protocol !== 'https:') return;

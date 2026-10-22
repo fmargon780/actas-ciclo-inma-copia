@@ -10,6 +10,18 @@
     return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
   }
 
+  var app = { est: null };
+  function ctxAyuda() { return { est: app.est, elegirCarpeta: elegirYAbrir }; }
+  /* El botón «?»: abre la página de ayuda en la sección de la pantalla donde estabas (antes se guarda lo que estuvieras escribiendo). */
+  async function abrirAyuda() {
+    var est = app.est;
+    if (!est) { window.PantallaAyuda.pintarAyuda({ seccion: 'carpeta', alVolver: empezar, alGuia: function () { window.PantallaAyuda.abrirGuia(ctxAyuda()); } }); return; }
+    await est.salir();
+    if (est.paso !== 'ayuda') { est.pasoAnterior = est.paso; est.seccionAyuda = est.paso; est.paso = 'ayuda'; }
+    est.refrescar();
+  }
+  $('botonAyuda').onclick = abrirAyuda;
+
   async function abrir(handle) {
     var raiz = window.Carpeta.adaptador(handle);
     raiz.alApartar = function (lista) { window.Dom.decir($('avisoApartados'), window.Carpeta.avisoApartados(lista)); };
@@ -19,6 +31,7 @@
     var est = { raiz: raiz, ficha: await window.Datos.leerFicha(raiz), paso: 'inicio', borrador: null, estadoGuardado: $('estadoGuardado'), alSalir: null };
     var refrescar;
     var salir = async function () { if (est.alSalir) { var f = est.alSalir; est.alSalir = null; await f(); } };
+    est.salir = salir; app.est = est;
     est.abrirBorrador = function (b) { est.borrador = b; est.paso = 'formulario'; refrescar(); };
     est.abrirFichas = function () { est.paso = 'fichas'; est.borrador = null; refrescar(); };
     est.abrirEntrevista = function (id) { est.paso = 'entrevista'; est.entrevistaId = id || null; est.entrevistaActual = null; est.borrador = null; refrescar(); };
@@ -38,9 +51,13 @@
       $('pasoInicio').classList.toggle('activo', est.paso === 'inicio' || est.paso === 'formulario' || est.paso === 'revision' || est.paso === 'fichas' || est.paso === 'habitual' || est.paso === 'convocatoria' || est.paso === 'entrevista' || est.paso === 'tutoria' || est.paso === 'reunion');
       $('pasoAjustes').classList.toggle('activo', est.paso === 'ajustes');
       est.ficha = await window.Datos.leerFicha(raiz);
-      if (est.paso !== 'entrevista') { est.entrevistaId = null; est.entrevistaActual = null; }
-      if (est.paso !== 'reunion') { est.reunionId = null; est.reunionActual = null; }
+      if (est.paso !== 'entrevista' && est.paso !== 'ayuda') { est.entrevistaId = null; est.entrevistaActual = null; }
+      if (est.paso !== 'reunion' && est.paso !== 'ayuda') { est.reunionId = null; est.reunionActual = null; }
       var alInicio = function () { est.paso = 'inicio'; est.borrador = null; refrescar(); };
+      if (est.paso === 'ayuda') {
+        await window.PantallaAyuda.pintarAyuda({ seccion: est.seccionAyuda, alVolver: function () { est.paso = est.pasoAnterior || 'inicio'; refrescar(); }, alGuia: function () { window.PantallaAyuda.abrirGuia(ctxAyuda()); } });
+        return;
+      }
       if (est.paso === 'formulario') { window.PantallaFormulario.pintarFormulario(est, est.borrador, alInicio, function () { est.paso = 'revision'; est.redactarAlEntrar = !est.borrador.puntos.some(function (p) { return p.parrafo; }); refrescar(); }); return; }
       if (est.paso === 'revision') {
         var redactar = est.redactarAlEntrar; est.redactarAlEntrar = false;
@@ -60,6 +77,7 @@
     $('pasoAjustes').onclick = async function () { await salir(); est.paso = 'ajustes'; est.borrador = null; refrescar(); };
     window.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden' && est.alSalir) est.alSalir(); });
     await refrescar();
+    await window.PantallaAyuda.guiaSiToca(ctxAyuda());
   }
 
   async function elegirYAbrir() {
@@ -70,7 +88,7 @@
   async function empezar() {
     var h = await window.Carpeta.recordada();
     var texto = 'Elige la carpeta ACTAS de tu Drive (está en Mi unidad › ACTAS; la crea el documento de actas la primera vez que usas su menú «Actas»). Aquí guardaré tus borradores.';
-    if (!h) { window.Pantalla.pedirCarpeta(texto, elegirYAbrir); return; }
+    if (!h) { window.Pantalla.pedirCarpeta(texto, elegirYAbrir); await window.PantallaAyuda.guiaSiToca(ctxAyuda()); return; }
     if ((await window.Carpeta.permiso(h)) === 'granted') {
       try { await abrir(h); } catch (e) { window.Pantalla.pedirCarpeta(window.Carpeta.explicarError(e), elegirYAbrir); }
       return;
@@ -80,5 +98,5 @@
       else window.Pantalla.pedirCarpeta('Sin permiso no puedo abrir la carpeta. Elígela otra vez.', elegirYAbrir);
     }, 'Dar permiso');
   }
-  empezar();
+  window.Ayuda.cargar().then(empezar, empezar);
 })();
