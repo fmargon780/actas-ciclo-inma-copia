@@ -1,4 +1,4 @@
-/* Tutoría y entrevistas con la familia (fila 40): lo que se guarda en la carpeta ACTAS y cómo se lee.
+/* Tutoría y entrevistas con la familia (filas 40 y 41): lo que se guarda en la carpeta ACTAS y cómo se lee.
    Sin pantalla: la carpeta entra por parámetro (adaptador de carpeta.js) y se prueba con node --test.
    - ACTAS/tutoria.json: { formato, grupo, tutora }. El grupo de tutoría de Inma y su nombre como tutora (lo usan también las filas 41 y 42).
    - ACTAS/entrevistas/<id>.json: una entrevista { formato, id, estado: 'borrador' | 'terminada', fecha, alumno: { nombre, grupo, enLista, genero },
@@ -81,9 +81,43 @@
     return res;
   }
 
+  /* --- Mi tutoría (fila 41): el grupo de un vistazo --- */
+  function delCurso(entrevistas, curso) {
+    var F = g.Fichas, anio = F.anioCurso(curso);
+    return (entrevistas || []).filter(function (e) { return anio == null || F.cursoDeFecha(e.fecha) === anio; });
+  }
+  /* Cada alumno del grupo, por orden de apellidos: { alumno, ultima (la entrevista terminada más reciente o null), enCurso (hay otra sin terminar), pendientes: [...] }.
+     Solo cuentan las entrevistas del curso. Una sin terminar no cuenta ni como última ni por sus compromisos. */
+  function resumenGrupo(alumnos, entrevistas, curso) {
+    var delC = delCurso(entrevistas, curso);
+    return (alumnos || []).slice().sort(function (a, b) {
+      var x = A.normalizar(a.apellidos + ' ' + a.pila), y = A.normalizar(b.apellidos + ' ' + b.pila);
+      return x < y ? -1 : x > y ? 1 : 0;
+    }).map(function (a) {
+      return { alumno: a, ultima: terminadas(deAlumno(delC, a))[0] || null, enCurso: !!sinTerminar(delC, a), pendientes: pendientes(delC, a) };
+    });
+  }
+  /* Los compromisos de las entrevistas terminadas del alumno, marcados o no: [{ entrevistaId, fecha, indice, quien, texto, hecho }], de la más antigua a la más reciente. */
+  function compromisosDe(entrevistas, alumno) {
+    var res = [];
+    terminadas(deAlumno(entrevistas, alumno)).slice().reverse().forEach(function (e) {
+      (e.compromisos || []).forEach(function (c, i) { res.push({ entrevistaId: e.id, fecha: e.fecha, indice: i, quien: c.quien, texto: c.texto, hecho: !!c.hecho }); });
+    });
+    return res;
+  }
+  /* Marca o desmarca un compromiso en su entrevista (la misma casilla que en la entrevista nueva). false si ya no existe. */
+  async function marcarCompromiso(raiz, entrevistaId, indice, hecho, ahora) {
+    var e = await leerEntrevista(raiz, entrevistaId);
+    if (!e || !e.compromisos || !e.compromisos[indice]) return false;
+    e.compromisos[indice].hecho = !!hecho;
+    await guardarEntrevista(raiz, e, ahora);
+    return true;
+  }
+
   g.Tutoria = {
     nueva: nueva, leerTutoria: leerTutoria, guardarTutoria: guardarTutoria, proponerTutora: proponerTutora, alumnadoDelGrupo: alumnadoDelGrupo,
     leerEntrevista: leerEntrevista, guardarEntrevista: guardarEntrevista, borrarEntrevista: borrarEntrevista, listarEntrevistas: listarEntrevistas,
-    mismoAlumno: mismoAlumno, deAlumno: deAlumno, terminadas: terminadas, sinTerminar: sinTerminar, pendientes: pendientes
+    mismoAlumno: mismoAlumno, deAlumno: deAlumno, terminadas: terminadas, sinTerminar: sinTerminar, pendientes: pendientes,
+    delCurso: delCurso, resumenGrupo: resumenGrupo, compromisosDe: compromisosDe, marcarCompromiso: marcarCompromiso
   };
 })(typeof window !== 'undefined' ? window : globalThis);

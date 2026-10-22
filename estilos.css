@@ -130,3 +130,26 @@ a.enlace-boton { display: inline-block; text-decoration: none; border: 1px solid
 .entrevista-ficha h3 { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .solo-imprimir { display: none; }
 @media print { .solo-imprimir { display: inline; } }
+
+/* Mi tutoría (fila 41): líneas compactas, en dos columnas cuando hay ancho */
+.resumen-tutoria { margin: 0 0 6px; font-weight: 600; }
+.grupo-tutoria { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 12px; align-items: start; }
+.alumno-tutoria { background: #fff; border: 1px solid var(--linea); border-radius: 6px; padding: 2px 8px; }
+.alumno-tutoria.sin-entrevista { background: #fff4d6; border-color: #e0a800; border-left-width: 5px; }
+.linea-alumno { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 26px; }
+.datos-alumno { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+button.enlace { font: inherit; background: none; border: 0; padding: 0; color: var(--azul); cursor: pointer; text-align: left; }
+button.enlace:hover { text-decoration: underline; }
+.sin-entrevista-texto { font-weight: 600; color: #8a5a00; }
+.pendientes.hay { font-weight: 600; }
+.detalle-tutoria { padding: 4px 0 8px; display: flex; flex-direction: column; gap: 4px; }
+@media (max-width: 900px) { .grupo-tutoria { grid-template-columns: 1fr; } }
+.punto-reunion h3 { font-size: 15px; }
+.texto-fijo { background: #f6f7fb; }
+.delegados { display: flex; flex-direction: column; gap: 6px; }
+.delegado .campo > .fila { flex-wrap: nowrap; align-items: center; }
+.delegado select { flex: 0 0 90px; width: 90px; }
+.delegado input[type=text] { flex: 1 1 260px; width: auto; }
+.asistencia { list-style: none; margin: 4px 0; padding: 0; columns: 2 320px; column-gap: 24px; }
+.asistencia li { display: flex; justify-content: space-between; gap: 8px; padding: 2px 0; break-inside: avoid; border-bottom: 1px solid var(--linea); }
+.redactado { display: flex; flex-direction: column; gap: 4px; }

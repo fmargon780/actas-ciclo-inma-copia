@@ -33,7 +33,7 @@
       var nombres = await raiz.listarJSON(carpetas[c]);
       for (var i = 0; i < nombres.length; i++) {
         var e = await leerBueno(raiz, carpetas[c] + '/' + nombres[i]);
-        if (e && e.id && e.fecha && Array.isArray(e.puntos)) todas.push(e);
+        if (e && e.id && e.fecha && Array.isArray(e.puntos) && e.tipo !== 'reunion-familias') todas.push(e); /* la reunión general es de todo el grupo: no entra en las fichas */
       }
     }
     var porFecha = {};

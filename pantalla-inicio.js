@@ -40,7 +40,7 @@
     botones.appendChild(h('button', { type: 'button', class: 'boton', 'data-accion': 'ver-enviada', texto: 'Ver lo que se envió', onclick: function () { detalle.hidden = !detalle.hidden; } }));
     return h('li', { class: 'borrador enviada ' + item.estado, 'data-id': e.id, 'data-estado': item.estado }, [
       h('div', { class: 'datos' }, [
-        h('strong', { texto: 'Reunión del ' + fecha }),
+        h('strong', { texto: (e.tipo === 'reunion-familias' ? 'Reunión con familias del ' : 'Reunión del ') + fecha }),
         h('span', { class: 'primero', texto: primero }),
         h('span', { class: 'estado-envio ' + item.estado, texto: g.Envios.etiqueta(item) })
       ]), botones, detalle
@@ -55,6 +55,8 @@
     nodos.push(h('button', { type: 'button', class: 'boton grande', id: 'loHabitual', texto: 'Lo habitual', onclick: function () { est.abrirHabitual(); } }));
     nodos.push(h('button', { type: 'button', class: 'boton grande', id: 'fichasAlumnado', texto: 'Fichas del alumnado', onclick: function () { est.abrirFichas(); } }));
     nodos.push(h('button', { type: 'button', class: 'boton grande', id: 'entrevistaFamilia', texto: 'Entrevista con familia', onclick: function () { est.abrirEntrevista(); } }));
+    nodos.push(h('button', { type: 'button', class: 'boton grande', id: 'miTutoria', texto: 'Mi tutoría', onclick: function () { est.abrirMiTutoria(); } }));
+    nodos.push(h('button', { type: 'button', class: 'boton grande', id: 'reunionFamilias', texto: 'Reunión general con familias', onclick: function () { est.abrirReunion(); } }));
     nodos.push(h('h2', { class: 'subtitulo', texto: 'Borradores' }));
     if (!lista.length) nodos.push(h('p', { class: 'suave', id: 'sinBorradores', texto: 'No tienes borradores. Lo que escribas en una acta nueva se guarda solo aquí.' }));
     else nodos.push(h('ul', { class: 'borradores', id: 'listaBorradores' }, lista.map(function (b) { return fila(est, b, refrescar); })));
