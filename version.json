@@ -1,6 +1,6 @@
 {
-  "version": "actas v13",
-  "commit": "6364801",
+  "version": "actas v14",
+  "commit": "df1b09b",
   "ficheros": {
     "ABRIR MIS ACTAS.html": "92e4cdf0e6d55ebc4c57453d77e71b8db251f8f7e248ab3fbc78ec81a39f0eb6",
     "actas-antiguas.js": "6452ffb632507e43541b262fd38b893b0d61f6aaf453a914c40f2a3fc5946626",
@@ -14,7 +14,7 @@
     "buscador-alumno.js": "e60a8f6d2378105c3d3e4fe7cd2e3e470a64b6cf7cff7e13f38a2d56607c4d47",
     "carpeta.js": "8b771599232ad95158bca23277cf3a3fc891c8f6c5c7704f74a5875a81c6d8e2",
     "claude.js": "8581f119df4a9745889a2bacba10b6a8e2326a284871c809f2b2648d0e115e36",
-    "commit.js": "5339b42b12a461f00ffde5685e2e5f169f02e1a4c201e6e6fec101fb0568d0bd",
+    "commit.js": "122972d135c471c8e6df1e8bbbc9ea70c619ccf490d3ce8df6309d8eea7ef6e9",
     "convocatoria.js": "6e16a853abb35e37879cd282cfb0516380614672beeeab7413a2b53815b81202",
     "datos.js": "7f5fe37f8faeb6f8a052646f3e4c99a55221fb4aece303cbc03f9e72f4efac64",
     "dictado.js": "8eb138804969f3c5d0095cabee9ca0df6eaa0a85e4943790712b143b804eb86e",
@@ -24,8 +24,9 @@
     "entrevista-claude.js": "2df759a052e3227a86ab227d13ef2d04756da49fd9417f9dfb9ff3900c3d1da5",
     "entrevista.js": "aa0373029e1d655b92c3b8e662c058ad4c22e751f1737ab7a4a6f9829e9af785",
     "envios.js": "869d0c6e3296d0bfedfddb7e45b940bf28ab8a2e13e571a7c7bea91a70f69838",
-    "estilos.css": "d3c2c250a1e126328266d317e154d0077102d696aff2761ea8c47a532be0c816",
+    "estilos.css": "df422ced0acd8e77dee8db8103c9dc2319eea30e105671630849899a4df0415e",
     "fechas.js": "0208f3a7ad24d66f62a72b001812c28759a6bd8277c9bc1ba0cb3f3b66f48173",
+    "ficha-curso.js": "00b9da20ee28819db9547b89ee27c8daa7f5cbc0c9cf77ac9cbb2cbe8e508b86",
     "fichas.js": "3303961ad1d91f896271d2830a1ee03d49b4cb3fedb3bf8206366ecc8705143b",
     "figtree-LICENSE.txt": "ee23e6c84000126692e112ff067b456470493349f993ceaa8b4d3766dd6fad5d",
     "figtree.woff2": "4ba7d3d096695818fe0686be4f1e82c6b05134e18a22260336130335027462dd",
@@ -34,11 +35,12 @@
     "huecos.js": "9083d7c2a5a70b7a27cf67a75bdc2ca135a1ef4b0803883939cff837851038ce",
     "icon-192.png": "e9f9ac775cbcddb9abd857d066e8c50a0afff892ed0c5185fa6f790a5fe244bd",
     "icon-512.png": "e64f89e97a5d40be574afa05805e10b6f87d1773a3cd57244c3d87650014d3a1",
-    "index.html": "549b244e7f36c62ee82cebe9946130e60ee6fa7262dc2f7a9dfb33480187b645",
+    "index.html": "0d27e4e52a06d9dcadc042949a7987efc393f2f230fb408df219e2463eec61b7",
     "instalable.js": "c88c7474e4ec7dd5e55012c14695d292997d538d2299875970e2061c058c4d4b",
     "manifest.webmanifest": "dc2c92cc64ef15b69b636deaa4b320026ab1e7bbeff95ec9307aa9e163ea7af5",
-    "pantalla-ajustes.js": "307c094a767f11e732d3ae9525035405ead8dec43fac205756da3abec9c8a554",
+    "pantalla-ajustes.js": "4e5984b954d1b47b5eefb624de33cbd9e6acad7856b20d58d49e4651ea9720ef",
     "pantalla-convocatoria.js": "81e1cfac9068c0bf4b9d43df54980b3d6810f047eb45f19eda2302c6ab42a7ca",
+    "pantalla-datos-curso.js": "ae9c25b2f0d99fadf2a87db367e48bbfd250fd29ce4251123923600db2fe7404",
     "pantalla-entrevista.js": "2e34d96862ef60124ab38a90a9c8e1c347fecdcaa17629d6b39e043c46955c60",
     "pantalla-fichas.js": "f988766b542bf81ad7bcc6a66c14c93691971923275e8537ab6922fc62fdf22e",
     "pantalla-formulario.js": "d1d91d65cd884ceba542b8de2cdb6520360620ca8776688ba27a054bf5120950",
@@ -55,6 +57,6 @@
     "reunion.js": "4625491402f67387dc50cbe8f0129aeea19316fca2d96f9304fb590eac17faec",
     "rubricas.js": "fd2a316b445dd82c09f4cdc9e11ce00c94353aca72f7d0e26169cb970d6a92f3",
     "tutoria.js": "bdb20e920dfa584e855d31ec8d3dc4bdc6851956aa152377d278afcd423fbab3",
-    "version.js": "41351f2a5d0ba828106892025c65917e29f6dde3771570a49a0544620e4962bc"
+    "version.js": "d8b0a64f99526f985cd64d6d1d6832d08f30541a74e6a25b46acfcbcc0889d4b"
   }
 }

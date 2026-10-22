@@ -1,4 +1,4 @@
-/* Ajustes: la clave de Claude (clave.json), o copiarla de la carpeta RÚBRICAS. */
+/* Ajustes: los datos del curso (ficha.json), la clave de Claude (clave.json, o copiarla de la carpeta RÚBRICAS) y Mi tutoría. */
 (function (g) {
   'use strict';
   var h = g.Dom.h;
@@ -28,7 +28,8 @@
       } catch (e) { if (e && e.name === 'AbortError') return; g.Dom.decir(aviso, e.message || String(e)); }
     } });
     var tutoria = await g.PantallaTutoria.tarjeta(est, function () { refrescar(); });
-    g.Dom.montar([h('section', { class: 'tarjeta ancha' }, [
+    var datosCurso = await g.PantallaDatosCurso.tarjeta(est);
+    g.Dom.montar([datosCurso, h('section', { class: 'tarjeta ancha' }, [
       h('h2', { texto: 'Clave de Claude' }),
       h('p', { class: 'suave', texto: 'Se guarda en tu carpeta ACTAS. La usará Claude para redactar las actas.' }),
       campo, h('div', { class: 'fila' }, [guardar, deRubricas]), dicho, aviso

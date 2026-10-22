@@ -153,3 +153,6 @@ button.enlace:hover { text-decoration: underline; }
 .asistencia { list-style: none; margin: 4px 0; padding: 0; columns: 2 320px; column-gap: 24px; }
 .asistencia li { display: flex; justify-content: space-between; gap: 8px; padding: 2px 0; break-inside: avoid; border-bottom: 1px solid var(--linea); }
 .redactado { display: flex; flex-direction: column; gap: 4px; }
+.tabla-docentes { display: flex; flex-direction: column; gap: 4px; width: 100%; }
+.docente { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto auto auto; gap: 6px; align-items: center; }
+.docente input { width: 100%; }
