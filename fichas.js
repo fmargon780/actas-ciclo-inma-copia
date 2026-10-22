@@ -7,6 +7,8 @@
   var A = g.Alumnado, PARA = 'para-el-documento', HECHAS = 'enviadas';
   var AVISO_PIE = 'Correcciones hechas después en el documento no aparecen aquí';
   var VACIA = 'Todavía no aparece en ninguna acta creada con Mis actas';
+  var TITULO_ENTREVISTA = 'Entrevista con la familia';
+  var CAJAS_ENTREVISTA = [['temas', 'Temas tratados'], ['decisiones', 'Decisiones y acuerdos alcanzados'], ['otros', 'Otros datos de interés']];
 
   /* «2026-2027» o «26-27» -> 2026 (el año en que empieza el curso), o null. */
   function anioCurso(curso) {
@@ -78,8 +80,9 @@
     return enLista ? [todos.join('\n')] : [];
   }
 
-  /* La ficha: { alumno, curso, reuniones: [{ fecha, puntos: [{ titulo, parrafos }] }] }, de la reunión más antigua a la más reciente. */
-  function ficha(actas, alumno, curso) {
+  /* La ficha: { alumno, curso, reuniones: [{ fecha, puntos: [{ titulo, parrafos }] } | { fecha, entrevista: { id, textos } }] }, de la más antigua a la más reciente.
+     `entrevistas` (opcional, fila 40): las entrevistas con la familia ya terminadas del alumno, mezcladas por fecha con las actas (a igual fecha, el acta antes). */
+  function ficha(actas, alumno, curso, entrevistas) {
     var reuniones = [];
     (actas || []).forEach(function (e) {
       var puntos = [];
@@ -89,7 +92,12 @@
       });
       if (puntos.length) reuniones.push({ fecha: e.fecha, puntos: puntos });
     });
-    reuniones.sort(function (a, b) { return a.fecha < b.fecha ? -1 : a.fecha > b.fecha ? 1 : 0; });
+    (entrevistas || []).forEach(function (e) {
+      if (e.estado !== 'terminada' || !e.fecha) return;
+      if (anioCurso(curso) != null && cursoDeFecha(e.fecha) !== anioCurso(curso)) return;
+      reuniones.push({ fecha: e.fecha, entrevista: { id: e.id, textos: e.textos || {} } });
+    });
+    reuniones.sort(function (a, b) { return a.fecha < b.fecha ? -1 : a.fecha > b.fecha ? 1 : (a.entrevista ? 1 : 0) - (b.entrevista ? 1 : 0); });
     return { alumno: alumno, curso: curso || '', reuniones: reuniones };
   }
 
@@ -131,6 +139,7 @@
     l.push('');
     if (!f.reuniones.length) l.push(VACIA + '.', '');
     f.reuniones.forEach(function (r) {
+      if (r.entrevista) { l.push(TITULO_ENTREVISTA + ' — ' + fd(r.fecha)); CAJAS_ENTREVISTA.forEach(function (c) { if (r.entrevista.textos[c[0]]) { l.push(c[1]); l.push(r.entrevista.textos[c[0]]); l.push(''); } }); return; }
       l.push('Reunión del ' + fd(r.fecha));
       r.puntos.forEach(function (p) { l.push(p.titulo); p.parrafos.forEach(function (x) { l.push(x); }); l.push(''); });
     });
@@ -144,6 +153,15 @@
     if (f.curso) h.push('<p>Curso ' + esc(f.curso) + '</p>');
     if (!f.reuniones.length) h.push('<p>' + esc(VACIA) + '.</p>');
     f.reuniones.forEach(function (r) {
+      if (r.entrevista) {
+        h.push('<h3>' + esc(TITULO_ENTREVISTA + ' — ' + fd(r.fecha)) + '</h3>');
+        CAJAS_ENTREVISTA.forEach(function (c) {
+          if (!r.entrevista.textos[c[0]]) return;
+          h.push('<p><b>' + esc(c[1]) + '</b></p>');
+          String(r.entrevista.textos[c[0]]).split(/\n+/).forEach(function (x) { if (x.trim()) h.push('<p>' + esc(x) + '</p>'); });
+        });
+        return;
+      }
       h.push('<h3>Reunión del ' + esc(fd(r.fecha)) + '</h3>');
       r.puntos.forEach(function (p) {
         h.push('<p><b>' + esc(p.titulo) + '</b></p>');
@@ -154,6 +172,6 @@
     return h.join('\n');
   }
 
-  g.Fichas = { AVISO_PIE: AVISO_PIE, VACIA: VACIA, anioCurso: anioCurso, cursoDeFecha: cursoDeFecha, leerActas: leerActas, mismoAlumno: mismoAlumno,
+  g.Fichas = { AVISO_PIE: AVISO_PIE, VACIA: VACIA, TITULO_ENTREVISTA: TITULO_ENTREVISTA, CAJAS_ENTREVISTA: CAJAS_ENTREVISTA, anioCurso: anioCurso, cursoDeFecha: cursoDeFecha, leerActas: leerActas, mismoAlumno: mismoAlumno,
     nombra: nombra, dichoEnPunto: dichoEnPunto, ficha: ficha, citados: citados, candidatos: candidatos, aTexto: aTexto, aHtml: aHtml };
 })(typeof window !== 'undefined' ? window : globalThis);

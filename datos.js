@@ -5,8 +5,23 @@
 
   /* La carpeta vale solo si tiene actas.json (lo crea el documento de actas). */
   async function comprobar(raiz) {
-    var m = await raiz.leerJSON('actas.json');
-    if (!m || typeof m !== 'object') throw new Error('Esta no es tu carpeta de actas: está en Mi unidad › ACTAS.');
+    var m = await raiz.leerJSON('actas.json'), e;
+    if (!m || typeof m !== 'object') {
+      /* Si actas.json estaba dañado (se acaba de apartar o se apartó otro día: queda un actas.roto-…json) la carpeta es la buena:
+         el documento solo crea la marca al crear la carpeta, así que la página la vuelve a poner. */
+      var rota = (raiz.apartados || []).some(function (x) { return x.nombre === 'actas.json'; });
+      if (!rota && raiz.listar) {
+        try { rota = ((await raiz.listar('')) || []).some(function (x) { return /^actas\.roto-.*\.json$/.test(x.nombre); }); } catch (x) { rota = false; }
+      }
+      if (rota) {
+        m = { formato: 1, aplicacion: 'Mis actas' };
+        await raiz.escribirJSON('actas.json', m);
+        return m;
+      }
+      e = new Error('Esta no es tu carpeta de actas: está en Mi unidad › ACTAS.');
+      e.enEspanol = true;
+      throw e;
+    }
     return m;
   }
 

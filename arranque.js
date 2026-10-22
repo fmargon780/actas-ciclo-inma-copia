@@ -12,6 +12,8 @@
 
   async function abrir(handle) {
     var raiz = window.Carpeta.adaptador(handle);
+    raiz.alApartar = function (lista) { window.Dom.decir($('avisoApartados'), window.Carpeta.avisoApartados(lista)); };
+    window.Dom.decir($('avisoApartados'), '');
     await window.Datos.comprobar(raiz);
     $('estadoCarpeta').textContent = 'Carpeta: ' + handle.name;
     var est = { raiz: raiz, ficha: await window.Datos.leerFicha(raiz), paso: 'inicio', borrador: null, estadoGuardado: $('estadoGuardado'), alSalir: null };
@@ -19,6 +21,7 @@
     var salir = async function () { if (est.alSalir) { var f = est.alSalir; est.alSalir = null; await f(); } };
     est.abrirBorrador = function (b) { est.borrador = b; est.paso = 'formulario'; refrescar(); };
     est.abrirFichas = function () { est.paso = 'fichas'; est.borrador = null; refrescar(); };
+    est.abrirEntrevista = function (id) { est.paso = 'entrevista'; est.entrevistaId = id || null; est.entrevistaActual = null; est.borrador = null; refrescar(); };
     est.abrirHabitual = function () { est.paso = 'habitual'; est.borrador = null; refrescar(); };
     est.abrirConvocatoria = function (fecha) { est.paso = 'convocatoria'; est.fechaConvocatoria = fecha || hoyIso(); est.borrador = null; refrescar(); };
     est.irAjustes = async function () { await salir(); est.paso = 'ajustes'; est.borrador = null; refrescar(); };
@@ -30,9 +33,10 @@
     };
     refrescar = async function () {
       $('estadoGuardado').textContent = '';
-      $('pasoInicio').classList.toggle('activo', est.paso === 'inicio' || est.paso === 'formulario' || est.paso === 'revision' || est.paso === 'fichas' || est.paso === 'habitual' || est.paso === 'convocatoria');
+      $('pasoInicio').classList.toggle('activo', est.paso === 'inicio' || est.paso === 'formulario' || est.paso === 'revision' || est.paso === 'fichas' || est.paso === 'habitual' || est.paso === 'convocatoria' || est.paso === 'entrevista');
       $('pasoAjustes').classList.toggle('activo', est.paso === 'ajustes');
       est.ficha = await window.Datos.leerFicha(raiz);
+      if (est.paso !== 'entrevista') { est.entrevistaId = null; est.entrevistaActual = null; }
       var alInicio = function () { est.paso = 'inicio'; est.borrador = null; refrescar(); };
       if (est.paso === 'formulario') { window.PantallaFormulario.pintarFormulario(est, est.borrador, alInicio, function () { est.paso = 'revision'; est.redactarAlEntrar = !est.borrador.puntos.some(function (p) { return p.parrafo; }); refrescar(); }); return; }
       if (est.paso === 'revision') {
@@ -41,6 +45,7 @@
       }
       if (est.paso === 'habitual') { await window.PantallaHabitual.pintarHabitual(est, alInicio); return; }
       if (est.paso === 'convocatoria') { await window.PantallaConvocatoria.pintarConvocatoria(est, alInicio, est.fechaConvocatoria || hoyIso()); return; }
+      if (est.paso === 'entrevista') { await window.PantallaEntrevista.pintarEntrevista(est, alInicio); return; }
       if (est.paso === 'fichas') { await window.PantallaFichas.pintarFichas(est, alInicio); return; }
       if (est.paso === 'ajustes') { await window.PantallaAjustes.pintarAjustes(est, refrescar); return; }
       await window.PantallaInicio.pintarInicio(est, refrescar);
@@ -53,7 +58,7 @@
 
   async function elegirYAbrir() {
     try { await abrir(await window.Carpeta.elegir()); }
-    catch (e) { if (e && e.name === 'AbortError') return; window.Pantalla.pedirCarpeta(e && e.message ? e.message : String(e), elegirYAbrir); }
+    catch (e) { if (e && e.name === 'AbortError') return; window.Pantalla.pedirCarpeta(window.Carpeta.explicarError(e), elegirYAbrir); }
   }
 
   async function empezar() {
@@ -61,11 +66,11 @@
     var texto = 'Elige la carpeta ACTAS de tu Drive (está en Mi unidad › ACTAS; la crea el documento de actas la primera vez que usas su menú «Actas»). Aquí guardaré tus borradores.';
     if (!h) { window.Pantalla.pedirCarpeta(texto, elegirYAbrir); return; }
     if ((await window.Carpeta.permiso(h)) === 'granted') {
-      try { await abrir(h); } catch (e) { window.Pantalla.pedirCarpeta((e && e.message) || 'No he podido abrir la carpeta de siempre. Elígela otra vez.', elegirYAbrir); }
+      try { await abrir(h); } catch (e) { window.Pantalla.pedirCarpeta(window.Carpeta.explicarError(e), elegirYAbrir); }
       return;
     }
     window.Pantalla.pedirCarpeta('Chrome pide confirmar el permiso sobre tu carpeta ' + h.name + '.', async function () {
-      if (await window.Carpeta.pedirPermiso(h)) { try { await abrir(h); } catch (e) { window.Pantalla.pedirCarpeta((e && e.message) || String(e), elegirYAbrir); } }
+      if (await window.Carpeta.pedirPermiso(h)) { try { await abrir(h); } catch (e) { window.Pantalla.pedirCarpeta(window.Carpeta.explicarError(e), elegirYAbrir); } }
       else window.Pantalla.pedirCarpeta('Sin permiso no puedo abrir la carpeta. Elígela otra vez.', elegirYAbrir);
     }, 'Dar permiso');
   }

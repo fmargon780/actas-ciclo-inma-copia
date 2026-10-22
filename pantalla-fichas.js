@@ -16,12 +16,20 @@
 
   function fechaDe(iso) { try { return g.fechaLarga(iso); } catch (e) { return iso; } }
 
-  function verFicha(f, volver, otro) {
+  function verFicha(f, volver, otro, abrir) {
     var aviso = h('span', { class: 'suave', id: 'avisoCopiada', 'aria-live': 'polite' });
     var cuerpo = [h('h2', { 'data-ficha': 'titulo', texto: 'Ficha de ' + A.etiqueta(f.alumno) })];
     if (f.curso) cuerpo.push(h('p', { class: 'suave', 'data-ficha': 'curso', texto: 'Curso ' + f.curso }));
     if (!f.reuniones.length) cuerpo.push(h('p', { class: 'aviso', id: 'fichaVacia', texto: F.VACIA + '.' }));
     f.reuniones.forEach(function (r) {
+      if (r.entrevista) {
+        cuerpo.push(h('div', { class: 'reunion-ficha entrevista-ficha', 'data-fecha': r.fecha, 'data-entrevista': r.entrevista.id }, [
+          h('h3', {}, [F.TITULO_ENTREVISTA + ' — ', h('button', { type: 'button', class: 'boton chico no-imprimir', 'data-accion': 'abrir-entrevista', title: 'Abrir esta entrevista', texto: fechaDe(r.fecha), onclick: function () { abrir(r.entrevista.id); } }), h('span', { class: 'solo-imprimir', texto: fechaDe(r.fecha) })])
+        ].concat(F.CAJAS_ENTREVISTA.filter(function (c) { return r.entrevista.textos[c[0]]; }).map(function (c) {
+          return h('div', { class: 'punto-ficha' }, [h('strong', { texto: c[1] })].concat(String(r.entrevista.textos[c[0]]).split(/\n+/).filter(Boolean).map(function (x) { return h('p', { class: 'texto-enviado', texto: x }); })));
+        }))));
+        return;
+      }
       cuerpo.push(h('div', { class: 'reunion-ficha', 'data-fecha': r.fecha }, [h('h3', { texto: 'Reunión del ' + fechaDe(r.fecha) })].concat(r.puntos.map(function (p) {
         return h('div', { class: 'punto-ficha' }, [h('strong', { texto: p.titulo })].concat(p.parrafos.map(function (x) { return h('p', { class: 'texto-enviado', texto: x }); })));
       }))));
@@ -61,8 +69,9 @@
     var repintar = function () { pintarFichas(est, alInicio); };
     var curso = (est.ficha && est.ficha.curso) || '';
     var lista = { estado: 'ok', lista: { delCiclo: F.candidatos(est.alumnado && est.alumnado.lista, actas), grupos: [] } };
-    var buscador = g.BuscadorAlumno.crear('', function () { return lista; }, function (a) {
-      verFicha(F.ficha(actas, a, curso), alInicio, repintar);
+    var buscador = g.BuscadorAlumno.crear('', function () { return lista; }, async function (a) {
+      var ents = g.Tutoria ? g.Tutoria.terminadas(g.Tutoria.deAlumno(await g.Tutoria.listarEntrevistas(est.raiz), a)) : [];
+      verFicha(F.ficha(actas, a, curso, ents), alInicio, repintar, est.abrirEntrevista);
     }, alInicio, { sinLibre: true });
     var nodos = [h('h2', { texto: 'Fichas del alumnado' }), h('p', { class: 'suave', texto: 'Elige a un alumno para ver lo que se ha dicho de él en las actas creadas con Mis actas.' })];
     var aviso = avisoRubricas(est, repintar);

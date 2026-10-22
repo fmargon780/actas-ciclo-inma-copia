@@ -27,11 +27,12 @@
         await g.Datos.guardarClave(est.raiz, c); campo.value = c; ok('Clave copiada de Rúbricas.');
       } catch (e) { if (e && e.name === 'AbortError') return; g.Dom.decir(aviso, e.message || String(e)); }
     } });
+    var tutoria = await g.PantallaTutoria.tarjeta(est, function () { refrescar(); });
     g.Dom.montar([h('section', { class: 'tarjeta ancha' }, [
       h('h2', { texto: 'Clave de Claude' }),
       h('p', { class: 'suave', texto: 'Se guarda en tu carpeta ACTAS. La usará Claude para redactar las actas.' }),
       campo, h('div', { class: 'fila' }, [guardar, deRubricas]), dicho, aviso
-    ])]);
+    ]), tutoria]);
   }
   g.PantallaAjustes = { pintarAjustes: pintarAjustes };
 })(window);

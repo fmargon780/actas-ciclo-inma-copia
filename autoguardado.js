@@ -3,14 +3,15 @@
   'use strict';
   var ESPERA_MS = 600;
 
-  /* Devuelve { cambio, guardar }. También deja en est.alSalir lo que hay que esperar antes de cambiar de pantalla. */
-  function crear(est, b) {
+  /* Devuelve { cambio, guardar }. También deja en est.alSalir lo que hay que esperar antes de cambiar de pantalla.
+     `escribir(raiz, b, ahora)` es opcional: por defecto guarda un borrador de acta (la entrevista de la fila 40 pasa la suya). */
+  function crear(est, b, escribir) {
     var estado = est.estadoGuardado, temporizador = null, pendiente = false, guardando = Promise.resolve();
     function decir(t) { estado.textContent = t; }
     function guardar() {
       pendiente = false; clearTimeout(temporizador);
       decir('Guardando…');
-      guardando = guardando.then(function () { return g.Datos.guardarBorrador(est.raiz, b, new Date()); })
+      guardando = guardando.then(function () { return (escribir || g.Datos.guardarBorrador)(est.raiz, b, new Date()); })
         .then(function () { if (!pendiente) decir('Guardado'); })
         .catch(function (e) { decir('No se ha podido guardar: ' + (e.message || e)); });
       return guardando;
