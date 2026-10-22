@@ -92,3 +92,15 @@ button.mic.grabando { background: var(--rojo); color: #fff; border-color: var(--
   .cabecera, .pie, .no-imprimir { display: none !important; }
   .ficha { border: 0; padding: 0; margin: 0; }
 }
+
+/* Lo habitual y Nueva convocatoria (fila 17) */
+.mes-habitual { background: #fff; border: 1px solid var(--linea); border-radius: 8px; padding: 8px 12px; margin-top: 8px; }
+.mes-habitual summary { cursor: pointer; font-weight: 700; color: var(--azul); }
+.habitual-punto { background: var(--fondo); border: 1px solid var(--linea); border-radius: 8px; padding: 8px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.habitual-punto .datos { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 240px; }
+.habitual-punto input, .nuevo-habitual, #nuevoPuntoConv { width: 100%; }
+.nuevo-habitual, #nuevoPuntoConv { flex: 1; min-width: 200px; }
+.puntos-conv { display: flex; flex-direction: column; gap: 6px; margin: 0; padding-left: 24px; }
+.punto-conv { display: list-item; }
+.punto-conv input { width: calc(100% - 150px); min-width: 180px; }
+a.enlace-boton { display: inline-block; text-decoration: none; border: 1px solid var(--azul); border-radius: 6px; padding: 5px 12px; background: var(--azul); color: #fff; }

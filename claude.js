@@ -83,5 +83,5 @@
     return { parrafos: parrafos, avisos: avisos, notasMarcadas: prep.notasMarcadas };
   }
 
-  g.Claude = { MODELO: MODELO, cuerpo: cuerpo, redactar: redactar, redactarConAlumnado: redactarConAlumnado, FRASE_RED: FRASE_RED, FRASE_SIN_CLAVE: FRASE_SIN_CLAVE };
+  g.Claude = { MODELO: MODELO, URL_API: URL_API, llamar: llamar, cuerpo: cuerpo, redactar: redactar, redactarConAlumnado: redactarConAlumnado, FRASE_RED: FRASE_RED, FRASE_SIN_CLAVE: FRASE_SIN_CLAVE };
 })(typeof window !== 'undefined' ? window : globalThis);

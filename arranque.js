@@ -19,11 +19,16 @@
     var salir = async function () { if (est.alSalir) { var f = est.alSalir; est.alSalir = null; await f(); } };
     est.abrirBorrador = function (b) { est.borrador = b; est.paso = 'formulario'; refrescar(); };
     est.abrirFichas = function () { est.paso = 'fichas'; est.borrador = null; refrescar(); };
+    est.abrirHabitual = function () { est.paso = 'habitual'; est.borrador = null; refrescar(); };
+    est.abrirConvocatoria = function (fecha) { est.paso = 'convocatoria'; est.fechaConvocatoria = fecha || hoyIso(); est.borrador = null; refrescar(); };
     est.irAjustes = async function () { await salir(); est.paso = 'ajustes'; est.borrador = null; refrescar(); };
-    est.nuevoBorrador = function () { est.abrirBorrador(window.Borradores.nuevo(est.ficha, hoyIso(), new Date())); };
+    est.nuevoBorrador = async function () {
+      var b = window.Borradores.nuevo(est.ficha, hoyIso(), new Date()), conv = await window.Convocatoria.leer(raiz, b.fecha);
+      est.abrirBorrador(conv ? window.Convocatoria.borradorNuevo(conv, est.ficha, new Date()) : b); /* si hoy hay convocatoria, el acta ya trae sus puntos */
+    };
     refrescar = async function () {
       $('estadoGuardado').textContent = '';
-      $('pasoInicio').classList.toggle('activo', est.paso === 'inicio' || est.paso === 'formulario' || est.paso === 'revision' || est.paso === 'fichas');
+      $('pasoInicio').classList.toggle('activo', est.paso === 'inicio' || est.paso === 'formulario' || est.paso === 'revision' || est.paso === 'fichas' || est.paso === 'habitual' || est.paso === 'convocatoria');
       $('pasoAjustes').classList.toggle('activo', est.paso === 'ajustes');
       est.ficha = await window.Datos.leerFicha(raiz);
       var alInicio = function () { est.paso = 'inicio'; est.borrador = null; refrescar(); };
@@ -32,6 +37,8 @@
         var redactar = est.redactarAlEntrar; est.redactarAlEntrar = false;
         window.PantallaRevision.pintarRevision(est, est.borrador, function () { est.paso = 'formulario'; refrescar(); }, alInicio, redactar); return;
       }
+      if (est.paso === 'habitual') { await window.PantallaHabitual.pintarHabitual(est, alInicio); return; }
+      if (est.paso === 'convocatoria') { await window.PantallaConvocatoria.pintarConvocatoria(est, alInicio, est.fechaConvocatoria || hoyIso()); return; }
       if (est.paso === 'fichas') { await window.PantallaFichas.pintarFichas(est, alInicio); return; }
       if (est.paso === 'ajustes') { await window.PantallaAjustes.pintarAjustes(est, refrescar); return; }
       await window.PantallaInicio.pintarInicio(est, refrescar);

@@ -40,10 +40,10 @@
   }
 
   /* El aviso de la carpeta RÚBRICAS (el mismo de la fila 15): la ficha funciona igual con los alumnos citados en las actas. */
-  function avisoRubricas(est, repintar) {
+  function avisoRubricas(est, repintar, textoSinCarpeta) {
     var a = est.alumnado, texto = '', boton = 'Abrir la carpeta RÚBRICAS', permiso = false;
     if (!a || a.estado === 'ok') return null;
-    if (a.estado === 'sinCarpeta') texto = a.texto || 'Para buscar en toda la lista de alumnado, abre una vez la carpeta RÚBRICAS (Mi unidad › RÚBRICAS). Solo la leo: no escribo nada en ella.';
+    if (a.estado === 'sinCarpeta') texto = a.texto || textoSinCarpeta || 'Para buscar en toda la lista de alumnado, abre una vez la carpeta RÚBRICAS (Mi unidad › RÚBRICAS). Solo la leo: no escribo nada en ella.';
     else if (a.estado === 'sinPermiso') { texto = 'Chrome pide confirmar el permiso sobre la carpeta RÚBRICAS.'; boton = 'Dar permiso'; permiso = true; }
     else if (a.estado === 'vacia') texto = 'En la carpeta RÚBRICAS no hay alumnado de este ciclo todavía.';
     else texto = a.texto;
@@ -72,5 +72,5 @@
     buscador.enfocar();
   }
 
-  g.PantallaFichas = { pintarFichas: pintarFichas };
+  g.PantallaFichas = { pintarFichas: pintarFichas, avisoRubricas: avisoRubricas };
 })(window);

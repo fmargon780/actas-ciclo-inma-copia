@@ -51,6 +51,8 @@
     var lista = await g.Datos.listarBorradores(est.raiz);
     var enviadas = await g.Envios.listar(est.raiz);
     var nodos = [h('button', { type: 'button', class: 'boton principal grande', id: 'nuevaActa', texto: 'Nueva acta de ciclo', onclick: function () { est.nuevoBorrador(); } })];
+    nodos.push(h('button', { type: 'button', class: 'boton grande', id: 'nuevaConvocatoria', texto: 'Nueva convocatoria', onclick: function () { est.abrirConvocatoria(); } }));
+    nodos.push(h('button', { type: 'button', class: 'boton grande', id: 'loHabitual', texto: 'Lo habitual', onclick: function () { est.abrirHabitual(); } }));
     nodos.push(h('button', { type: 'button', class: 'boton grande', id: 'fichasAlumnado', texto: 'Fichas del alumnado', onclick: function () { est.abrirFichas(); } }));
     nodos.push(h('h2', { class: 'subtitulo', texto: 'Borradores' }));
     if (!lista.length) nodos.push(h('p', { class: 'suave', id: 'sinBorradores', texto: 'No tienes borradores. Lo que escribas en una acta nueva se guarda solo aquí.' }));
