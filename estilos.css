@@ -117,3 +117,7 @@ a.enlace-boton { display: inline-block; text-decoration: none; border: 1px solid
 .anadir-hueco input { flex: 1; min-width: 0; }
 .etiqueta-libres { font-weight: 600; }
 .caja-ayudas { display: flex; flex-direction: column; gap: 4px; }
+
+.volver-apps { position: sticky; top: 0; z-index: 50; display: block; padding: 2px 12px; font-size: 12px; background: var(--azul-claro); color: var(--azul); text-decoration: none; border-bottom: 1px solid var(--linea); }
+.volver-apps:hover { text-decoration: underline; }
+@media print { .volver-apps { display: none; } }

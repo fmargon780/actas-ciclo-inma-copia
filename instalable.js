@@ -6,6 +6,12 @@
     var instalada = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
     return instalada ? 'aplicación instalada' : 'página web';
   };
+  /* Enlace de vuelta al panel. En la copia sin internet (file:) no se pone: sin red no llevaría a ningún sitio. */
+  if (location.protocol !== 'file:') {
+    var volver = document.createElement('a');
+    volver.id = 'volverApps'; volver.className = 'volver-apps'; volver.href = '/apps/'; volver.textContent = '← Apps de Inma';
+    document.body.insertBefore(volver, document.body.firstChild);
+  }
   if (!('serviceWorker' in navigator) || location.protocol !== 'https:') return;
 
   function avisar(espera) {
