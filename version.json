@@ -1,6 +1,6 @@
 {
-  "version": "actas v7",
-  "commit": "1b917ac",
+  "version": "actas v8",
+  "commit": "2b06f0f",
   "ficheros": {
     "ABRIR MIS ACTAS.html": "92e4cdf0e6d55ebc4c57453d77e71b8db251f8f7e248ab3fbc78ec81a39f0eb6",
     "actas-antiguas.js": "6452ffb632507e43541b262fd38b893b0d61f6aaf453a914c40f2a3fc5946626",
@@ -14,7 +14,7 @@
     "buscador-alumno.js": "e60a8f6d2378105c3d3e4fe7cd2e3e470a64b6cf7cff7e13f38a2d56607c4d47",
     "carpeta.js": "2b7a3847e5971359dfd6ae2766a43a93d4c042805b4eab47b5a874c0475162ee",
     "claude.js": "8581f119df4a9745889a2bacba10b6a8e2326a284871c809f2b2648d0e115e36",
-    "commit.js": "aef10bfbcd00430149621e1f40fedef570c7e671188a2b87746ea063d9a4b302",
+    "commit.js": "776b7e052d18a0927f9b8c6cf930f5caa3c68e423225bc085874a883b405b3b2",
     "convocatoria.js": "6e16a853abb35e37879cd282cfb0516380614672beeeab7413a2b53815b81202",
     "datos.js": "10ac1f6504419edec6622ace69df9bfaf622789ea39e771c3a4c7d49dda93281",
     "dictado.js": "8eb138804969f3c5d0095cabee9ca0df6eaa0a85e4943790712b143b804eb86e",
@@ -46,6 +46,6 @@
     "pantalla.js": "9a046e838e54639ead062fd38aa6a22ceabf429c9e388fa598a6a66e6840771f",
     "redaccion.js": "c8a5d1892e9a98a1493281263d49d39ca90f260bce9e5d55b4d39e92ed3a24cf",
     "rubricas.js": "fd2a316b445dd82c09f4cdc9e11ce00c94353aca72f7d0e26169cb970d6a92f3",
-    "version.js": "d184f7707bc3051c4ed48b105db6f6192fc6a940215fa4c8ceb548d4a3b968e8"
+    "version.js": "29d1d4a3b32341c66c71f51f04a69cb9fa2be420b3a82066ea316caefaf2a9e9"
   }
 }
