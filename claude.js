@@ -8,6 +8,7 @@
   var INSTRUCCIONES = [
     'Eres quien redacta las actas del equipo de ciclo de un colegio público de Primaria de Andalucía (España).',
     'Recibes una lista JSON de puntos del orden del día, cada uno con n (número), titulo y notas cortas escritas o dictadas por la maestra.',
+    'Un punto puede traer además «huecos» (cada uno con su titulo y sus notas: lo que se tomó sobre ese aspecto del punto) y «grupos» (cada grupo con sus huecos). Usa todo junto con las notas del punto y únelo en párrafos seguidos, sin copiar los títulos de los huecos.',
     'Para cada punto escribe el texto que irá en el acta.',
     'Reglas:',
     '- Estilo formal y sencillo, en pasado o presente impersonal: «Se informa de…», «Se acuerda…», «Se hace constar…», «Queda pendiente…».',
@@ -19,6 +20,7 @@
     'Ejemplos del estilo:',
     '  notas: «faltan 2 guías profe: Lengua 3.º y Lengua 4.º» -> «Se hace constar que se precisa la reposición de dos guías didácticas para el profesorado (una de Lengua Castellana de 3.º EP y otra de 4.º EP).»',
     '  notas: «faltan libros: 3.º 5 Lengua, 6 Cono, 5 Inglés; 4.º 5 Lengua, 5 Cono» -> «Queda pendiente la recepción de los siguientes libros de texto para el alumnado: 5 de Lengua Castellana (3.º EP), 6 de Conocimiento del Medio (3.º EP), 5 de Inglés (3.º EP), 5 de Lengua Castellana (4.º EP) y 5 de Conocimiento del Medio (4.º EP).»',
+    'Si un punto trae "bloques":true (sesión de evaluación), en vez de "parrafo" responde con "bloques": un bloque por cada grupo con algo escrito, con "titulo" igual al nombre del grupo, y después un bloque por cada hueco general con algo escrito (por ejemplo «Acuerdos y propuestas de mejora»), con "titulo" igual al título del hueco: {"n":3,"bloques":[{"titulo":"3.º A","parrafo":"…"}]}.',
     'Responde SOLO con un JSON, sin nada más, con esta forma exacta: {"puntos":[{"n":1,"parrafo":"…"}]}, con un elemento por cada punto recibido.'
   ].join('\n');
   var OTRA_VERSION = 'Escribe una redacción distinta de la habitual, con otras palabras y otra estructura, sin cambiar lo que dicen las notas.';
@@ -80,7 +82,7 @@
       else { parrafos[p.n] = res[p.n]; avisos[p.n] = AC.AVISO_NOMBRES; }
       if (prep.avisos[p.n]) avisos[p.n] = avisos[p.n] ? avisos[p.n] + '. ' + prep.avisos[p.n] : prep.avisos[p.n];
     });
-    return { parrafos: parrafos, avisos: avisos, notasMarcadas: prep.notasMarcadas };
+    return { parrafos: parrafos, avisos: avisos, notasMarcadas: prep.notasMarcadas, marcados: prep.marcados };
   }
 
   g.Claude = { MODELO: MODELO, URL_API: URL_API, llamar: llamar, cuerpo: cuerpo, redactar: redactar, redactarConAlumnado: redactarConAlumnado, FRASE_RED: FRASE_RED, FRASE_SIN_CLAVE: FRASE_SIN_CLAVE };

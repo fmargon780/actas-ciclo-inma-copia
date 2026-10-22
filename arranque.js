@@ -24,7 +24,9 @@
     est.irAjustes = async function () { await salir(); est.paso = 'ajustes'; est.borrador = null; refrescar(); };
     est.nuevoBorrador = async function () {
       var b = window.Borradores.nuevo(est.ficha, hoyIso(), new Date()), conv = await window.Convocatoria.leer(raiz, b.fecha);
-      est.abrirBorrador(conv ? window.Convocatoria.borradorNuevo(conv, est.ficha, new Date()) : b); /* si hoy hay convocatoria, el acta ya trae sus puntos */
+      /* Si hoy hay convocatoria, el acta ya trae sus puntos; si no, los de «Lo habitual» de este mes, con sus huecos. */
+      if (!conv) conv = window.Convocatoria.proponer(await window.Habitual.leer(raiz), b.fecha, b.inicio, new Date());
+      est.abrirBorrador(window.Convocatoria.borradorNuevo(conv, est.ficha, new Date()));
     };
     refrescar = async function () {
       $('estadoGuardado').textContent = '';

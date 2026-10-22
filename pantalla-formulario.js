@@ -42,6 +42,8 @@
     var alumnadoVisto = [], avisoAlumnado = h('div', { class: 'aviso', id: 'avisoAlumnado', hidden: '' });
     /* Lo que depende de la lista de alumnado (se carga aparte): el aviso de arriba, el recordatorio y el botón «+ Alumno» de cada punto. */
     function pintarAlumnado() {
+      /* Con la lista de grupos de Rúbricas, las sesiones de evaluación sacan un bloque por grupo (una sola vez en cada punto). */
+      if (est.alumnado && est.alumnado.lista && g.Huecos.completarGrupos(b, est.alumnado.lista.grupos)) { cambio(); pintarPuntos(); return; }
       var a = est.alumnado, ok = !!(a && a.estado === 'ok'), cargando = !a;
       alumnadoVisto.forEach(function (x) {
         x.recordatorio.textContent = ok || cargando ? 'Alumnado: escríbelo y elígelo de la lista, o usa + Alumno' : 'Sin lista de alumnado: abre la carpeta RÚBRICAS';
@@ -80,19 +82,29 @@
       ]);
       var cabeza = h('div', { class: 'cabeza-punto' }, [h('span', { class: 'numero', texto: (i + 1) + '.' }), titulo, botones]);
       if (fijo) return h('div', { class: 'punto fijo', 'data-punto': String(i) }, [cabeza, h('p', { class: 'suave', texto: 'Este punto no lleva notas: su texto es fijo y se escribe solo al crear el acta.' })]);
-      var ed = g.EditorNotas.crear(i, p.notas, function () { return est.alumnado; }, function (t) { p.notas = t; cambio(); });
+      var notas = caja(i, p.notas, function (t) { p.notas = t; cambio(); }, false);
+      var partes = [cabeza];
+      if (g.Huecos.tiene(p)) partes.push(g.PantallaHuecos.pintar(p, i, caja, cambio, pintarPuntos), h('div', { class: 'suave etiqueta-libres', texto: 'Notas libres (lo que no encaje en ningún hueco)' }));
+      else partes.push(g.PantallaHuecos.pintar(p, i, caja, cambio, pintarPuntos));
+      partes.push(notas);
+      return h('div', { class: 'punto', 'data-punto': String(i) }, partes);
+    }
+    /* Una caja de texto con dictado y «+ Alumno»: la de las notas libres y la de cada hueco. */
+    function caja(id, texto, guardar, compacto) {
+      var ed = g.EditorNotas.crear(id, texto, function () { return est.alumnado; }, guardar);
       var recordatorio = h('span', { class: 'iniciales' });
       var masAlumno = h('button', { type: 'button', class: 'boton chico', 'data-accion': 'anadir-alumno', texto: '+ Alumno', onclick: function () { ed.abrirBuscador(); } });
       alumnadoVisto.push({ recordatorio: recordatorio, masAlumno: masAlumno });
-      var pie = [recordatorio, h('span', { class: 'suave', texto: 'Nunca un nombre suelto sin elegirlo de la lista.' }), masAlumno];
+      var pie = [recordatorio];
+      if (!compacto) pie.push(h('span', { class: 'suave', texto: 'Nunca un nombre suelto sin elegirlo de la lista.' }));
+      pie.push(masAlumno);
       if (g.Dictado.disponible()) {
         var mic = h('button', { type: 'button', class: 'boton chico mic', 'data-accion': 'dictar', title: 'Dictar', texto: '🎤 Dictar' });
-        var d = g.Dictado.crear(ed.comoCaja, function (t) { p.notas = t; cambio(); }, function (activo) { mic.classList.toggle('grabando', activo); mic.textContent = activo ? '⏹ Parar' : '🎤 Dictar'; });
+        var d = g.Dictado.crear(ed.comoCaja, guardar, function (activo) { mic.classList.toggle('grabando', activo); mic.textContent = activo ? '⏹ Parar' : '🎤 Dictar'; });
         mic.onclick = function () { d.alternar(); };
         pie.push(mic);
       }
-      var tarjeta = h('div', { class: 'punto', 'data-punto': String(i) }, [cabeza, ed.elemento, h('div', { class: 'pie-punto' }, pie)]);
-      return tarjeta;
+      return h('div', { class: 'caja-ayudas' }, [ed.elemento, h('div', { class: 'pie-punto' }, pie)]);
     }
     pintarPuntos();
     g.Rubricas.cargar(est).then(pintarAlumnado);

@@ -104,3 +104,16 @@ button.mic.grabando { background: var(--rojo); color: #fff; border-color: var(--
 .punto-conv { display: list-item; }
 .punto-conv input { width: calc(100% - 150px); min-width: 180px; }
 a.enlace-boton { display: inline-block; text-decoration: none; border: 1px solid var(--azul); border-radius: 6px; padding: 5px 12px; background: var(--azul); color: #fff; }
+
+/* Huecos de cada punto (fila 18) */
+.huecos { display: flex; flex-direction: column; gap: 6px; }
+.hueco { border-left: 3px solid var(--azul-claro); padding-left: 8px; display: flex; flex-direction: column; gap: 4px; }
+.cabeza-hueco { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.titulo-hueco { font-weight: 600; font-size: 14px; }
+.hueco .notas { min-height: 40px; }
+.grupo-huecos { border: 1px dashed var(--linea); border-radius: 8px; padding: 6px 8px; display: flex; flex-direction: column; gap: 6px; }
+.titulo-grupo { margin: 0; color: var(--azul); }
+.anadir-hueco { display: flex; gap: 6px; }
+.anadir-hueco input { flex: 1; min-width: 0; }
+.etiqueta-libres { font-weight: 600; }
+.caja-ayudas { display: flex; flex-direction: column; gap: 4px; }

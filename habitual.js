@@ -150,7 +150,7 @@
     var actas = await g.Fichas.leerActas(raiz, ficha), sumadas = 0;
     actas.forEach(function (e) {
       if (h.actas.indexOf(e.fecha) >= 0) return;
-      aprender(h, { fecha: e.fecha, puntos: e.puntos.map(function (p) { return { titulo: p.titulo, huecos: [] }; }) });
+      aprender(h, { fecha: e.fecha, puntos: e.puntos.map(function (p) { return { titulo: p.titulo, huecos: p.huecos || [] }; }) });
       sumadas++;
     });
     return sumadas;

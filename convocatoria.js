@@ -27,7 +27,7 @@
     return { formato: 1, fecha: fecha, hora: hora || '13:00', puntos: H.proponer(habitual, H.mesDe(fecha)), creado: marca, cambiado: marca };
   }
 
-  function tieneTexto(p) { return !!(String(p.notas || '').trim() || String(p.parrafo || '').trim()); }
+  function tieneTexto(p) { return !!(String(p.notas || '').trim() || String(p.parrafo || '').trim() || (g.Huecos && g.Huecos.hayTexto(p))); }
   function igual(a, b) { return String(a || '').trim().toLowerCase() === String(b || '').trim().toLowerCase(); }
 
   /* Pone en el borrador los puntos de la convocatoria sin perder nada de lo escrito:
@@ -36,11 +36,11 @@
   function aplicarAlBorrador(b, conv, anterior, ficha) {
     var deseados = conv.puntos.map(function (p) { return p.titulo; }), viejos = anterior ? anterior.puntos.map(function (p) { return p.titulo; }) : [];
     var hayActaAnterior = !!(ficha && ficha.ultimaActa), usado = {}, puntos = [];
-    deseados.forEach(function (t) {
+    deseados.forEach(function (t, d) {
       var i = -1;
       b.puntos.forEach(function (p, k) { if (i < 0 && !usado[k] && igual(p.titulo, t)) i = k; });
       if (i >= 0) { usado[i] = true; puntos.push(b.puntos[i]); }
-      else if (!H.esAnterior(t) || hayActaAnterior) puntos.push({ titulo: t, notas: '' });
+      else if (!H.esAnterior(t) || hayActaAnterior) puntos.push(g.Huecos ? g.Huecos.deConvocatoria({ titulo: t, notas: '' }, conv.puntos[d]) : { titulo: t, notas: '' });
     });
     b.puntos.forEach(function (p, k) {
       if (usado[k]) return;

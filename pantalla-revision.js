@@ -7,7 +7,7 @@
   /* volverFormulario(): al formulario; volverInicio(): a la lista; redactarAlEntrar: empezar redactando lo que falte. */
   function pintarRevision(est, b, volverFormulario, volverInicio, redactarAlEntrar) {
     var cambio = g.Autoguardado.crear(est, b).cambio;
-    var ocupado = false, preguntas = {}, confirmando = false, avisosNombres = {};
+    var ocupado = false, preguntas = {}, confirmando = false, faltaAnterior = false, avisosNombres = {};
     var avisoClaude = g.Dom.aviso(), estadoRedaccion = h('span', { class: 'suave', id: 'estadoRedaccion' });
     var contenedor = h('div', { class: 'puntos', id: 'puntosRevision' });
     var zonaCrear = h('div', { class: 'zona-crear' });
@@ -27,7 +27,7 @@
         var res = await g.Claude.redactarConAlumnado(clave, b, indices, rub.lista ? rub.lista.todos : null, { otraVersion: !!otraVersion });
         indices.forEach(function (i) {
           var p = b.puntos[i], n = i + 1;
-          p.notas = String(res.notasMarcadas[n] == null ? p.notas : res.notasMarcadas[n]); /* los nombres que Inma escribió sueltos quedan marcados */
+          R.ponerMarcados(p, res.marcados[n] || { notas: res.notasMarcadas[n] }); /* los nombres que Inma escribió sueltos quedan marcados */
           R.ponerParrafo(p, res.parrafos[n]);
           if (res.avisos[n]) avisosNombres[i] = res.avisos[n]; else delete avisosNombres[i];
         });
@@ -42,7 +42,7 @@
       var p = b.puntos[i];
       if (!confirmado && R.hayQuePreguntar(p)) { preguntas[i] = !!otraVersion ? 'otra' : 'nueva'; pintar(); return Promise.resolve(); }
       delete preguntas[i];
-      if (!String(p.notas || '').trim()) { R.quitarParrafo(p); cambio(); pintar(); return Promise.resolve(); }
+      if (!R.hayContenido(p)) { R.quitarParrafo(p); cambio(); pintar(); return Promise.resolve(); }
       return redactarPuntos([i], otraVersion);
     }
 
@@ -65,12 +65,12 @@
       area.oninput = function () { R.editarParrafo(p, area.value); delete avisosNombres[i]; cambio(); };
       area.readOnly = ocupado;
       var acciones = h('div', { class: 'fila' });
-      var puede = !ocupado && String(p.notas || '').trim() !== '';
+      var puede = !ocupado && R.hayContenido(p);
       if (estado === 'cambiadas' || estado === 'sinRedactar') acciones.appendChild(h('button', { type: 'button', class: 'boton principal chico', 'data-accion': 'de-nuevo', texto: estado === 'cambiadas' ? 'Redactar de nuevo' : 'Redactar este punto', onclick: function () { pedirPunto(i, false, false); } }));
       Array.prototype.forEach.call(acciones.querySelectorAll('button'), function (x) { x.disabled = ocupado; });
       if ((estado === 'redactado' || estado === 'cambiadas') && puede) acciones.appendChild(h('button', { type: 'button', class: 'boton chico', 'data-accion': 'otra', texto: 'Otra versión', onclick: function () { pedirPunto(i, true, false); } }));
       var nodos = [cabeza, h('div', { class: 'dos' }, [
-        h('div', { class: 'izq' }, [h('div', { class: 'suave', texto: 'Tus notas' }), h('div', { class: 'notas-vistas', 'data-vistas': String(i), texto: g.Alumnado.aVisible(p.notas) || '(sin notas)' })]),
+        h('div', { class: 'izq' }, [h('div', { class: 'suave', texto: 'Tus notas' }), h('div', { class: 'notas-vistas', 'data-vistas': String(i), texto: R.verContenido(p) || '(sin notas)' })]),
         h('div', { class: 'der' }, [h('div', { class: 'suave', texto: 'Párrafo del acta' }), area])
       ]), acciones];
       var avisoNombres = avisosNombres[i] || (g.AlumnadoClaude.quedanMarcas(p.parrafo) ? g.AlumnadoClaude.AVISO_NOMBRES : '');
@@ -108,6 +108,15 @@
     function pintarZonaCrear() {
       zonaCrear.textContent = '';
       var motivo = R.motivoQueImpide(b);
+      if (faltaAnterior) {
+        zonaCrear.appendChild(h('div', { class: 'aviso pregunta', id: 'avisoActaAnterior' }, [
+          h('span', { texto: 'Falta el punto «Lectura y aprobación del acta anterior», que es obligatorio. ' }),
+          h('button', { type: 'button', class: 'boton principal', 'data-accion': 'anadir-acta-anterior', texto: 'Añadirlo', onclick: async function () {
+            R.anadirActaAnterior(b); cambio(); faltaAnterior = false; await est.alSalir(); volverFormulario();
+          } }),
+          h('button', { type: 'button', class: 'boton', 'data-accion': 'crear-igualmente', texto: 'Crear igualmente', onclick: function () { faltaAnterior = false; confirmando = true; pintar(); } })]));
+        return;
+      }
       if (confirmando) {
         zonaCrear.appendChild(h('div', { class: 'aviso pregunta', id: 'confirmarCrear' }, [
           h('span', { texto: 'Se añadirá al final de tu documento de actas. ¿Crear? ' }),
@@ -115,7 +124,7 @@
           h('button', { type: 'button', class: 'boton', 'data-accion': 'no-crear', texto: 'No', onclick: function () { confirmando = false; pintar(); } })]));
         return;
       }
-      zonaCrear.appendChild(h('button', { type: 'button', class: 'boton principal grande', id: 'crearActa', texto: 'Crear acta', onclick: function () { confirmando = true; pintar(); } }));
+      zonaCrear.appendChild(h('button', { type: 'button', class: 'boton principal grande', id: 'crearActa', texto: 'Crear acta', onclick: function () { if (R.tieneActaAnterior(b)) confirmando = true; else faltaAnterior = true; pintar(); } }));
       zonaCrear.lastChild.disabled = !!motivo || ocupado;
       if (motivo) zonaCrear.appendChild(h('p', { class: 'suave', id: 'motivoCrear', texto: motivo }));
     }

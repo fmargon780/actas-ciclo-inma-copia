@@ -91,7 +91,11 @@
       asistentes: b.asistentes.slice(),
       puntos: b.puntos.map(function (p) {
         var o = { titulo: String(p.titulo || ''), notas: String(p.notas || ''), alumnado: g.Alumnado ? g.Alumnado.alumnosCitados(p.notas) : [] };
-        if (p.parrafo) { o.parrafo = String(p.parrafo); o.notasRedactadas = String(p.notasRedactadas == null ? p.notas || '' : p.notasRedactadas); o.manual = !!p.manual; }
+        if (g.Huecos) {
+          g.Huecos.paraGuardar(p, o);
+          o.alumnado = g.Alumnado.alumnosCitados(String(p.notas || '') + g.Huecos.cajas(p).map(function (c) { return '\n' + c.hueco.notas; }).join(''));
+        }
+        if (p.parrafo) { o.parrafo = String(p.parrafo); o.notasRedactadas = String(p.notasRedactadas == null ? (g.Redaccion ? g.Redaccion.contenido(p) : p.notas || '') : p.notasRedactadas); o.manual = !!p.manual; }
         return o;
       })
     };
