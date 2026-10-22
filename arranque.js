@@ -18,11 +18,12 @@
     var refrescar;
     var salir = async function () { if (est.alSalir) { var f = est.alSalir; est.alSalir = null; await f(); } };
     est.abrirBorrador = function (b) { est.borrador = b; est.paso = 'formulario'; refrescar(); };
+    est.abrirFichas = function () { est.paso = 'fichas'; est.borrador = null; refrescar(); };
     est.irAjustes = async function () { await salir(); est.paso = 'ajustes'; est.borrador = null; refrescar(); };
     est.nuevoBorrador = function () { est.abrirBorrador(window.Borradores.nuevo(est.ficha, hoyIso(), new Date())); };
     refrescar = async function () {
       $('estadoGuardado').textContent = '';
-      $('pasoInicio').classList.toggle('activo', est.paso === 'inicio' || est.paso === 'formulario' || est.paso === 'revision');
+      $('pasoInicio').classList.toggle('activo', est.paso === 'inicio' || est.paso === 'formulario' || est.paso === 'revision' || est.paso === 'fichas');
       $('pasoAjustes').classList.toggle('activo', est.paso === 'ajustes');
       est.ficha = await window.Datos.leerFicha(raiz);
       var alInicio = function () { est.paso = 'inicio'; est.borrador = null; refrescar(); };
@@ -31,6 +32,7 @@
         var redactar = est.redactarAlEntrar; est.redactarAlEntrar = false;
         window.PantallaRevision.pintarRevision(est, est.borrador, function () { est.paso = 'formulario'; refrescar(); }, alInicio, redactar); return;
       }
+      if (est.paso === 'fichas') { await window.PantallaFichas.pintarFichas(est, alInicio); return; }
       if (est.paso === 'ajustes') { await window.PantallaAjustes.pintarAjustes(est, refrescar); return; }
       await window.PantallaInicio.pintarInicio(est, refrescar);
     };

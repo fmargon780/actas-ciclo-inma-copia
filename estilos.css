@@ -82,3 +82,13 @@ button.mic.grabando { background: var(--rojo); color: #fff; border-color: var(--
 .buscador-alumno { border: 1px solid var(--linea); border-radius: 8px; padding: 8px; background: #fff; display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
 .fuera-de-lista { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .pie-punto { flex-wrap: wrap; }
+
+/* Fichas del alumnado (fila 16) */
+.ficha { background: #fff; border: 1px solid var(--linea); border-radius: 8px; padding: 12px 16px; margin-top: 10px; }
+.reunion-ficha { margin-top: 12px; }
+.punto-ficha { margin: 6px 0 10px; }
+.pie-ficha { margin-top: 14px; font-style: italic; }
+@media print {
+  .cabecera, .pie, .no-imprimir { display: none !important; }
+  .ficha { border: 0; padding: 0; margin: 0; }
+}

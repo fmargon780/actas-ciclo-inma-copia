@@ -90,6 +90,19 @@
     return res;
   }
 
+  /* Los alumnos del punto (los de sus notas y los ya guardados en el borrador), sin repetir: [{ nombre, grupo, enLista }]. Con esto
+     las fichas del alumnado saben de quién se habló aunque el párrafo no lleve el nombre. */
+  function alumnadoDe(p) {
+    var A = g.Alumnado, vistos = {}, res = [];
+    if (!A) return res;
+    (A.alumnosCitados(p.notas).concat(p.alumnado || [])).forEach(function (x) {
+      if (!x || !String(x.nombre || '').trim()) return;
+      var k = A.normalizar(x.nombre) + '|' + A.normalizar(x.grupo);
+      if (!vistos[k]) { vistos[k] = 1; res.push({ nombre: String(x.nombre).trim(), grupo: String(x.grupo || ''), enLista: x.enLista !== false }); }
+    });
+    return res;
+  }
+
   /* El acta terminada, tal como la recoge el documento (ACTAS/para-el-documento/<id>.json).
      fechaActaAnterior: fecha aaaa-mm-dd de la última acta (o null); se fija aquí, al enviar. */
   function armarEnvio(b, fechaActaAnteriorIso, ahora) {
@@ -99,7 +112,7 @@
       asistentes: b.asistentes.slice(), fechaActaAnterior: fechaActaAnteriorIso || null,
       puntos: b.puntos.map(function (p) {
         if (fijo(p)) return { titulo: String(p.titulo).trim(), parrafo: null, fijo: true };
-        return { titulo: String(p.titulo || '').trim(), parrafo: hayParrafo(p) ? String(p.parrafo).trim() : '' };
+        return { titulo: String(p.titulo || '').trim(), parrafo: hayParrafo(p) ? String(p.parrafo).trim() : '', alumnado: alumnadoDe(p) };
       }).filter(function (p) { return p.titulo; })
     };
   }

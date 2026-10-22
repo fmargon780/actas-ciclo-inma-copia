@@ -5,7 +5,8 @@
   var h = g.Dom.h, A = g.Alumnado;
   var MAXIMO = 8;
 
-  function crear(inicial, lista, elegido, cerrar) {
+  function crear(inicial, lista, elegido, cerrar, opciones) {
+    var sinLibre = !!(opciones && opciones.sinLibre);
     var estado = lista() || {}, datos = estado.lista;
     var campo = h('input', { type: 'text', class: 'buscar-alumno', 'data-buscador': 'campo', placeholder: 'Escribe el nombre o un apellido', value: inicial || '', autocomplete: 'off' });
     var resultados = h('div', { class: 'resultados', 'data-buscador': 'resultados' });
@@ -21,10 +22,11 @@
       if (Array.from(A.normalizar(texto)).length < 3) { resultados.appendChild(h('p', { class: 'suave', texto: 'Escribe al menos 3 letras.' })); return; }
       var encontrados = A.sugerir(datos.delCiclo, texto, MAXIMO);
       encontrados.forEach(function (a) {
-        resultados.appendChild(h('button', { type: 'button', class: 'sugerencia', 'data-alumno': a.nombre, texto: A.etiqueta(a),
-          onclick: function () { elegido({ nombre: a.nombre, grupo: a.grupo, enLista: true }); } }));
+        resultados.appendChild(h('button', { type: 'button', class: 'sugerencia', 'data-alumno': a.nombre, texto: A.etiqueta(a) + (a.enLista === false ? ' · No está en la lista de Rúbricas' : ''),
+          onclick: function () { elegido({ nombre: a.nombre, grupo: a.grupo, enLista: a.enLista !== false }); } }));
       });
       if (encontrados.length) return;
+      if (sinLibre) { resultados.appendChild(h('p', { class: 'suave', 'data-buscador': 'nadie', texto: 'No encuentro a nadie con ese nombre.' })); return; }
       var grupo = h('select', { class: 'grupo-fuera', 'data-buscador': 'grupo' }, [h('option', { value: '', texto: 'Sin grupo' })].concat(datos.grupos.map(function (n) { return h('option', { value: n, texto: n }); })));
       resultados.appendChild(h('div', { class: 'fuera-de-lista' }, [
         h('button', { type: 'button', class: 'boton chico', 'data-accion': 'usar-igualmente', texto: 'Usar «' + texto + '» igualmente',
