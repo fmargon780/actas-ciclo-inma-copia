@@ -19,7 +19,7 @@
       "Chrome puede volver a pedirte permiso sobre la carpeta de vez en cuando. Pulsa «Dar permiso» y sigue."
     ] },
     { "id": "inicio", "titulo": "Inicio", "texto": [
-      "Desde el inicio empiezas lo que quieras hacer: «Nueva acta de ciclo», «Nueva convocatoria», «Lo habitual», «Fichas del alumnado», «Entrevista con familia», «Mi tutoría», «Libro de actas del curso» y «Reunión general con familias».",
+      "Desde el inicio empiezas lo que quieras hacer: «Nueva acta de ciclo», «Nueva convocatoria», «Lo habitual», «Fichas del alumnado», «Entrevista con familia», «Mi tutoría», «Libro de actas del curso», «Reunión general con familias» y «Acta de evaluación».",
       "En «Borradores» están las actas que has empezado y no has creado. Pulsa «Seguir» para continuar o «Borrar» para quitar uno. Lo que escribes se guarda solo.",
       "En «Actas hechas» están las actas que ya has creado. Junto a cada una, «Abrir PDF» y «Abrir Word» abren el fichero guardado en tu carpeta ACTAS, y «Ver lo que se envió» enseña el texto. Las que se mandaron antes al documento de Google Docs siguen ahí, con su estado. Las que has traído de un documento antiguo dicen «Traída del documento antiguo».",
       "«Libro de actas del curso» junta todas las actas de este curso (las creadas aquí y las traídas) en un solo PDF y un solo Word, por orden de fecha, cada acta en página nueva con su membrete. Se guarda en ACTAS › documentos › el curso, y «Abrir PDF» y «Abrir Word» lo abren. Cada vez que lo pulsas se hace de nuevo entero."
@@ -68,6 +68,7 @@
       "Apunta la asistencia y los delegados. «Crear acta» guarda la reunión en PDF y en Word, con el membrete oficial, en tu carpeta ACTAS, dentro de «documentos» y del curso. «Abrir PDF» y «Abrir Word» los abren.",
       "«Libro de reuniones con familias» junta todas las reuniones creadas de este curso en un solo PDF y un solo Word, por orden de fecha, cada una en página nueva con su membrete."
     ] },
+    {"id": "evaluacion", "titulo": "Acta de evaluación", "texto": ["Sirve para preparar lo que hay que escribir en Séneca tras cada sesión de evaluación (inicial, primera, segunda o final). Eliges la clase, la sesión y la fecha, y pulsas «Nueva acta de evaluación». Si ya hay una de esa clase y sesión, se abre esa.", "Apunta notas cortas por área (con el porcentaje del grupo con dificultades) y por alumno. Solo saldrán en el acta los alumnos con algo apuntado. También hay cajas para la orientación, las observaciones y las conclusiones, y los datos del grupo (alumnas y alumnos). En la sesión inicial hay además una caja para los informes del curso anterior. Todo se guarda solo y se puede dictar.", "«Redactar con Claude» escribe a la vez las cinco cajas de Séneca y el anexo. En «Para Séneca» cada caja tiene su botón «Copiar» (texto plano, listo para pegar). En «Anexo» están las partes I a IV. Puedes cambiar cualquier texto a mano.", "«Crear anexo» guarda el anexo en PDF y en Word, con el membrete oficial, en tu carpeta ACTAS, dentro de «documentos» y del curso. «Abrir PDF» y «Abrir Word» los abren."]},
     { "id": "ajustes", "titulo": "Ajustes", "texto": [
       "«Datos del curso»: el curso, el ciclo, la localidad, la coordinadora y la tabla del profesorado, con una fila por docente. Los asistentes de cada acta salen de esa tabla, en ese orden.",
       "«Clave de Claude»: pega aquí tu clave y pulsa «Guardar la clave». Si ya la guardaste en Rúbricas, pulsa «Usar la de Rúbricas».",
@@ -110,6 +111,8 @@
     "traer-revision": "Lo que no cuadre sale en amarillo con su motivo. Corrígelo aquí mismo o déjalo como está. «Guardar y seguir» rehace el PDF y el Word de esta acta; «Seguir sin cambiar» deja lo guardado.",
     "libro-actas": "Junta las actas de este curso en un solo PDF y un solo Word, por orden de fecha, cada una en página nueva con su membrete. Se hace de nuevo entero cada vez.",
     "libro-reuniones": "Junta las reuniones con familias de este curso, las de tu grupo de tutoría, en un solo PDF y un solo Word, por orden de fecha, cada una en página nueva con su membrete. Se hace de nuevo entero cada vez.",
+    "acta-evaluacion": "Aquí preparas lo que escribes en Séneca tras una sesión de evaluación: cinco cajas de texto y un anexo en PDF y Word. Solo salen los alumnos con algo apuntado.",
+    "evaluacion-seneca": "Claude escribe a la vez las cinco cajas de Séneca y el anexo. A Claude solo viajan iniciales del alumnado, nunca un nombre. Si las notas cambian, puedes volver a redactar.",
     "crear-acta": "Monta el acta con el membrete oficial y la guarda en tu carpeta ACTAS, en PDF y en Word. Si vuelves a crear la misma acta, sustituye sus ficheros."
   }
 }

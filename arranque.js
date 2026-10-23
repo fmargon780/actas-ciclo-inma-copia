@@ -36,6 +36,7 @@
     est.abrirFichas = function () { est.paso = 'fichas'; est.borrador = null; refrescar(); };
     est.abrirEntrevista = function (id) { est.paso = 'entrevista'; est.entrevistaId = id || null; est.entrevistaActual = null; est.borrador = null; refrescar(); };
     est.abrirReunion = function (id) { est.paso = 'reunion'; est.reunionId = id || null; est.reunionActual = null; est.borrador = null; refrescar(); };
+    est.abrirEvaluacion = function (id) { est.paso = 'evaluacion'; est.evaluacionId = id || null; est.evaluacionActual = null; est.borrador = null; refrescar(); };
     est.abrirMiTutoria = function () { est.paso = 'tutoria'; est.borrador = null; refrescar(); };
     est.abrirTraer = function () { est.paso = 'traer'; est.traer = null; est.borrador = null; refrescar(); };
     est.abrirLibro = function () { est.paso = 'libro'; est.libro = null; est.borrador = null; refrescar(); };
@@ -50,11 +51,12 @@
     };
     refrescar = async function () {
       $('estadoGuardado').textContent = '';
-      $('pasoInicio').classList.toggle('activo', est.paso === 'inicio' || est.paso === 'formulario' || est.paso === 'revision' || est.paso === 'fichas' || est.paso === 'habitual' || est.paso === 'traer' || est.paso === 'libro' || est.paso === 'convocatoria' || est.paso === 'entrevista' || est.paso === 'tutoria' || est.paso === 'reunion');
+      $('pasoInicio').classList.toggle('activo', est.paso === 'inicio' || est.paso === 'formulario' || est.paso === 'revision' || est.paso === 'fichas' || est.paso === 'habitual' || est.paso === 'traer' || est.paso === 'libro' || est.paso === 'convocatoria' || est.paso === 'entrevista' || est.paso === 'tutoria' || est.paso === 'reunion' || est.paso === 'evaluacion');
       $('pasoAjustes').classList.toggle('activo', est.paso === 'ajustes');
       est.ficha = await window.Datos.leerFicha(raiz);
       if (est.paso !== 'entrevista' && est.paso !== 'ayuda') { est.entrevistaId = null; est.entrevistaActual = null; }
       if (est.paso !== 'reunion' && est.paso !== 'ayuda') { est.reunionId = null; est.reunionActual = null; }
+      if (est.paso !== 'evaluacion' && est.paso !== 'ayuda') { est.evaluacionId = null; est.evaluacionActual = null; }
       var alInicio = function () { est.paso = 'inicio'; est.borrador = null; refrescar(); };
       if (est.paso === 'ayuda') {
         await window.PantallaAyuda.pintarAyuda({ seccion: est.seccionAyuda, alVolver: function () { est.paso = est.pasoAnterior || 'inicio'; refrescar(); }, alGuia: function () { window.PantallaAyuda.abrirGuia(ctxAyuda()); } });
@@ -71,6 +73,7 @@
       if (est.paso === 'convocatoria') { await window.PantallaConvocatoria.pintarConvocatoria(est, alInicio, est.fechaConvocatoria || hoyIso()); return; }
       if (est.paso === 'tutoria') { await window.PantallaMiTutoria.pintarMiTutoria(est, alInicio); return; }
       if (est.paso === 'reunion') { await window.PantallaReunion.pintarReunion(est, alInicio); return; }
+      if (est.paso === 'evaluacion') { await window.PantallaEvaluacion.pintarEvaluacion(est, alInicio); return; }
       if (est.paso === 'entrevista') { await window.PantallaEntrevista.pintarEntrevista(est, alInicio); return; }
       if (est.paso === 'fichas') { await window.PantallaFichas.pintarFichas(est, alInicio); return; }
       if (est.paso === 'ajustes') { await window.PantallaAjustes.pintarAjustes(est, refrescar); return; }

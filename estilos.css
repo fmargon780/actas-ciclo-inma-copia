@@ -213,3 +213,10 @@ a.boton { text-decoration: none; display: inline-block; }
 .rotulo-traida { margin: 10px 0 2px; font-size: 14px; text-align: center; }
 .tabla-traida { border-collapse: collapse; width: 100%; table-layout: fixed; }
 .tabla-traida td { border: 1px solid var(--linea); padding: 3px; vertical-align: top; }
+
+/* Acta de evaluación (fila 59) */
+.dos-col { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: start; }
+.pestanas { margin: 8px 0; }
+.campo-corto input { width: 5em; }
+.alumno-evaluacion summary { cursor: pointer; }
+@media (max-width: 800px) { .dos-col { grid-template-columns: minmax(0, 1fr); } }
