@@ -246,10 +246,10 @@
       });
       vacio();
 
-      parrafo('PUNTOS DEL DÍA', { negrita: true, alin: 'centro' });
+      parrafo((modelo.encabezados || {}).puntos || 'PUNTOS DEL DÍA', { negrita: true, alin: 'centro' });
       modelo.puntos.forEach(function (p) { parrafo(p, { sangria: 36, primera: 18 }); });
       vacio();
-      parrafo('ASUNTOS TRATADOS', { negrita: true, alin: 'centro' });
+      parrafo((modelo.encabezados || {}).asuntos || 'ASUNTOS TRATADOS', { negrita: true, alin: 'centro', juntoConSiguiente: true });
       modelo.asuntos.forEach(function (a) {
         if (a.titulo) parrafo(a.titulo, { negrita: true, antes: DESPUES, juntoConSiguiente: true });
         (a.lineas || [{ texto: a.texto, vineta: false }]).forEach(function (l) {

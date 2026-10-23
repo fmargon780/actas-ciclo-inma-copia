@@ -65,7 +65,8 @@
     ] },
     { "id": "reunion", "titulo": "Reunión general con familias", "texto": [
       "Los 14 puntos de la reunión ya vienen escritos. Si algo cambia este año, usa «Cambiar el texto». Si quieres añadir algo, escríbelo en «Añadir» y, si quieres, Claude lo redacta.",
-      "Apunta la asistencia y los delegados. «Crear acta» la manda al documento «Reuniones con familias» de tu carpeta ACTAS, que se crea la primera vez."
+      "Apunta la asistencia y los delegados. «Crear acta» guarda la reunión en PDF y en Word, con el membrete oficial, en tu carpeta ACTAS, dentro de «documentos» y del curso. «Abrir PDF» y «Abrir Word» los abren.",
+      "«Libro de reuniones con familias» junta todas las reuniones creadas de este curso en un solo PDF y un solo Word, por orden de fecha, cada una en página nueva con su membrete."
     ] },
     { "id": "ajustes", "titulo": "Ajustes", "texto": [
       "«Datos del curso»: el curso, el ciclo, la localidad, la coordinadora y la tabla del profesorado, con una fila por docente. Los asistentes de cada acta salen de esa tabla, en ese orden.",
@@ -108,6 +109,7 @@
     "traer-actas": "Elige el documento de actas en Word (en Google Docs: Archivo › Descargar › Microsoft Word). Se traen solo las actas de este curso, tal cual, cada una en PDF y en Word. Las de otros cursos no se tocan.",
     "traer-revision": "Lo que no cuadre sale en amarillo con su motivo. Corrígelo aquí mismo o déjalo como está. «Guardar y seguir» rehace el PDF y el Word de esta acta; «Seguir sin cambiar» deja lo guardado.",
     "libro-actas": "Junta las actas de este curso en un solo PDF y un solo Word, por orden de fecha, cada una en página nueva con su membrete. Se hace de nuevo entero cada vez.",
+    "libro-reuniones": "Junta las reuniones con familias de este curso, las de tu grupo de tutoría, en un solo PDF y un solo Word, por orden de fecha, cada una en página nueva con su membrete. Se hace de nuevo entero cada vez.",
     "crear-acta": "Monta el acta con el membrete oficial y la guarda en tu carpeta ACTAS, en PDF y en Word. Si vuelves a crear la misma acta, sustituye sus ficheros."
   }
 }

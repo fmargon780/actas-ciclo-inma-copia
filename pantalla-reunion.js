@@ -1,5 +1,5 @@
 /* Reunión general con familias (fila 42): el acta con los 14 puntos ya escritos, lo que Inma añade a cada uno (Claude lo pule), los delegados, la asistencia
-   del grupo y «Crear acta», que la manda al documento «Reuniones con familias <curso>». La reunión se guarda sola en ACTAS/reuniones/. */
+   del grupo y «Crear acta», que guarda el PDF y el Word en ACTAS › documentos (fila 57). La reunión se guarda sola en ACTAS/reuniones/. */
 (function (g) {
   'use strict';
   var h = g.Dom.h, R = g.Reunion, T = g.Tutoria;
@@ -17,9 +17,17 @@
   /* --- la lista de reuniones del curso --- */
   async function pintarLista(est, alInicio, tut, reuniones) {
     var abrir = function (r) { est.reunionActual = r; est.reunionId = null; est.refrescar(); };
+    var avisoLista = h('p', { class: 'suave', id: 'avisoLista' });
     var items = reuniones.map(function (r) {
       var confirmar = h('span', { class: 'confirmar', hidden: '' }), botones = h('span', { class: 'botones' });
       botones.appendChild(h('button', { type: 'button', class: 'boton principal', 'data-accion': 'abrir-reunion', texto: 'Abrir', onclick: function () { abrir(r); } }));
+      if (r.estado === 'creada' && r.documentos) {
+        ['pdf', 'docx'].forEach(function (t) {
+          botones.appendChild(h('button', { type: 'button', class: 'boton', 'data-accion': 'abrir-' + t, texto: t === 'pdf' ? 'Abrir PDF' : 'Abrir Word', onclick: async function () {
+            if ((await g.Envios.abrir(est.raiz, r, t)) === 'falta') avisoLista.textContent = 'No encuentro el fichero en la carpeta ACTAS.';
+          } }));
+        });
+      }
       if (r.estado !== 'creada') {
         botones.appendChild(h('button', { type: 'button', class: 'boton peligro', 'data-accion': 'borrar', texto: 'Borrar', onclick: function () { botones.hidden = true; confirmar.hidden = false; } }));
         confirmar.appendChild(h('span', { texto: '¿Borrar esta reunión? ' }));
@@ -39,8 +47,9 @@
         var l = est.alumnado && est.alumnado.lista;
         abrir(R.nueva(tut, est.ficha, l ? T.alumnadoDelGrupo(l, tut.grupo) : [], hoyIso(), new Date()));
       } }),
+      h('button', { type: 'button', class: 'boton grande', id: 'libroReuniones', texto: 'Libro de reuniones con familias', onclick: function () { g.PantallaReunionLibro.pintar(est, tut, function () { est.refrescar(); }); } }),
       h('h2', { class: 'subtitulo', texto: 'Las de este curso' }),
-      h('ul', { class: 'borradores', id: 'listaReuniones' }, items)
+      h('ul', { class: 'borradores', id: 'listaReuniones' }, items), avisoLista
     ]);
   }
 
@@ -189,7 +198,7 @@
       var previa = R.yaCreada(await R.listar(est.raiz), r);
       if (previa && !sinAviso) {
         zonaPregunta.appendChild(h('div', { class: 'aviso pregunta', id: 'reunionYaCreada' }, [
-          h('span', { texto: 'Esta reunión ya se creó el ' + diaDe(previa.creada) + '. Si sigues, se añadirá otra vez al documento. ' }),
+          h('span', { texto: 'Esta reunión ya se creó el ' + diaDe(previa.creada) + '. Si sigues, se guardarán otra vez sus ficheros. ' }),
           h('button', { type: 'button', class: 'boton chico principal', 'data-accion': 'seguir-crear', texto: 'Seguir', onclick: function () { crear(true); } }),
           h('button', { type: 'button', class: 'boton chico', 'data-accion': 'cancelar-crear', texto: 'Cancelar', onclick: function () { zonaPregunta.textContent = ''; } })
         ]));
@@ -198,17 +207,20 @@
       try {
         await est.alSalir();
         var ahora = new Date();
-        await g.Envios.enviar(est.raiz, R.armarEnvio(r, ahora));
-        R.marcarCreada(r, ahora); await R.guardar(est.raiz, r, ahora);
-      } catch (x) { g.Dom.decir(avisoCrear, 'No he podido enviar el acta: ' + (x && x.message ? x.message : x)); return; }
+        await g.ReunionDocs.crear(est.raiz, r, est.ficha, ahora);
+      } catch (x) { g.Dom.decir(avisoCrear, 'No he podido crear el acta: ' + (x && x.message ? x.message : x)); return; }
       terminado = true; est.alSalir = null; est.estadoGuardado.textContent = '';
+      var avisoAbrir = g.Dom.aviso();
+      function abrirFichero(tipo) { return async function () { g.Dom.decir(avisoAbrir, (await g.Envios.abrir(est.raiz, r, tipo)) === 'falta' ? 'No encuentro el fichero en la carpeta ACTAS.' : ''); }; }
       g.Dom.montar([h('section', { class: 'tarjeta ancha' }, [
-        h('h2', { texto: 'Acta creada' }),
-        h('p', { id: 'reunionCreada', texto: 'Queda enviada. En un minuto aparecerá al final del documento «Reuniones con familias ' + g.cursoEscolar(r.fecha) + '» de tu carpeta ACTAS. Si no aparece, mira «Enviadas» en el inicio.' }),
+        h('h2', { texto: 'Acta guardada en tu carpeta ACTAS' }),
+        h('p', { id: 'reunionCreada', texto: 'La reunión del ' + fechaDe(r.fecha) + ' está en PDF y en Word, en la carpeta ACTAS › ' + r.documentos.curso + '.' }),
         h('div', { class: 'fila' }, [
-          h('button', { type: 'button', class: 'boton principal', id: 'volverInicio', texto: 'Volver al inicio', onclick: function () { est.reunionActual = null; alInicio(); } }),
+          h('button', { type: 'button', class: 'boton principal', id: 'abrirPdf', texto: 'Abrir PDF', onclick: abrirFichero('pdf') }),
+          h('button', { type: 'button', class: 'boton principal', id: 'abrirWord', texto: 'Abrir Word', onclick: abrirFichero('docx') }),
+          h('button', { type: 'button', class: 'boton', id: 'volverInicio', texto: 'Volver al inicio', onclick: function () { est.reunionActual = null; alInicio(); } }),
           h('button', { type: 'button', class: 'boton', id: 'verReuniones', texto: 'Ver las reuniones', onclick: function () { est.reunionActual = null; est.refrescar(); } })
-        ])
+        ]), avisoAbrir
       ])]);
     }
 

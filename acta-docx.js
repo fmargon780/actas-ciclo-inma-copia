@@ -71,9 +71,9 @@
     x.push(tabla([2160, ANCHO - 2160], m.filas.map(function (f) {
       return celda(2160, [parrafo(f[0], { negrita: true, despues: 0 })]) + celda(ANCHO - 2160, f[1].map(function (t) { return parrafo(t, { despues: 0 }); }));
     })), parrafo(''));
-    x.push(parrafo('PUNTOS DEL DÍA', { negrita: true, alin: 'center' }));
+    x.push(parrafo((m.encabezados || {}).puntos || 'PUNTOS DEL DÍA', { negrita: true, alin: 'center' }));
     m.puntos.forEach(function (p) { x.push(parrafo(p, { sangria: { izq: 720, primera: 360 } })); });
-    x.push(parrafo(''), parrafo('ASUNTOS TRATADOS', { negrita: true, alin: 'center' }));
+    x.push(parrafo(''), parrafo((m.encabezados || {}).asuntos || 'ASUNTOS TRATADOS', { negrita: true, alin: 'center' }));
     m.asuntos.forEach(function (a) {
       if (a.titulo) x.push(parrafo(a.titulo, { negrita: true, antes: 120 }));
       (a.lineas || [{ texto: a.texto, vineta: false }]).forEach(function (l) {
