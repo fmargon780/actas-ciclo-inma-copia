@@ -64,6 +64,15 @@
       zonaTextos.textContent = '';
       if (!E.hayTextos(e)) return;
       if (avisoNombres) zonaTextos.appendChild(h('div', { class: 'aviso', 'data-aviso-nombres': '1', texto: avisoNombres }));
+      if (String(e.resumenCiclo || '').trim() && g.EvaluacionCiclo) {
+        var enviado = h('span', { class: 'suave', id: 'resumenEnviado', 'aria-live': 'polite' });
+        zonaTextos.appendChild(h('div', { class: 'fila', id: 'enviarResumen' }, [
+          h('button', { type: 'button', class: 'boton', 'data-accion': 'enviar-resumen', texto: 'Enviar resumen al ciclo', onclick: async function () {
+            enviado.textContent = (await g.PantallaEntrevista.copiarTexto(g.EvaluacionCiclo.textoParaEnviar(e), true))
+              ? 'Copiado. Pégalo en un correo o mensaje a quien escribe el acta de ciclo' : 'No he podido copiar';
+          } }), g.Ayuda.aviso('enviar-resumen-ciclo'), enviado
+        ]));
+      }
       var seneca = h('div', { id: 'panelSeneca', 'data-panel': 'seneca' }), anexo = h('div', { id: 'panelAnexo', 'data-panel': 'anexo' });
       if (pestana !== 'seneca') seneca.setAttribute('hidden', ''); else seneca.removeAttribute('hidden');
       if (pestana !== 'anexo') anexo.setAttribute('hidden', ''); else anexo.removeAttribute('hidden');

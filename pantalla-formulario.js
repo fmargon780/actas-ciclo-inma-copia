@@ -39,11 +39,11 @@
 
     /* Puntos */
     var contenedor = h('div', { class: 'puntos', id: 'puntos' });
-    var alumnadoVisto = [], avisoAlumnado = h('div', { class: 'aviso', id: 'avisoAlumnado', hidden: '' });
+    var alumnadoVisto = [], avisoAlumnado = h('div', { class: 'aviso', id: 'avisoAlumnado', hidden: '' }), avisoResumenes = h('div', { class: 'aviso ok', id: 'avisoResumenes', hidden: '' });
     /* Lo que depende de la lista de alumnado (se carga aparte): el aviso de arriba, el recordatorio y el botón «+ Alumno» de cada punto. */
     function pintarAlumnado() {
       /* Con la lista de grupos de Rúbricas, las sesiones de evaluación sacan un bloque por grupo (una sola vez en cada punto). */
-      if (est.alumnado && est.alumnado.lista && g.Huecos.completarGrupos(b, est.alumnado.lista.grupos)) { cambio(); pintarPuntos(); return; }
+      if (est.alumnado && est.alumnado.lista && g.Huecos.completarGrupos(b, est.alumnado.lista.grupos)) { cambio(); pintarPuntos(); traerResumenes(); return; }
       var a = est.alumnado, ok = !!(a && a.estado === 'ok'), cargando = !a;
       alumnadoVisto.forEach(function (x) {
         x.recordatorio.textContent = ok || cargando ? 'Alumnado: escríbelo y elígelo de la lista, o usa + Alumno' : 'Sin lista de alumnado: abre la carpeta RÚBRICAS';
@@ -88,6 +88,7 @@
       var partes = [cabeza];
       if (g.Huecos.tiene(p)) partes.push(g.PantallaHuecos.pintar(p, i, caja, cambio, pintarPuntos), h('div', { class: 'suave etiqueta-libres', texto: 'Notas libres (lo que no encaje en ningún hueco)' }));
       else partes.push(g.PantallaHuecos.pintar(p, i, caja, cambio, pintarPuntos));
+      if (g.EvaluacionCiclo && Array.isArray(p.grupos) && p.grupos.length) partes.push(g.PantallaResumenCiclo.pintar(b, p, i, est.alumnado && est.alumnado.lista ? est.alumnado.lista.delCiclo : null, cambio, pintarPuntos));
       partes.push(notas);
       return h('div', { class: 'punto', 'data-punto': String(i) }, partes);
     }
@@ -108,8 +109,18 @@
       }
       return h('div', { class: 'caja-ayudas' }, [ed.elemento, h('div', { class: 'pie-punto' }, pie)]);
     }
+    /* Fila 61: la propia clase entra sola. Se hace una vez, cuando ya están los bloques por grupo (hace falta la lista de Rúbricas). */
+    async function traerResumenes() {
+      try {
+        if (!est.raiz || !g.EvaluacionCiclo || !g.EvaluacionCiclo.puntosDeEvaluacion(b).length) return;
+        var r = g.EvaluacionCiclo.traerPropia(b, await g.Evaluacion.listar(est.raiz));
+        avisoResumenes.textContent = ''; avisoResumenes.hidden = !r.avisos.length;
+        r.avisos.forEach(function (t) { avisoResumenes.appendChild(h('div', { texto: t })); });
+        if (r.cambiado) { cambio(); pintarPuntos(); }
+      } catch (x) { /* sin acta de evaluación legible: el borrador sigue como estaba */ }
+    }
     pintarPuntos();
-    g.Rubricas.cargar(est).then(pintarAlumnado);
+    g.Rubricas.cargar(est).then(pintarAlumnado).then(traerResumenes);
 
     g.Dom.montar([
       h('div', { class: 'barra-form' }, [
@@ -123,7 +134,7 @@
       ]),
       h('section', { class: 'tarjeta ancha' }, [h('h3', { texto: 'Profesorado asistente' }), asistentes]),
       h('section', { class: 'tarjeta ancha' }, [
-        h('h3', { texto: 'Puntos del orden del día' }), avisoAlumnado, contenedor,
+        h('h3', { texto: 'Puntos del orden del día' }), avisoAlumnado, avisoResumenes, contenedor,
         h('button', { type: 'button', class: 'boton', id: 'anadirPunto', texto: '+ Añadir punto', onclick: function () { B.anadirPunto(b); cambio(); pintarPuntos(); var t = contenedor.querySelector('.punto:last-child .titulo-punto'); if (t) t.focus(); } })
       ])
     ]);

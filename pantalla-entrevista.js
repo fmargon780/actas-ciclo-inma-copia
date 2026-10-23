@@ -11,9 +11,9 @@
   }
   function fechaDe(iso) { try { return g.fechaLarga(iso); } catch (e) { return iso; } }
 
-  /* Copia el texto tal como Séneca lo entiende (texto plano, párrafos separados). */
-  async function copiarTexto(texto) {
-    var plano = E.textoParaSeneca(texto);
+  /* Copia el texto tal como Séneca lo entiende (texto plano, párrafos separados); con `tal`, tal cual está (el resumen para el ciclo, fila 61). */
+  async function copiarTexto(texto, tal) {
+    var plano = tal ? String(texto) : E.textoParaSeneca(texto);
     try { await g.navigator.clipboard.writeText(plano); return true; } catch (e) { /* se prueba el modo antiguo */ }
     try {
       var t = document.createElement('textarea'); t.value = plano; document.body.appendChild(t); t.select();

@@ -12,7 +12,16 @@
         h('label', { class: 'titulo-hueco', texto: x.titulo }),
         h('button', { type: 'button', class: 'boton chico peligro', 'data-accion': 'quitar-hueco', title: 'Quitar este hueco', texto: '✕', onclick: function () { Hu.quitar(lista, k); cambio(); repintar(); } })
       ]);
-      return h('div', { class: 'hueco', 'data-hueco': id + '-' + k }, [cabeza, caja(id + '-' + k, x.notas, function (t) { x.notas = t; cambio(); }, true)]);
+      var partes = [cabeza];
+      /* Fila 61: un resumen pegado con algo que parece un nombre sin reconocer no va a Claude hasta que se corrija o se confirme. */
+      var aviso = h('div', { class: 'aviso', 'data-revisar-hueco': id + '-' + k, hidden: '' }, [
+        h('span', { texto: (g.EvaluacionCiclo ? g.EvaluacionCiclo.AVISO_NOMBRE : 'Revisa este texto') + '. No va a Claude hasta que lo corrijas o lo confirmes. ' }),
+        h('button', { type: 'button', class: 'boton chico', 'data-accion': 'confirmar-hueco', texto: 'Está bien así', onclick: function () { x.revisar = false; cambio(); repintar(); } })
+      ]);
+      aviso.hidden = !x.revisar;
+      partes.push(aviso);
+      partes.push(caja(id + '-' + k, x.notas, function (t) { x.notas = t; if (x.revisar) { x.revisar = false; aviso.hidden = true; } cambio(); }, true));
+      return h('div', { class: 'hueco', 'data-hueco': id + '-' + k }, partes);
     });
     var nuevo = h('input', { type: 'text', class: 'nuevo-hueco', placeholder: 'Título de un hueco nuevo', 'aria-label': 'Título de un hueco nuevo' });
     var anadir = function () { if (Hu.anadir(lista, nuevo.value)) { cambio(); repintar(); } };

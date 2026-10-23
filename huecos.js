@@ -8,8 +8,9 @@
 
   function limpio(t) { return String(t == null ? '' : t).replace(/\s+/g, ' ').trim(); }
   function hueco(titulo) { return { titulo: limpio(titulo), notas: '' }; }
-  function copia(l) { return (l || []).map(function (x) { return { titulo: limpio(x.titulo), notas: String(x.notas || '') }; }); }
-  function rellena(x) { return String(x.notas || '').trim() !== ''; }
+  function copia(l) { return (l || []).map(function (x) { var o = { titulo: limpio(x.titulo), notas: String(x.notas || '') }; if (x.revisar) o.revisar = true; return o; }); }
+  /* Un hueco marcado `revisar` (fila 61: puede llevar un nombre que no está en la lista) cuenta como vacío hasta que se corrija o se confirme: no va a Claude. */
+  function rellena(x) { return !x.revisar && String(x.notas || '').trim() !== ''; }
 
   /* Un punto de la convocatoria ({ titulo, huecos, porGrupo? }) -> los campos de hueco del punto del borrador. */
   function deConvocatoria(punto, cp) {
