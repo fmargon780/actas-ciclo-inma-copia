@@ -83,5 +83,5 @@
     return textoDeXml(dec.decode(z['word/document.xml']), z['word/numbering.xml'] ? formatosNumeracion(dec.decode(z['word/numbering.xml'])) : null);
   }
 
-  g.Docx = { leerTexto: leerTexto, textoDeXml: textoDeXml };
+  g.Docx = { leerTexto: leerTexto, textoDeXml: textoDeXml, formatosNumeracion: formatosNumeracion, decodificar: decodificar };
 })(typeof window !== 'undefined' ? window : globalThis);

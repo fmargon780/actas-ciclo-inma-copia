@@ -187,3 +187,29 @@ a.boton { text-decoration: none; display: inline-block; }
 .ayuda-texto p { margin: 6px 0; }
 @media (max-width: 800px) { .ayuda-pagina { grid-template-columns: 1fr; } .ayuda-indice { position: static; } }
 @media print { .boton-ayuda, .info-caja { display: none; } }
+
+/* Fila 55: lo que no cuadre del acta, en amarillo detrás del texto, con su porqué debajo */
+.caja-marcas { position: relative; background: #fff; border-radius: 6px; }
+.caja-marcas .fondo, .caja-marcas textarea { font: inherit; line-height: 1.4; padding: 5px 8px; border: 1px solid var(--linea); box-sizing: border-box; margin: 0; width: 100%; white-space: pre-wrap; overflow-wrap: break-word; letter-spacing: normal; border-radius: 6px; }
+.caja-marcas .fondo { position: absolute; top: 0; left: 0; right: 0; bottom: 0; color: transparent; overflow: hidden; pointer-events: none; border-color: transparent; }
+.caja-marcas textarea { position: relative; background: transparent; overflow: hidden; resize: none; display: block; }
+.caja-marcas mark { background: #FFF176; color: transparent; border-radius: 2px; }
+.marca-frase { background: #FFF9C4; border-left: 3px solid #FFF176; padding: 2px 8px; margin-top: 4px; font-size: 13px; }
+.aviso.amarillo { background: #FFF9C4; border-color: #e6d94c; display: flex; flex-direction: column; gap: 2px; margin-top: 12px; }
+.aviso.amarillo[hidden] { display: none; }
+.aviso.amarillo .marca-frase { margin-top: 0; }
+.estado-envio.creada { color: var(--verde); }
+
+/* Revisar actas traídas del documento antiguo (fila 56) */
+.campo-traida { flex: 1; min-width: 0; }
+.campo-traida .caja-marcas textarea { min-height: 30px; }
+.campo-traida textarea.negrita { font-weight: 700; }
+.cuadro-traida { border: 1px solid var(--linea); border-radius: 6px; padding: 6px; background: #f2f2f2; display: flex; flex-direction: column; gap: 4px; }
+.fila-cabecera-traida { display: grid; grid-template-columns: 180px 1fr; gap: 4px 8px; align-items: start; }
+.fila-cabecera-traida strong { grid-column: 1; padding-top: 6px; }
+.fila-cabecera-traida .campo-traida { grid-column: 2; }
+.linea-traida { display: flex; gap: 8px; align-items: flex-start; }
+.linea-traida .numero { width: 28px; text-align: right; padding-top: 6px; flex: none; }
+.rotulo-traida { margin: 10px 0 2px; font-size: 14px; text-align: center; }
+.tabla-traida { border-collapse: collapse; width: 100%; table-layout: fixed; }
+.tabla-traida td { border: 1px solid var(--linea); padding: 3px; vertical-align: top; }

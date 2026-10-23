@@ -37,6 +37,15 @@
     }));
     var botones = h('span', { class: 'botones' });
     if (item.estado === 'error') botones.appendChild(h('button', { type: 'button', class: 'boton principal', 'data-accion': 'reintentar', texto: 'Volver a intentar', onclick: async function () { await g.Envios.reintentar(est.raiz, e.id); await refrescar(); } }));
+    if (item.estado === 'creada' || item.estado === 'traida') {
+      var avisoAbrir = h('span', { class: 'suave', 'data-aviso-abrir': '' });
+      [['pdf', 'Abrir PDF'], ['docx', 'Abrir Word']].forEach(function (x) {
+        botones.appendChild(h('button', { type: 'button', class: 'boton principal', 'data-accion': 'abrir-' + x[0], texto: x[1], onclick: async function () {
+          avisoAbrir.textContent = (await g.Envios.abrir(est.raiz, e, x[0])) === 'falta' ? 'No encuentro el fichero en la carpeta ACTAS.' : '';
+        } }));
+      });
+      botones.appendChild(avisoAbrir);
+    }
     botones.appendChild(h('button', { type: 'button', class: 'boton', 'data-accion': 'ver-enviada', texto: 'Ver lo que se envió', onclick: function () { detalle.hidden = !detalle.hidden; } }));
     return h('li', { class: 'borrador enviada ' + item.estado, 'data-id': e.id, 'data-estado': item.estado }, [
       h('div', { class: 'datos' }, [
@@ -56,12 +65,13 @@
     nodos.push(h('button', { type: 'button', class: 'boton grande', id: 'fichasAlumnado', texto: 'Fichas del alumnado', onclick: function () { est.abrirFichas(); } }));
     nodos.push(h('button', { type: 'button', class: 'boton grande', id: 'entrevistaFamilia', texto: 'Entrevista con familia', onclick: function () { est.abrirEntrevista(); } }));
     nodos.push(h('button', { type: 'button', class: 'boton grande', id: 'miTutoria', texto: 'Mi tutoría', onclick: function () { est.abrirMiTutoria(); } }));
+    nodos.push(h('button', { type: 'button', class: 'boton grande', id: 'libroActas', texto: 'Libro de actas del curso', onclick: function () { est.abrirLibro(); } }));
     nodos.push(h('button', { type: 'button', class: 'boton grande', id: 'reunionFamilias', texto: 'Reunión general con familias', onclick: function () { est.abrirReunion(); } }));
     nodos.push(h('h2', { class: 'subtitulo', texto: 'Borradores' }));
     if (!lista.length) nodos.push(h('p', { class: 'suave', id: 'sinBorradores', texto: 'No tienes borradores. Lo que escribas en una acta nueva se guarda solo aquí.' }));
     else nodos.push(h('ul', { class: 'borradores', id: 'listaBorradores' }, lista.map(function (b) { return fila(est, b, refrescar); })));
-    nodos.push(h('h2', { class: 'subtitulo', texto: 'Enviadas' }));
-    if (!enviadas.length) nodos.push(h('p', { class: 'suave', id: 'sinEnviadas', texto: 'Todavía no has enviado ningún acta al documento.' }));
+    nodos.push(h('h2', { class: 'subtitulo', texto: 'Actas hechas' }));
+    if (!enviadas.length) nodos.push(h('p', { class: 'suave', id: 'sinEnviadas', texto: 'Todavía no has creado ningún acta.' }));
     else nodos.push(h('ul', { class: 'borradores', id: 'listaEnviadas' }, enviadas.map(function (x) { return filaEnviada(est, x, refrescar); })));
     g.Dom.montar(nodos);
   }

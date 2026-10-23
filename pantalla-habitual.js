@@ -107,7 +107,7 @@
     g.Dom.montar([
       h('div', { class: 'barra-form' }, [h('h2', { class: 'subtitulo', texto: 'Lo habitual' }), h('button', { type: 'button', class: 'boton derecha', id: 'volverInicio', texto: 'Volver al inicio', onclick: alInicio })]),
       h('p', { class: 'suave', texto: 'Los puntos que se repiten en las reuniones de cada mes, aprendidos de tus actas. Lo que cambies aquí manda: un punto que quites no vuelve. «' + H.PUNTO_ANTERIOR + '» va siempre el primero de cada convocatoria.' }),
-      h('div', { class: 'fila' }, [boton]), avisoRub, h('p', { class: 'suave', texto: PEGA_GOOGLE }), estado, fuentes
+      h('div', { class: 'fila' }, [boton, h('button', { type: 'button', class: 'boton', id: 'traerDesdeHabitual', texto: 'Traer actas del documento antiguo', onclick: function () { est.abrirTraer(); } })]), avisoRub, h('p', { class: 'suave', texto: PEGA_GOOGLE }), estado, fuentes
     ].concat(meses.map(function (m) { return bloqueMes(est, habitual, m, repintar); })).filter(Boolean));
   }
 

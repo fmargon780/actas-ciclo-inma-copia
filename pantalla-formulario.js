@@ -34,7 +34,7 @@
       var area = h('textarea', { id: 'asistentesTexto', rows: '4', placeholder: 'Un nombre por línea: cargo: nombre' }); area.value = b.asistentes.join('\n');
       area.oninput = function () { b.asistentes = area.value.split(/\r?\n/).map(function (l) { return l.trim(); }).filter(Boolean); cambio(); };
       asistentes = h('div', {}, [
-        h('div', { class: 'aviso', id: 'avisoSinFicha', texto: 'Abre el documento de actas y entra en Actas › Datos del curso una vez.' }), area]);
+        h('div', { class: 'aviso', id: 'avisoSinFicha', texto: 'Rellena «Datos del curso» en Ajustes una vez (o abre el documento de actas y entra en Actas › Datos del curso).' }), area]);
     }
 
     /* Puntos */

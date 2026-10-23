@@ -37,6 +37,8 @@
     est.abrirEntrevista = function (id) { est.paso = 'entrevista'; est.entrevistaId = id || null; est.entrevistaActual = null; est.borrador = null; refrescar(); };
     est.abrirReunion = function (id) { est.paso = 'reunion'; est.reunionId = id || null; est.reunionActual = null; est.borrador = null; refrescar(); };
     est.abrirMiTutoria = function () { est.paso = 'tutoria'; est.borrador = null; refrescar(); };
+    est.abrirTraer = function () { est.paso = 'traer'; est.traer = null; est.borrador = null; refrescar(); };
+    est.abrirLibro = function () { est.paso = 'libro'; est.libro = null; est.borrador = null; refrescar(); };
     est.abrirHabitual = function () { est.paso = 'habitual'; est.borrador = null; refrescar(); };
     est.abrirConvocatoria = function (fecha) { est.paso = 'convocatoria'; est.fechaConvocatoria = fecha || hoyIso(); est.borrador = null; refrescar(); };
     est.irAjustes = async function () { await salir(); est.paso = 'ajustes'; est.borrador = null; refrescar(); };
@@ -48,7 +50,7 @@
     };
     refrescar = async function () {
       $('estadoGuardado').textContent = '';
-      $('pasoInicio').classList.toggle('activo', est.paso === 'inicio' || est.paso === 'formulario' || est.paso === 'revision' || est.paso === 'fichas' || est.paso === 'habitual' || est.paso === 'convocatoria' || est.paso === 'entrevista' || est.paso === 'tutoria' || est.paso === 'reunion');
+      $('pasoInicio').classList.toggle('activo', est.paso === 'inicio' || est.paso === 'formulario' || est.paso === 'revision' || est.paso === 'fichas' || est.paso === 'habitual' || est.paso === 'traer' || est.paso === 'libro' || est.paso === 'convocatoria' || est.paso === 'entrevista' || est.paso === 'tutoria' || est.paso === 'reunion');
       $('pasoAjustes').classList.toggle('activo', est.paso === 'ajustes');
       est.ficha = await window.Datos.leerFicha(raiz);
       if (est.paso !== 'entrevista' && est.paso !== 'ayuda') { est.entrevistaId = null; est.entrevistaActual = null; }
@@ -63,6 +65,8 @@
         var redactar = est.redactarAlEntrar; est.redactarAlEntrar = false;
         window.PantallaRevision.pintarRevision(est, est.borrador, function () { est.paso = 'formulario'; refrescar(); }, alInicio, redactar); return;
       }
+      if (est.paso === 'traer') { await window.PantallaTraer.pintarTraer(est, alInicio); return; }
+      if (est.paso === 'libro') { await window.PantallaLibro.pintarLibro(est, alInicio); return; }
       if (est.paso === 'habitual') { await window.PantallaHabitual.pintarHabitual(est, alInicio); return; }
       if (est.paso === 'convocatoria') { await window.PantallaConvocatoria.pintarConvocatoria(est, alInicio, est.fechaConvocatoria || hoyIso()); return; }
       if (est.paso === 'tutoria') { await window.PantallaMiTutoria.pintarMiTutoria(est, alInicio); return; }

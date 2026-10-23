@@ -85,6 +85,21 @@
         await w.write(texto);
         await w.close();
       },
+      /* Guarda un fichero binario (PDF, Word) y comprueba que ha quedado entero; si se corta, avisa y no deja medio fichero dado por bueno. */
+      async escribirBinario(ruta, bytes) {
+        var t = ruta.split('/'), n = t.pop();
+        var fh = await (await subcarpeta(raiz, t.join('/'), true)).getFileHandle(n, { create: true });
+        var w = await fh.createWritable();
+        try { await w.write(bytes); await w.close(); }
+        catch (e) { try { if (w.abort) await w.abort(); } catch (x) { /* nada */ } throw e; }
+        if ((await fh.getFile()).size !== bytes.length) throw propio('No he podido guardar «' + n + '» entero. Vuelve a intentarlo.');
+      },
+      /* El fichero tal cual (File) o null si no existe: para abrirlo o descargarlo. */
+      async abrirArchivo(ruta) {
+        var t = ruta.split('/'), n = t.pop();
+        try { return await (await (await subcarpeta(raiz, t.join('/'), false)).getFileHandle(n)).getFile(); }
+        catch (e) { if (esNoEncontrado(e)) return null; throw e; }
+      },
       /* Todo lo que hay en una carpeta: [{ nombre, tipo: 'file'|'directory' }]; null si la carpeta no existe. */
       async listar(ruta) {
         var l = [];

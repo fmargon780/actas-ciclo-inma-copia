@@ -29,11 +29,16 @@
     } });
     var tutoria = await g.PantallaTutoria.tarjeta(est, function () { refrescar(); });
     var datosCurso = await g.PantallaDatosCurso.tarjeta(est);
+    var traer = h('section', { class: 'tarjeta ancha' }, [
+      h('h2', { texto: 'Actas del documento antiguo ' }, [g.Ayuda.aviso('traer-actas')]),
+      h('p', { class: 'suave', texto: 'Trae a la carpeta ACTAS, con su PDF y su Word, las actas de este curso que tengas en un documento de Word.' }),
+      h('div', { class: 'fila' }, [h('button', { type: 'button', class: 'boton', id: 'traerDesdeAjustes', texto: 'Traer actas del documento antiguo', onclick: function () { est.abrirTraer(); } })])
+    ]);
     g.Dom.montar([datosCurso, h('section', { class: 'tarjeta ancha' }, [
       h('h2', { texto: 'Clave de Claude ' }, [g.Ayuda.aviso('clave-claude')]),
       h('p', { class: 'suave', texto: 'Se guarda en tu carpeta ACTAS. La usará Claude para redactar las actas.' }),
       campo, h('div', { class: 'fila' }, [guardar, deRubricas, g.Ayuda.aviso('clave-rubricas')]), dicho, aviso
-    ]), tutoria]);
+    ]), traer, tutoria]);
   }
   g.PantallaAjustes = { pintarAjustes: pintarAjustes };
 })(window);
