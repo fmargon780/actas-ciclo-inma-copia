@@ -76,6 +76,17 @@
     var rub = await g.Rubricas.cargar(est), lista = rub.lista;
     var alumnado = lista ? T.alumnadoDelGrupo(lista, e.clase) : [];
     var cambio = g.Autoguardado.crear(est, e, E.guardar).cambio, textos = null, lugarAreas = h('div', { class: 'dos-col', id: 'areasEvaluacion' });
+    var hayRubricas = false, cifrasCambiadas = false;
+    /* Fila 60: el % con dificultades sale de las notas de Rúbricas (solo se lee su carpeta). Una acta ya creada no se toca. */
+    if (lista && est.alumnado.handle && e.estado !== 'creada') {
+      try {
+        var res = await g.EvaluacionRubricas.leer(g.Carpeta.adaptador(est.alumnado.handle), e);
+        hayRubricas = res.estado === 'ok';
+        var antes = JSON.stringify(e.areas), ap = g.EvaluacionRubricas.aplicar(e, res);
+        cifrasCambiadas = ap.cambiaron;
+        if (JSON.stringify(e.areas) !== antes) cambio();
+      } catch (x) { hayRubricas = false; }
+    }
     function alCambiar() { cambio(); if (textos) textos.notasCambiaron(); }
 
     /* Una caja de notas con dictado y «+ Alumno». */
@@ -98,10 +109,23 @@
       lugarAreas.textContent = '';
       e.areas.forEach(function (a, i) {
         var pct = h('input', { type: 'number', min: '0', max: '100', step: '1', 'data-porcentaje': String(i), value: E.tienePorcentaje(a) ? String(a.porcentaje) : '', title: 'Porcentaje del grupo con dificultades' });
-        pct.oninput = function () { E.ponerPorcentaje(a, pct.value); alCambiar(); };
+        pct.oninput = function () { E.ponerPorcentaje(a, pct.value); alCambiar(); pintarNota(); };
+        var nota = h('span', { class: 'suave nota-rubricas', 'data-nota-rubricas': String(i) });
+        function pintarNota() {
+          nota.textContent = '';
+          var hay = a.porcentajeDeRubricas != null && a.porcentajeDeRubricas !== '';
+          if (hay && !a.porcentajeAMano) nota.textContent = a.fraseRubricas || '';
+          else if (hay) {
+            nota.appendChild(document.createTextNode(a.porcentajeDeRubricas + ' en Rúbricas '));
+            nota.appendChild(h('button', { type: 'button', class: 'boton chico', 'data-accion': 'usar-rubricas', texto: 'Usar el de Rúbricas', onclick: function () {
+              g.EvaluacionRubricas.usarElDeRubricas(a); pct.value = String(a.porcentaje); alCambiar(); pintarNota();
+            } }));
+          } else if (hayRubricas && !a.porcentajeAMano && !E.tienePorcentaje(a)) nota.textContent = 'Sin notas en Rúbricas: escríbela tú';
+        }
+        pintarNota();
         var quitar = h('button', { type: 'button', class: 'boton chico', 'data-accion': 'quitar-area', texto: 'Quitar', onclick: function () { E.quitarArea(e, i); alCambiar(); pintarAreas(); } });
         lugarAreas.appendChild(h('div', { class: 'tarjeta area-evaluacion', 'data-area': a.nombre }, [
-          h('div', { class: 'cabeza-hueco' }, [h('strong', { texto: a.nombre }), h('span', { class: 'fila' }, [h('label', { class: 'campo-corto' }, ['% con dificultades ', pct]), quitar])]),
+          h('div', { class: 'cabeza-hueco' }, [h('strong', { texto: a.nombre }), h('span', { class: 'fila' }, [h('label', { class: 'campo-corto' }, ['% con dificultades ', pct]), quitar])]), nota,
           caja('ev-area-' + i, '', a.notas, function (t) { a.notas = t; })
         ]));
       });
@@ -150,7 +174,8 @@
       h('section', { class: 'tarjeta ancha' }, [h('div', { class: 'cuatro' }, [h('label', { class: 'campo' }, ['Fecha de la sesión', fecha]),
         h('label', { class: 'campo' }, ['Alumnas', chicas]), h('label', { class: 'campo' }, ['Alumnos', chicos])]),
         h('p', { class: 'suave', texto: 'La composición del grupo la pones tú: Rúbricas no sabe si cada alumno es chico o chica.' })]),
-      h('section', { class: 'tarjeta ancha' }, [h('h3', { texto: 'Por área' }), h('p', { class: 'suave', texto: 'Notas de lo hablado en cada área y el porcentaje del grupo con dificultades.' }), lugarAreas]),
+      h('section', { class: 'tarjeta ancha' }, [h('h3', { texto: 'Por área' }), h('p', { class: 'suave', texto: 'Notas de lo hablado en cada área y el porcentaje del grupo con dificultades. Si el área tiene notas en Rúbricas, el porcentaje sale de ahí y puedes cambiarlo.' }),
+        cifrasCambiadas ? h('div', { class: 'aviso', id: 'avisoCifrasRubricas', texto: 'Las cifras de Rúbricas han cambiado desde que se redactó: vuelve a pulsar «Redactar con Claude» si quieres ponerlas al día.' }) : null, lugarAreas].filter(Boolean)),
       alumnos(),
       h('section', { class: 'tarjeta ancha' }, cajas),
       textos.nodo
