@@ -36,11 +36,12 @@
       h('p', { class: 'suave', texto: 'Trae a la carpeta ACTAS, con su PDF y su Word, las actas de este curso que tengas en un documento de Word.' }),
       h('div', { class: 'fila' }, [h('button', { type: 'button', class: 'boton', id: 'traerDesdeAjustes', texto: 'Traer actas del documento antiguo', onclick: function () { est.abrirTraer(); } })])
     ]);
-    g.Dom.montar([colegio, datosCurso, h('section', { class: 'tarjeta ancha' }, [
+    var cuenta = g.Entrada.tarjeta(), invitados = await g.PantallaInvitados.tarjeta();
+    g.Dom.montar([cuenta, invitados, colegio, datosCurso, h('section', { class: 'tarjeta ancha' }, [
       h('h2', { texto: 'Clave de Claude ' }, [g.Ayuda.aviso('clave-claude')]),
       h('p', { class: 'suave', texto: 'Se guarda en tu carpeta ACTAS. La usará Claude para redactar las actas.' }),
       campo, h('div', { class: 'fila' }, [guardar, deRubricas, g.Ayuda.aviso('clave-rubricas')]), dicho, aviso
-    ]), estilo, traer, tutoria]);
+    ]), estilo, traer, tutoria].filter(Boolean));
     /* «Ir a Ajustes» desde un aviso de falta de datos del colegio: baja hasta su tarjeta */
     if (est.destinoAjustes) { var d = est.destinoAjustes; est.destinoAjustes = null; var t = document.getElementById(d === 'colegio' ? 'tarjetaColegio' : d); if (t && t.scrollIntoView) t.scrollIntoView({ block: 'start' }); }
   }

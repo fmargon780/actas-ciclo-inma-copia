@@ -228,3 +228,10 @@ a.boton { text-decoration: none; display: inline-block; }
 .retoque-libre { flex: 1; min-width: 0; }
 
 .logo-vista { max-height: 64px; max-width: 160px; object-fit: contain; border: 1px solid var(--gris, #ccc); border-radius: 4px; background: #fff; padding: 2px; }
+
+/* Entrada con Google e Invitados (fila 85) */
+.sin-entrar .pasos, .sin-entrar .guardado, .sin-entrar .carpeta, .sin-entrar .boton-ayuda { display: none; }
+#botonGoogle { display: flex; justify-content: center; min-height: 44px; }
+.invitado { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) auto; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--linea); }
+.invitado-correo { overflow-wrap: anywhere; }
+@media (max-width: 640px) { .invitado { grid-template-columns: 1fr; } }

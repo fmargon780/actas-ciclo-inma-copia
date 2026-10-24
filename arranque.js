@@ -97,6 +97,8 @@
   }
 
   async function empezar() {
+    /* En la app de internet hay que entrar con Google; con la sesión guardada no se pregunta nada al servicio. */
+    if (!window.Entrada.pedir(empezar)) return;
     var h = await window.Carpeta.recordada();
     var texto = 'Elige la carpeta ACTAS de tu Drive (está en Mi unidad › ACTAS; la crea el documento de actas la primera vez que usas su menú «Actas»). Aquí guardaré tus borradores.';
     if (!h) { window.Pantalla.pedirCarpeta(texto, elegirYAbrir); await window.PantallaAyuda.guiaSiToca(ctxAyuda()); return; }
