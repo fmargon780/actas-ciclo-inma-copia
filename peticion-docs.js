@@ -42,9 +42,9 @@
     };
   }
 
-  async function opciones(ficha, tipo) {
-    var mem = await g.Membrete.cargar(), colegio = ficha ? g.ActaModelo.fichaParaActa(ficha).colegio : '';
-    return { mem: mem, opc: { colegio: colegio || mem.colegio, pie: tipo.pie } };
+  async function opciones(raiz, tipo) {
+    var cm = await g.Colegio.paraDocumentos(raiz);
+    return { mem: cm.mem, opc: { pie: tipo.pie } };
   }
 
   /* El nombre sin extensión: «2026-11-06 Acta reunión equipo docente LHC». Otra petición con el mismo nombre -> « (2)»; la misma, el suyo. */
@@ -58,7 +58,7 @@
 
   /* Monta y guarda el PDF y el Word. Los ficheros van primero: si falla, no se marca nada. Devuelve { curso, base, pdf, docx }. */
   async function escribir(raiz, p, ficha, modelo, tipo, fecha, docs) {
-    var o = await opciones(ficha, tipo), curso = g.cursoEscolar(fecha);
+    var o = await opciones(raiz, tipo), curso = g.cursoEscolar(fecha);
     var pdf = await g.ActaPdf.crear(modelo, o.mem, o.opc), docx = await g.ActaDocx.crear(modelo, o.mem, o.opc);
     var base = await nombreLibre(raiz, curso, p, tipo, fecha, docs), ruta = g.Envios.DOCS + '/' + curso + '/' + base;
     await raiz.escribirBinario(ruta + '.pdf', pdf);

@@ -25,7 +25,7 @@
     try { est.libro = { r: await g.Libro.crear(est.raiz, est.ficha) }; mostrar(est.libro.r); }
     catch (e) {
       g.Dom.decir(aviso, (e && e.message) || String(e));
-      if (e && e.tipo === 'ajustes') aviso.appendChild(h('button', { type: 'button', class: 'boton chico', id: 'irAjustes', texto: 'Ir a Ajustes', onclick: function () { est.irAjustes(); } }));
+      if (e && e.tipo === 'ajustes') aviso.appendChild(h('button', { type: 'button', class: 'boton chico', id: 'irAjustes', texto: 'Ir a Ajustes', onclick: function () { est.irAjustes(e.destino); } }));
       g.Dom.montar([h('section', { class: 'tarjeta ancha' }, [h('h2', { texto: 'Libro de actas del curso' }), aviso, h('div', { class: 'fila' }, [volver()])])]);
     }
   }

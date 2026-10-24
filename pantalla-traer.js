@@ -20,7 +20,7 @@
   function fechaDe(d) { try { return g.fechaCorta(d.fecha); } catch (e) { return d.fecha; } }
   function decirError(est, caja, e) {
     g.Dom.decir(caja, (e && e.message) || String(e));
-    if (e && e.tipo === 'ajustes') caja.appendChild(h('button', { type: 'button', class: 'boton chico', id: 'irAjustes', texto: 'Ir a Ajustes', onclick: function () { est.irAjustes(); } }));
+    if (e && e.tipo === 'ajustes') caja.appendChild(h('button', { type: 'button', class: 'boton chico', id: 'irAjustes', texto: 'Ir a Ajustes', onclick: function () { est.irAjustes(e.destino); } }));
   }
 
   function botonesAbrir(est, d, aviso) {

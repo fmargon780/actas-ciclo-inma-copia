@@ -45,6 +45,7 @@
           await abrirGuia(ctx);
           if (mal) { var e = document.getElementById('guiaPrimerosPasos'); if (e) g.Dom.decir(e.querySelector('.aviso.error'), mal); }
         }), 'guiaIr-alumnado')];
+      if (id === 'colegio') return [ir('Ir', conCarpeta(ctx, async function (est) { await est.irAjustes(); bajarA('#tarjetaColegio'); }), 'guiaIr-colegio')];
       if (id === 'datos-curso') return [ir('Ir', conCarpeta(ctx, async function (est) { await est.irAjustes(); bajarA('#tarjetaDatosCurso'); }), 'guiaIr-datos-curso')];
       if (id === 'clave') return [ir('Ir', conCarpeta(ctx, async function (est) { await est.irAjustes(); bajarA('#campoClave'); }), 'guiaIr-clave')];
       if (id === 'acta') return [

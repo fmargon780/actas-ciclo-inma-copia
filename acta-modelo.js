@@ -21,7 +21,7 @@
     f = f || {};
     var prof = Array.isArray(f.profesorado) ? f.profesorado.join('\n') : texto(f.profesorado);
     return { curso: texto(f.curso), ciclo: texto(f.ciclo), localidad: texto(f.localidad), coordinadoraCargo: texto(f.coordinadoraCargo),
-      coordinadoraNombre: texto(f.coordinadoraNombre), profesorado: prof, colegio: texto(f.colegio) };
+      coordinadoraNombre: texto(f.coordinadoraNombre), profesorado: prof };
   }
 
   /* '' si la ficha vale para montar el acta; si no, la frase para quien la usa. */
@@ -74,7 +74,7 @@
      env: el envío que se haría ahora (con la fecha del acta anterior). ficha: la de ACTAS/ficha.json (o null). */
   function revisar(env, ficha) {
     var res = { porPunto: {}, otros: [] }, m;
-    try { m = montar(ficha || { ciclo: 'Segundo ciclo', localidad: 'Alhaurín el Grande', coordinadoraNombre: '-', profesorado: '-' }, env); } catch (e) { return res; }
+    try { m = montar(ficha || { ciclo: 'Ciclo', localidad: 'Localidad', coordinadoraNombre: '-', profesorado: '-' }, env); } catch (e) { return res; }
     var li = lineasConOrigen(m), fijos = {};
     env.puntos.filter(function (p) { return p.titulo; }).forEach(function (p, i) { fijos[i] = !!p.fijo; });
     var hall = g.revisarLineasActa(li.lineas, { anioInicio: g.anioInicioCurso(env.fecha), fechaAnterior: env.fechaActaAnterior });

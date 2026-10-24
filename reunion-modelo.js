@@ -8,9 +8,11 @@
   function dosCifras(n) { return (n < 10 ? '0' : '') + n; }
   function fechaCortaDosCifras(iso) { var p = g.partesFecha(iso); return dosCifras(p.d) + '/' + dosCifras(p.m) + '/' + String(p.a).slice(-2); }
   function fechaEnMayusculas(iso) { var p = g.partesFecha(iso); return p.d + ' DE ' + g.MESES[p.m - 1].toUpperCase() + ' DE ' + p.a; }
-  function textoReunionInicial(localidad) {
+  /* «C.E.I.P. Jorge Guillén» se dice «CEIP Jorge Guillén» en esta frase, como siempre. */
+  function nombreEnFrase(colegio) { return String(colegio || '').trim().replace(/^C\.E\.I\.P\.\s*/i, 'CEIP ').trim() || 'centro'; }
+  function textoReunionInicial(localidad, colegio) {
     var l = String(localidad).trim();
-    return 'En la localidad de ' + l + ', se reúnen en el CEIP Jorge Guillén de la localidad de ' + l +
+    return 'En la localidad de ' + l + ', se reúnen en el ' + nombreEnFrase(colegio) + ' de la localidad de ' + l +
       ' los padres/madres/representantes legales del alumnado del curso arriba indicados con el/la tutor/a del citado curso, al objeto de tratar los siguientes puntos:';
   }
 
@@ -18,14 +20,14 @@
   function celda(col, span, t, negrita, fondo) { return { col: col, span: span, rs: 1, vm: null, fondo: fondo || '', parrafos: [{ runs: runs(t, negrita) }] }; }
 
   /* r: la reunión guardada (ACTAS/reuniones/<id>.json). Devuelve el modelo para ActaPdf / ActaDocx. */
-  function montar(r) {
+  function montar(r, colegio) {
     var env = g.Reunion.armarEnvio(r), fecha = env.fecha, grupo = env.grupo;
     var filas = [[celda(0, 1, 'ALUMNOS ' + grupo, true, 'EEEEEE'), celda(1, 1, 'reunión inicial ' + fechaCortaDosCifras(fecha), true, 'EEEEEE')]];
     env.asistencia.forEach(function (a) { filas.push([celda(0, 1, a.nombre, false), celda(1, 1, a.asiste ? 'sí' : 'no', false)]); });
     return {
       titulo: 'Reunión de TUTORÍA', celebrada: 'celebrada el día ' + g.fechaLarga(fecha),
       encabezados: { puntos: 'TEMAS TRATADOS', asuntos: 'ACUERDOS DE LA REUNIÓN' },
-      filas: [['CURSO:', [grupo]], ['TUTOR / A', [env.tutora]], ['PROFESORES / AS ASISTENTES', [TEXTO_ASISTENTES, textoReunionInicial(env.localidad)]]],
+      filas: [['CURSO:', [grupo]], ['TUTOR / A', [env.tutora]], ['PROFESORES / AS ASISTENTES', [TEXTO_ASISTENTES, textoReunionInicial(env.localidad, colegio)]]],
       puntos: env.puntos.map(function (p, i) { return (i + 1) + '. ' + p.titulo; }),
       asuntos: env.puntos.map(function (p, i) { return { titulo: (i + 1) + '. ' + p.tituloAcuerdo, lineas: g.lineasDeParrafo(p.parrafo) }; })
         .concat([{ titulo: 'ANEXO. Asistencia de padres', lineas: [{ tabla: { anchos: [3, 1], filas: filas } }] }]),

@@ -203,6 +203,7 @@
       zonaPregunta.textContent = ''; g.Dom.decir(avisoCrear, '');
       var pr = R.problema(r);
       if (pr) { g.Dom.decir(avisoCrear, pr); return; }
+      if (await g.PantallaColegio.avisoSiFalta(est, avisoCrear)) return;
       var previa = R.yaCreada(await R.listar(est.raiz), r);
       if (previa && !sinAviso) {
         zonaPregunta.appendChild(h('div', { class: 'aviso pregunta', id: 'reunionYaCreada' }, [

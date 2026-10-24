@@ -20,11 +20,12 @@
       .filter(function (f) { return f.cargo || f.nombre; });
   }
 
-  /* Lo que se enseña en el formulario: la ficha leída (o null) -> datos con filas. Sin ficha, el curso se propone por la fecha de hoy. */
-  function datosIniciales(ficha, hoyIso) {
+  /* Lo que se enseña en el formulario: la ficha leída (o null) -> datos con filas. Sin ficha, el curso se propone por la fecha de hoy y la localidad por la del colegio
+     (la de «Datos del colegio», que se pasa ya sin código postal ni provincia); el ciclo y lo demás quedan vacíos. */
+  function datosIniciales(ficha, hoyIso, localidadPorDefecto) {
     var f = ficha || {};
     return {
-      curso: texto(f.curso) || g.cursoEscolar(hoyIso), ciclo: texto(f.ciclo) || 'Segundo ciclo', localidad: texto(f.localidad) || 'Alhaurín el Grande',
+      curso: texto(f.curso) || g.cursoEscolar(hoyIso), ciclo: texto(f.ciclo), localidad: texto(f.localidad) || texto(localidadPorDefecto),
       coordinadoraCargo: texto(f.coordinadoraCargo), coordinadoraNombre: texto(f.coordinadoraNombre),
       filas: filasDeLineas(f.profesorado)
     };

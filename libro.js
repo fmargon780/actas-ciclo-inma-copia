@@ -26,13 +26,14 @@
   async function crear(raiz, ficha) {
     var p = g.ActaModelo.problemaDeFichaActa(ficha);
     if (p) { var err = new Error(p); err.tipo = 'ajustes'; throw err; }
+    var cm = await g.Colegio.paraDocumentos(raiz);
     var anio = g.anioInicioDeTextoCurso(ficha.curso), curso = anio + '-' + (anio + 1), lista = await reunir(raiz, ficha), modelos = [], fallos = [];
     lista.forEach(function (e) {
       try { modelos.push(e.origen === 'traida' ? g.ActaTraida.modeloDe(e) : g.ActaModelo.montar(ficha, e)); }
       catch (x) { fallos.push({ fecha: e.fecha, motivo: (x && x.message) || String(x) }); }
     });
     if (!modelos.length) { var vacio = new Error('Todavía no hay actas de este curso: crea una con «Nueva acta de ciclo» o trae las del documento antiguo.'); vacio.enEspanol = true; throw vacio; }
-    var mem = await g.Membrete.cargar(), opc = { colegio: g.ActaModelo.fichaParaActa(ficha).colegio || mem.colegio, pie: g.Membrete.textoPie(ficha.ciclo), tituloLibro: 'Libro de actas del curso ' + curso };
+    var mem = cm.mem, opc = { pie: g.Membrete.textoPie(ficha.ciclo), tituloLibro: 'Libro de actas del curso ' + curso };
     var ruta = g.Envios.DOCS + '/' + curso + '/Libro de actas del curso ' + curso;
     await raiz.escribirBinario(ruta + '.pdf', await g.ActaPdf.crearLibro(modelos, mem, opc));
     await raiz.escribirBinario(ruta + '.docx', await g.ActaDocx.crearLibro(modelos, mem, opc));

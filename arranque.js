@@ -28,6 +28,7 @@
     window.Dom.decir($('avisoApartados'), '');
     await window.Datos.comprobar(raiz);
     $('estadoCarpeta').textContent = 'Carpeta: ' + handle.name;
+    try { await window.Colegio.alAbrir(raiz); } catch (e) { /* los datos del colegio se piden al sacar un documento; no impiden abrir la carpeta */ }
     var est = { raiz: raiz, ficha: await window.Datos.leerFicha(raiz), paso: 'inicio', borrador: null, estadoGuardado: $('estadoGuardado'), alSalir: null };
     var refrescar;
     var salir = async function () { if (est.alSalir) { var f = est.alSalir; est.alSalir = null; await f(); } };
@@ -43,7 +44,7 @@
     est.abrirLibro = function () { est.paso = 'libro'; est.libro = null; est.borrador = null; refrescar(); };
     est.abrirHabitual = function () { est.paso = 'habitual'; est.borrador = null; refrescar(); };
     est.abrirConvocatoria = function (fecha) { est.paso = 'convocatoria'; est.fechaConvocatoria = fecha || hoyIso(); est.borrador = null; refrescar(); };
-    est.irAjustes = async function () { await salir(); est.paso = 'ajustes'; est.borrador = null; refrescar(); };
+    est.irAjustes = async function (destino) { await salir(); est.paso = 'ajustes'; est.borrador = null; est.destinoAjustes = destino || null; refrescar(); };
     est.nuevoBorrador = async function () {
       var b = window.Borradores.nuevo(est.ficha, hoyIso(), new Date()), conv = await window.Convocatoria.leer(raiz, b.fecha);
       /* Si hoy hay convocatoria, el acta ya trae sus puntos; si no, los de «Lo habitual» de este mes, con sus huecos. */

@@ -80,6 +80,7 @@
       g.Dom.decir(avisoCrear, '');
       var pr = c.problemaCrear();
       if (pr) { g.Dom.decir(avisoCrear, pr); return; }
+      if (await g.PantallaColegio.avisoSiFalta(est, avisoCrear)) return;
       try { await est.alSalir(); await c.crear(); } catch (x) { g.Dom.decir(avisoCrear, 'No he podido crear los ficheros: ' + (x && x.message ? x.message : x)); return; }
       creado = c.almacen.documentos; if (c.alCrear) c.alCrear(); pintarFin();
     }

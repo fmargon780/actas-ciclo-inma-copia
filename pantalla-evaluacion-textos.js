@@ -145,6 +145,7 @@
       g.Dom.decir(avisoCrear, '');
       var pr = E.problema(e);
       if (pr) { g.Dom.decir(avisoCrear, pr); return; }
+      if (await g.PantallaColegio.avisoSiFalta(est, avisoCrear)) return;
       try {
         await est.alSalir();
         await g.EvaluacionDocs.crear(est.raiz, e, est.ficha, ctx.tut, new Date());

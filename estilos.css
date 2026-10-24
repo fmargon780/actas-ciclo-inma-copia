@@ -226,3 +226,5 @@ a.boton { text-decoration: none; display: inline-block; }
 .retoque-caja { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
 .retoque-otro { align-items: center; flex-wrap: nowrap; }
 .retoque-libre { flex: 1; min-width: 0; }
+
+.logo-vista { max-height: 64px; max-width: 160px; object-fit: contain; border: 1px solid var(--gris, #ccc); border-radius: 4px; background: #fff; padding: 2px; }

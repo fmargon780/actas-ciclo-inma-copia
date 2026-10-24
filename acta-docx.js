@@ -92,6 +92,76 @@
     '<w:lvlText w:val="•"/><w:lvlJc w:val="left"/><w:pPr><w:ind w:left="720" w:hanging="360"/></w:pPr><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial"/></w:rPr></w:lvl></w:abstractNum>';
   var NUM = '<w:num w:numId="' + NUM_VINETA + '"><w:abstractNumId w:val="' + NUM_VINETA + '"/></w:num>';
 
+
+  /* El membrete de la plantilla (cabecera y pie de la primera página, y el símbolo de las siguientes) con los datos del colegio: su nombre, su dirección y su
+     logo, o sin nada de la Junta (membrete.sinJunta). Con los datos de la propia plantilla sale el mismo XML que trae. */
+  function dibujo(rid, id, nombre, cx, cy) {
+    return '<w:drawing><wp:inline distT="0" distB="0" distL="0" distR="0"><wp:extent cx="' + cx + '" cy="' + cy + '"/><wp:docPr id="' + id + '" name="' + esc(nombre) + '"/>' +
+      '<wp:cNvGraphicFramePr><a:graphicFrameLocks noChangeAspect="1"/></wp:cNvGraphicFramePr><a:graphic><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic>' +
+      '<pic:nvPicPr><pic:cNvPr id="' + id + '" name="' + esc(nombre) + '"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="' + rid + '"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill>' +
+      '<pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="' + cx + '" cy="' + cy + '"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing>';
+  }
+  var SIN_BORDES = '<w:tblBorders><w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:insideH w:val="nil"/><w:insideV w:val="nil"/></w:tblBorders><w:tblLayout w:type="fixed"/>' +
+    '<w:tblCellMar><w:left w:w="0" w:type="dxa"/><w:right w:w="0" w:type="dxa"/></w:tblCellMar><w:tblLook w:val="0000"/>';
+  function celdaMembrete(ancho, contenido) { return '<w:tc><w:tcPr><w:tcW w:w="' + ancho + '" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr>' + contenido + '</w:tc>'; }
+  function tablaMembrete(total, anchos, celdas, altoMinimo) {
+    return '<w:tbl><w:tblPr><w:tblW w:w="' + total + '" w:type="dxa"/>' + SIN_BORDES + '</w:tblPr><w:tblGrid>' + anchos.map(function (a) { return '<w:gridCol w:w="' + a + '"/>'; }).join('') + '</w:tblGrid>' +
+      '<w:tr>' + (altoMinimo ? '<w:trPr><w:trHeight w:val="' + altoMinimo + '" w:hRule="atLeast"/></w:trPr>' : '') + celdas.join('') + '</w:tr></w:tbl>';
+  }
+  function parrafoMembrete(estilo, texto) {
+    return '<w:p><w:pPr><w:pStyle w:val="' + estilo + '"/><w:spacing w:before="0" w:after="0"/></w:pPr>' + (texto == null ? '' : '<w:r>' + (estilo === 'Cabecera-Consejera' ? '<w:rPr><w:b/></w:rPr>' : '') + '<w:t xml:space="preserve">' + esc(texto) + '</w:t></w:r>') + '</w:p>';
+  }
+  var PARRAFO_ENTRE = '<w:p><w:pPr><w:spacing w:before="0" w:after="0"/></w:pPr>', PARRAFO_FINO = '<w:p><w:pPr><w:spacing w:before="0" w:after="0"/><w:rPr><w:sz w:val="2"/></w:rPr></w:pPr></w:p>';
+  function raizDe(xml) { return xml.slice(0, xml.indexOf('<w:tbl>')); }
+  function relaciones(lista) { return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' + lista.join('') + '</Relationships>'; }
+  function relacion(id, tipo, destino, externa) { return '<Relationship Id="' + id + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/' + tipo + '" Target="' + esc(destino).replace(/"/g, '&quot;') + '"' + (externa ? ' TargetMode="External"' : '') + '/>'; }
+
+  function ponerMembrete(z, membrete, colegio, dec) {
+    var junta = !membrete.sinJunta, logo = membrete.imagenes.ceip, h2 = dec.decode(z['word/header2.xml']), f2 = dec.decode(z['word/footer2.xml']);
+    /* cabecera de la primera página */
+    var alto = 1134; /* lo que mide el logo de la Junta: la fila no cambia de altura sin él */
+    if (junta) {
+      h2 = h2.replace(/(<w:pStyle w:val="Cabecera-Consejera"\/>[\s\S]*?<w:t xml:space="preserve">)[^<]*(<\/w:t>)/, function (m, a, b) { return a + esc(membrete.consejeria) + b; })
+        .replace(/(<w:pStyle w:val="Cabecera-Centrodirectivo"\/>[\s\S]*?<w:t xml:space="preserve">)[^<]*(<\/w:t>)/, function (m, a, b) { return a + esc(colegio) + b; });
+    } else {
+      h2 = raizDe(h2) + tablaMembrete(9468, [9468], [celdaMembrete(9468, parrafoMembrete('Cabecera-Consejera', colegio) + parrafoMembrete('Cabecera-Centrodirectivo', null))], alto) + PARRAFO_FINO + '</w:hdr>';
+      z['word/_rels/header2.xml.rels'] = relaciones([]);
+      delete z['word/media/logo_junta.png'];
+    }
+    z['word/header2.xml'] = h2;
+    /* símbolo de las páginas siguientes */
+    if (!junta) {
+      var h1 = dec.decode(z['word/header1.xml']);
+      z['word/header1.xml'] = h1.slice(0, h1.indexOf('<w:p ')) + '<w:p/></w:hdr>';
+      z['word/_rels/header1.xml.rels'] = relaciones([]);
+      delete z['word/media/jda_simbolo.jpg'];
+    }
+    /* pie de la primera página: logo del colegio, dos parejas de líneas y el escudo */
+    var pie = membrete.pie, parejas = [[pie[0], pie[1]], [pie[2], pie[3]]].map(function (par) { return par.filter(Boolean); }).filter(function (par) { return par.length; });
+    var correo = pie[3] && /^[^\s@]+@[^\s@]+$/.test(pie[3]) ? pie[3] : '';
+    var texto = parejas.map(function (par) {
+      return '<w:p><w:pPr><w:pStyle w:val="Piedepgina-Datos"/><w:spacing w:before="40" w:after="40"/></w:pPr>' + par.map(function (t) {
+        return t === correo ? '<w:hyperlink r:id="rId1"><w:r><w:rPr><w:rStyle w:val="Hipervnculo"/></w:rPr><w:t>' + esc(t) + '</w:t></w:r></w:hyperlink>' : '<w:r><w:t xml:space="preserve">' + esc(t) + '</w:t></w:r>';
+      }).join('<w:r><w:br/></w:r>') + '</w:p>';
+    }).join('') || '<w:p/>';
+    var anchos = [], celdas = [], rels = [], m = logo ? g.Membrete.encajar(logo) : null, ancho = 10224;
+    if (logo) {
+      var wl = junta ? 6242 : 1562;
+      anchos.push(wl); ancho -= wl;
+      celdas.push(celdaMembrete(wl, PARRAFO_ENTRE + '<w:r>' + dibujo('rId9', 202, 'Logo del colegio', m.cx, m.cy) + '</w:r></w:p>'));
+    }
+    if (junta) ancho -= 738;
+    anchos.push(ancho); celdas.push(celdaMembrete(ancho, texto));
+    if (junta) { anchos.push(738); celdas.push(celdaMembrete(738, '<w:p><w:pPr><w:spacing w:before="0" w:after="0"/><w:jc w:val="right"/></w:pPr><w:r>' + dibujo('rId3', 203, 'Escudo Junta de Andalucia', 468630, 680085) + '</w:r></w:p>')); }
+    z['word/footer2.xml'] = raizDe(f2) + tablaMembrete(10224, anchos, celdas, 0) + PARRAFO_FINO + '</w:ftr>';
+    if (correo) rels.push(relacion('rId1', 'hyperlink', 'mailto:' + correo, true));
+    if (junta) rels.push(relacion('rId3', 'image', 'media/jda_escudo.jpg'));
+    else delete z['word/media/jda_escudo.jpg'];
+    delete z['word/media/logo_ceip.png'];
+    if (logo) { z['word/media/logo_ceip.' + logo.tipo] = logo.bytes; rels.push(relacion('rId9', 'image', 'media/logo_ceip.' + logo.tipo)); }
+    z['word/_rels/footer2.xml.rels'] = relaciones(rels);
+  }
+
   /* membrete: lo que devuelve Membrete.leer(). modelos: una o varias actas (el libro del curso: cada una en su sección, con el membrete completo en su primera
      página). opciones: { colegio, pie }. Devuelve los bytes del .docx. */
   async function crearLibro(modelos, membrete, opciones) {
@@ -103,7 +173,7 @@
     z['word/document.xml'] = doc.slice(0, ini) + '<w:body>' + cuerpos.join('') + sect[0] + '</w:body></w:document>';
     var num = dec.decode(z['word/numbering.xml']), primero = num.indexOf('<w:num ');
     z['word/numbering.xml'] = num.slice(0, primero) + NUMERACION + num.slice(primero).replace('</w:numbering>', NUM + '</w:numbering>');
-    if (opciones.colegio && opciones.colegio !== membrete.colegio) z['word/header2.xml'] = dec.decode(z['word/header2.xml']).replace(esc(membrete.colegio), esc(opciones.colegio));
+    ponerMembrete(z, membrete, opciones.colegio || membrete.colegio, dec);
     if (opciones.pie && membrete.pieCiclo) z['word/footer1.xml'] = dec.decode(z['word/footer1.xml']).replace(esc(membrete.pieCiclo), esc(opciones.pie));
     var rels = dec.decode(z['word/_rels/document.xml.rels']).replace(/<Relationship Id="rId7"[^>]*\/>/, ''); /* el enlace de la plantilla original */
     var tipoEnlace = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink';

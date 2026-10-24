@@ -1,6 +1,7 @@
 {
   "guia": [
     { "id": "carpeta", "titulo": "Elige tu carpeta ACTAS", "texto": "Elige la carpeta ACTAS de tu Drive. Ahí se guardan tus borradores y tus actas. Esa carpeta la crea el documento de actas de Google Docs la primera vez que lo usas. Si no tienes ese documento, pide que te lo instalen." },
+    { "id": "colegio", "titulo": "Datos del colegio", "texto": "Escribe el nombre de tu colegio y, si quieres, su dirección, teléfono, correo y logo. Saldrán en la cabecera y en el pie de todos tus PDF y Word. Se guardan en tu carpeta ACTAS." },
     { "id": "alumnado", "titulo": "Tu alumnado", "texto": "Tu alumnado se mete en la app Rúbricas, en «Mis grupos», con el listado de cada grupo bajado de Séneca. Después abre aquí la carpeta RÚBRICAS para que Mis actas lo lea." },
     { "id": "datos-curso", "titulo": "Datos del curso", "texto": "Escribe el curso, el ciclo, la coordinadora y el profesorado del ciclo. Los asistentes de cada acta saldrán de aquí." },
     { "id": "clave", "titulo": "Clave de Claude", "texto": "Pega tu clave de Claude. Si alguien te ha dado una, pégala aquí. Si no, créala en https://console.anthropic.com/settings/keys (necesitas una cuenta de Anthropic con saldo). Empieza por «sk-ant-». Solo se ve una vez al crearla: cópiala entera. Si ya la tienes en Rúbricas, pulsa «Usar la de Rúbricas»." },
@@ -9,8 +10,8 @@
   "guiaTodoListo": "Todo listo. Puedes volver a esta guía desde el botón ?",
   "pantallas": [
     { "id": "primeros-pasos", "titulo": "Primeros pasos", "texto": [
-      "Mis actas te ayuda a escribir las actas de tu ciclo y a llevar las entrevistas con las familias. Antes de empezar hay cinco cosas que preparar. Se hacen una sola vez.",
-      "1. Elige tu carpeta ACTAS. 2. Abre la carpeta RÚBRICAS, de donde sale tu alumnado. 3. Rellena los datos del curso. 4. Pega tu clave de Claude. 5. Empieza tu primera acta.",
+      "Mis actas te ayuda a escribir las actas de tu ciclo y a llevar las entrevistas con las familias. Antes de empezar hay seis cosas que preparar. Se hacen una sola vez.",
+      "1. Elige tu carpeta ACTAS. 2. Rellena los datos de tu colegio. 3. Abre la carpeta RÚBRICAS, de donde sale tu alumnado. 4. Rellena los datos del curso. 5. Pega tu clave de Claude. 6. Empieza tu primera acta.",
       "La guía te marca ✓ lo que ya está hecho. Puedes abrirla otra vez con el botón «Ver la guía de primeros pasos» de esta página."
     ] },
     { "id": "carpeta", "titulo": "Elegir la carpeta ACTAS", "texto": [
@@ -88,6 +89,7 @@
       "Si las medidas han funcionado, pulsa «Las medidas han funcionado» y la petición queda cerrada sin solicitud. Con «Reabrir» vuelve a estar en marcha."
     ] },
     { "id": "ajustes", "titulo": "Ajustes", "texto": [
+      "«Datos del colegio»: el nombre, la dirección, el código postal y la localidad, el teléfono, el correo y el código de centro, más el logo («Subir logo» y «Quitar logo»). Salen en la cabecera y en el pie de todos los PDF y Word. Si tu colegio no usa el logo de la Junta de Andalucía, marca «Sin logo de la Junta». Sin el nombre del colegio la app no saca ningún documento: te avisa y te trae aquí.",
       "«Datos del curso»: el curso, el ciclo, la localidad, la coordinadora y la tabla del profesorado, con una fila por docente. Los asistentes de cada acta salen de esa tabla, en ese orden.",
       "«Clave de Claude»: pega aquí tu clave y pulsa «Guardar la clave». Si ya la guardaste en Rúbricas, pulsa «Usar la de Rúbricas».",
       "«Estilo de redacción»: elige si quieres los textos escuetos, normales o desarrollados, y el lenguaje sencillo, normal o técnico. Si quieres, escribe tus propias instrucciones («di siempre el alumnado»). Vale para todo lo que redacta Claude y se guarda solo.",
@@ -121,6 +123,7 @@
   "avisos": {
     "carpeta-actas": "Es la carpeta ACTAS de tu Drive (Mi unidad › ACTAS). La crea el documento de actas de Google Docs la primera vez que lo usas. Aquí se guardan tus borradores, tus datos y tus actas.",
     "carpeta-rubricas": "Es la carpeta RÚBRICAS de tu Drive, la de la app Rúbricas. Solo se lee, nunca se escribe en ella. Se abre una sola vez y la app la recuerda. De ahí sale la lista de tu alumnado.",
+    "colegio-sin-junta": "Márcala si tu colegio no usa el logo de la Junta de Andalucía (por ejemplo, un colegio concertado). Sin él, tampoco salen el escudo ni la línea de la Consejería.",
     "tabla-profesorado": "Una fila por docente, en el orden en que quieres que salgan en el acta. El cargo es lo que va delante del nombre (por ejemplo, «Tutora de 3.º A»). Los asistentes de cada acta salen de esta tabla.",
     "clave-claude": "La clave es el permiso para que Claude redacte. Si alguien te ha dado una, pégala aquí. Si no, créala en https://console.anthropic.com/settings/keys (necesitas una cuenta de Anthropic con saldo). Empieza por «sk-ant-» y solo se ve una vez al crearla: cópiala entera.",
     "clave-rubricas": "Si ya guardaste la clave en la app Rúbricas, este botón la copia aquí. Si aún no has abierto la carpeta RÚBRICAS, te la pide.",

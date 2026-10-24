@@ -36,9 +36,9 @@
     };
   }
 
-  async function opciones(ficha) {
-    var mem = await g.Membrete.cargar(), colegio = ficha ? g.ActaModelo.fichaParaActa(ficha).colegio : '';
-    return { mem: mem, opc: { colegio: colegio || mem.colegio, pie: PIE } };
+  async function opciones(raiz) {
+    var cm = await g.Colegio.paraDocumentos(raiz);
+    return { mem: cm.mem, opc: { pie: PIE } };
   }
 
   /* El nombre sin extensión: «2026-09-09 Acta de evaluación Inicial 4º A». Otra acta (otro id) con el mismo nombre -> « (2)»; la misma, el suyo. */
@@ -53,7 +53,7 @@
 
   /* Monta y guarda el PDF y el Word, y deja el acta marcada como creada (con dónde están sus ficheros). Los ficheros van primero: si falla, no se marca. */
   async function crear(raiz, e, ficha, tut, ahora) {
-    var o = await opciones(ficha), modelo = montar(e, tut, ficha && ficha.localidad), curso = g.cursoEscolar(e.fecha);
+    var o = await opciones(raiz), modelo = montar(e, tut, ficha && ficha.localidad), curso = g.cursoEscolar(e.fecha);
     var pdf = await g.ActaPdf.crear(modelo, o.mem, o.opc), docx = await g.ActaDocx.crear(modelo, o.mem, o.opc);
     var base = await nombreLibre(raiz, curso, e), ruta = g.Envios.DOCS + '/' + curso + '/' + base;
     await raiz.escribirBinario(ruta + '.pdf', pdf);

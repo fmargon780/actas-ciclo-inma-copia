@@ -45,7 +45,7 @@
 
     function decirError(e) {
       g.Dom.decir(avisoClaude, e && e.message ? e.message : String(e));
-      if (e && (e.tipo === 'clave' || e.tipo === 'ajustes')) avisoClaude.appendChild(h('button', { type: 'button', class: 'boton chico', id: 'irAjustes', texto: 'Ir a Ajustes', onclick: function () { est.irAjustes(); } }));
+      if (e && (e.tipo === 'clave' || e.tipo === 'ajustes')) avisoClaude.appendChild(h('button', { type: 'button', class: 'boton chico', id: 'irAjustes', texto: 'Ir a Ajustes', onclick: function () { est.irAjustes(e.destino); } }));
     }
 
     /* Escribe con Claude los puntos pedidos. Devuelve true si todo salió bien. */
@@ -138,7 +138,7 @@
       if (problema) { var e = new Error(problema); e.tipo = 'ajustes'; throw e; }
       var anterior = g.ActaModelo.fechaActaAnterior(b, ficha, await g.Envios.fechasHechas(est.raiz));
       var envio = R.armarEnvio(b, anterior, new Date()), modelo = g.ActaModelo.montar(ficha, envio);
-      var mem = await g.Membrete.cargar(), opc = { colegio: g.ActaModelo.fichaParaActa(ficha).colegio || mem.colegio, pie: g.Membrete.textoPie(ficha.ciclo) };
+      var mem = (await g.Colegio.paraDocumentos(est.raiz)).mem, opc = { pie: g.Membrete.textoPie(ficha.ciclo) };
       return { ficha: ficha, envio: envio, pdf: await g.ActaPdf.crear(modelo, mem, opc), docx: await g.ActaDocx.crear(modelo, mem, opc) };
     }
 
@@ -151,7 +151,11 @@
     }
 
     async function crear() {
-      confirmando = false; ocupado = true; pintar();
+      confirmando = false;
+      /* sin los datos del colegio no hay documento: se avisa antes de gastar una redacción de Claude */
+      var sinColegio = await g.Colegio.falta(est.raiz);
+      if (sinColegio) { var ec = new Error(sinColegio); ec.tipo = 'ajustes'; ec.destino = 'colegio'; decirError(ec); pintar(); return; }
+      ocupado = true; pintar();
       var bien = await redactarPuntos(b.puntos.map(function (p, i) { return R.estadoPunto(p) === 'sinRedactar' ? i : -1; }).filter(function (i) { return i >= 0; }), false);
       if (!bien) return;
       ocupado = true; estadoRedaccion.textContent = 'Creando el acta…'; pintar();

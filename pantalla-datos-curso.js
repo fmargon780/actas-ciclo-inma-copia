@@ -7,7 +7,7 @@
   function hoyIso() { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
 
   async function tarjeta(est, alGuardar) {
-    var datos = F.datosIniciales(await g.Datos.leerFicha(est.raiz), hoyIso());
+    var colegio = await g.Colegio.leer(est.raiz), datos = F.datosIniciales(await g.Datos.leerFicha(est.raiz), hoyIso(), colegio ? g.Colegio.localidadDeCurso(colegio.cpLocalidad) : '');
     var a = est.alumnado, grupos = a && a.estado === 'ok' && a.lista ? a.lista.grupos.slice() : [];
     var aviso = g.Dom.aviso(), hecho = h('div', { class: 'aviso ok', id: 'datosCursoGuardados', hidden: '' });
     var lista = h('datalist', { id: 'cargosSugeridos' }, F.sugerencias(grupos).map(function (c) { return h('option', { value: c }); }));

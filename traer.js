@@ -19,9 +19,8 @@
     return fechas;
   }
 
-  async function ficheros(ficha, datos) {
-    var mem = await g.Membrete.cargar(), modelo = g.ActaTraida.modeloDe(datos);
-    var opc = { colegio: g.ActaModelo.fichaParaActa(ficha).colegio || mem.colegio, pie: g.Membrete.textoPie(ficha.ciclo) };
+  async function ficheros(mem, ficha, datos) {
+    var modelo = g.ActaTraida.modeloDe(datos), opc = { pie: g.Membrete.textoPie(ficha.ciclo) };
     return { pdf: await g.ActaPdf.crear(modelo, mem, opc), docx: await g.ActaDocx.crear(modelo, mem, opc) };
   }
 
@@ -33,6 +32,7 @@
   /* bloques: lo que devuelve DocxBloques.leerBloques(). Devuelve { traidas: [datos guardados], deOtroCurso, yaEstaban, encontradas }. */
   async function traer(raiz, ficha, bloques, nombre, ahora) {
     problema(ficha);
+    var mem = (await g.Colegio.paraDocumentos(raiz)).mem;
     var actas = g.ActaTraida.leerDocumento(bloques);
     if (!actas.length) throw new Error('No he encontrado actas en «' + nombre + '». Busco el recuadro del título con «Celebrada el día dd/mm/aaaa».');
     var yaHay = await fechasDeLaApp(raiz), res = { traidas: [], deOtroCurso: 0, yaEstaban: 0, encontradas: actas.length }, vistas = {};
@@ -42,7 +42,7 @@
       if (!g.ActaTraida.clasificar(a, ficha).delCurso) { res.deOtroCurso++; continue; }
       if (yaHay[a.fecha]) { res.yaEstaban++; continue; }
       vistas[a.fecha] = (vistas[a.fecha] || 0) + 1;
-      var datos = g.ActaTraida.datos(a, 'traida-' + a.fecha + (vistas[a.fecha] > 1 ? '-' + vistas[a.fecha] : ''), nombre, ahora), f = await ficheros(ficha, datos);
+      var datos = g.ActaTraida.datos(a, 'traida-' + a.fecha + (vistas[a.fecha] > 1 ? '-' + vistas[a.fecha] : ''), nombre, ahora), f = await ficheros(mem, ficha, datos);
       res.traidas.push(await g.Envios.guardarTraida(raiz, datos, f.pdf, f.docx, curso));
     }
     return res;
@@ -52,7 +52,7 @@
   async function guardarRevisada(raiz, ficha, datos) {
     problema(ficha);
     g.ActaTraida.recalcular(datos);
-    var f = await ficheros(ficha, datos);
+    var f = await ficheros((await g.Colegio.paraDocumentos(raiz)).mem, ficha, datos);
     return g.Envios.guardarTraida(raiz, datos, f.pdf, f.docx, datos.documentos.curso);
   }
 

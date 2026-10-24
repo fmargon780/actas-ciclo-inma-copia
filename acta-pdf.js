@@ -15,7 +15,10 @@
     normal.getCharacterSet().forEach(function (c) { validos[c] = true; });
     var colegio = (opciones && opciones.colegio) || membrete.colegio;
     var imgs = {};
-    for (var k in membrete.imagenes) imgs[k] = membrete.imagenes[k].tipo === 'png' ? await doc.embedPng(membrete.imagenes[k].bytes) : await doc.embedJpg(membrete.imagenes[k].bytes);
+    for (var k in membrete.imagenes) {
+      var im = membrete.imagenes[k];
+      if (im) imgs[k] = im.tipo === 'png' ? await doc.embedPng(im.bytes) : await doc.embedJpg(im.bytes);
+    }
     doc.setTitle(opciones && opciones.tituloLibro ? opciones.tituloLibro : modelo.titulo); doc.setProducer('Mis actas'); doc.setCreator('Mis actas');
 
     function limpio(t) {
@@ -33,17 +36,29 @@
     function cabeceraYPie(pag, primera) {
       var top = A4[1] - 35.45;
       if (primera) {
-        imagen(pag, 'junta', IZQ, top - (60 - 718840 / EMU) / 2, 1259840, 718840);
         var x = IZQ + 5776 / 20, yc = top - 30;
-        pag.drawText(limpio(membrete.consejeria), { x: x, y: yc, size: 9, font: negrita });
-        pag.drawText(limpio(colegio), { x: x, y: yc - 11, size: 9, font: normal });
-        var base = 33, alto = 680085 / EMU;
-        imagen(pag, 'ceip', IZQ, base + alto, 812952, 680085);
-        imagen(pag, 'escudo', IZQ + 9486 / 20, base + alto, 468630, 680085);
-        var lineas = [[membrete.pie[0], membrete.pie[1]], [membrete.pie[2], membrete.pie[3]]], y = base + alto / 2 + 18;
-        lineas.forEach(function (par) { par.forEach(function (t) { if (t) { pag.drawText(limpio(t), { x: IZQ + 6242 / 20, y: y, size: 8, font: normal }); y -= 9.6; } }); y -= 4; });
+        if (membrete.sinJunta) {
+          /* sin logo de la Junta: el nombre del colegio, en negrita, arriba a la izquierda y a la altura que tenía la línea de la Consejería */
+          pag.drawText(limpio(colegio), { x: IZQ, y: yc, size: 9, font: negrita });
+        } else {
+          imagen(pag, 'junta', IZQ, top - (60 - 718840 / EMU) / 2, 1259840, 718840);
+          pag.drawText(limpio(membrete.consejeria), { x: x, y: yc, size: 9, font: negrita });
+          pag.drawText(limpio(colegio), { x: x, y: yc - 11, size: 9, font: normal });
+        }
+        var base = 33, alto = 680085 / EMU, logo = imgs.ceip, xTexto = IZQ;
+        if (logo) {
+          var m = g.Membrete.encajar(membrete.imagenes.ceip);
+          imagen(pag, 'ceip', IZQ, base + (alto + m.cy / EMU) / 2, m.cx, m.cy);
+          xTexto = IZQ + (membrete.sinJunta ? 1562 : 6242) / 20; /* sin el escudo, el texto se corre a la izquierda y ocupa su hueco */
+        }
+        if (!membrete.sinJunta) imagen(pag, 'escudo', IZQ + 9486 / 20, base + alto, 468630, 680085);
+        /* dos parejas (dirección + localidad, teléfono + correo); las líneas vacías no se dibujan y la pareja que se queda sin líneas pierde su hueco */
+        var parejas = [[membrete.pie[0], membrete.pie[1]], [membrete.pie[2], membrete.pie[3]]].map(function (par) { return par.filter(Boolean); }).filter(function (par) { return par.length; });
+        var nLineas = parejas.reduce(function (s, par) { return s + par.length; }, 0);
+        var y = base + alto / 2 + 1.6 + ((nLineas - 1) * 9.6 + (parejas.length - 1) * 4) / 2;
+        parejas.forEach(function (par) { par.forEach(function (t) { pag.drawText(limpio(t), { x: xTexto, y: y, size: 8, font: normal }); y -= 9.6; }); y -= 4; });
       } else {
-        imagen(pag, 'simbolo', IZQ, top, 563880, 530352);
+        if (!membrete.sinJunta) imagen(pag, 'simbolo', IZQ, top, 563880, 530352);
         var t = limpio(opciones && opciones.pie ? opciones.pie : membrete.pieCiclo), w = ancho(t, normal, 8.5);
         pag.drawText(t, { x: IZQ + (ANCHO - w) / 2, y: 36, size: 8.5, font: normal, color: rgb(0.392, 0.392, 0.392) });
       }

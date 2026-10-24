@@ -7,9 +7,9 @@
 
   function sinRaros(t) { return String(t).replace(/[\\\/:*?"<>|]/g, '').replace(/\s+/g, ' ').trim(); }
 
-  async function opciones(ficha) {
-    var mem = await g.Membrete.cargar(), colegio = ficha ? g.ActaModelo.fichaParaActa(ficha).colegio : '';
-    return { mem: mem, opc: { colegio: colegio || mem.colegio, pie: g.ReunionModelo.PIE } };
+  async function opciones(raiz) {
+    var cm = await g.Colegio.paraDocumentos(raiz);
+    return { mem: cm.mem, colegio: cm.colegio.nombre, opc: { pie: g.ReunionModelo.PIE } };
   }
 
   /* El nombre sin extensión: «2026-09-09 Reunión general con familias 4º A». Otra reunión (otro id) con el mismo nombre -> « (2)»; la misma, el suyo. */
@@ -24,7 +24,7 @@
 
   /* Monta y guarda el PDF y el Word, y deja la reunión marcada como creada (con dónde están sus ficheros). Los ficheros van primero: si falla, no se marca. */
   async function crear(raiz, r, ficha, ahora) {
-    var o = await opciones(ficha), modelo = g.ReunionModelo.montar(r), curso = g.cursoEscolar(r.fecha);
+    var o = await opciones(raiz), modelo = g.ReunionModelo.montar(r, o.colegio), curso = g.cursoEscolar(r.fecha);
     var pdf = await g.ActaPdf.crear(modelo, o.mem, o.opc), docx = await g.ActaDocx.crear(modelo, o.mem, o.opc);
     var base = await nombreLibre(raiz, curso, r), ruta = g.Envios.DOCS + '/' + curso + '/' + base;
     await raiz.escribirBinario(ruta + '.pdf', pdf);
@@ -47,7 +47,7 @@
     if (anio === null || anio === undefined) { var e0 = new Error('Antes de hacer el libro, rellena «Datos del curso» en Ajustes.'); e0.tipo = 'ajustes'; throw e0; }
     var curso = anio + '-' + (anio + 1), lista = delLibro(await R.listar(raiz), ficha, tut.grupo);
     if (!lista.length) { var e = new Error('Todavía no hay reuniones creadas de ' + tut.grupo + ' este curso: crea una con «Crear acta».'); e.enEspanol = true; throw e; }
-    var o = await opciones(ficha), modelos = lista.map(g.ReunionModelo.montar);
+    var o = await opciones(raiz), modelos = lista.map(function (x) { return g.ReunionModelo.montar(x, o.colegio); });
     var nombre = 'Libro de reuniones con familias ' + sinRaros(tut.grupo) + ' ' + curso, ruta = g.Envios.DOCS + '/' + curso + '/' + nombre;
     o.opc.tituloLibro = nombre;
     await raiz.escribirBinario(ruta + '.pdf', await g.ActaPdf.crearLibro(modelos, o.mem, o.opc));
