@@ -1,1 +1,1 @@
-window.VERSION_PAGINA = 'actas v23';
+window.VERSION_PAGINA = 'actas v24';

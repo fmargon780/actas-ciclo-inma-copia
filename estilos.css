@@ -116,6 +116,7 @@ a.enlace-boton { display: inline-block; text-decoration: none; border: 1px solid
 .anadir-hueco { display: flex; gap: 6px; }
 .anadir-hueco input { flex: 1; min-width: 0; }
 .etiqueta-libres { font-weight: 600; }
+.campo-casilla { display: inline-flex; align-items: center; gap: 4px; margin-right: 12px; }
 .caja-ayudas { display: flex; flex-direction: column; gap: 4px; }
 
 .volver-apps { position: sticky; top: 0; z-index: 50; display: block; padding: 2px 12px; font-size: 12px; background: var(--azul-claro); color: var(--azul); text-decoration: none; border-bottom: 1px solid var(--linea); }
