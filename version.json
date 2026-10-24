@@ -1,6 +1,6 @@
 {
-  "version": "actas v26",
-  "commit": "0897109",
+  "version": "actas v27",
+  "commit": "feb916a",
   "ficheros": {
     "ABRIR MIS ACTAS.html": "92e4cdf0e6d55ebc4c57453d77e71b8db251f8f7e248ab3fbc78ec81a39f0eb6",
     "acta-docx.js": "07b9e73cac9fe6c1f568a37ddd45ecdbd40cc6f710880213ff3918eb65f92ed0",
@@ -15,15 +15,15 @@
     "anonimizar.js": "2fcc596b640cf790d8df55910d808d40a0fb09fbc4e2827432764ff7daf2e2d8",
     "arranque.js": "97f1b2ef3b168666002b783e85544521f1001a22a38c87d9a807d57ef754c773",
     "autoguardado.js": "cfdb928ecebf640442bcc33463e2b050753a248c027520d9c158c586901dae82",
-    "ayuda-datos.js": "84749dc4afe15a0fb1f6b3f08d6cd5fe720c3dc45caa743c4fd830e6c2273e45",
+    "ayuda-datos.js": "d901bbb387e2ffba7d9eb80e093b08ad6ff92b4a3b19351a7e544a9e007235e9",
     "ayuda.js": "51c2f604216029debbcaf4adea5fa6c77b66d888adda16cb5360afdfe27048c0",
-    "ayuda.json": "1be18f676abb5e6556c8ec22d03a7ce96bdb875ed5ac6e955b3c02dbc4ed382b",
+    "ayuda.json": "c927545244f361e00fbbb7a264a00e422710270660ad3330cc1407321fbd260b",
     "borradores.js": "94802a327c9d2807bbbc9c6ed75eba9f342b1d24ccfaab4e1e663d55d731ab94",
     "buscador-alumno.js": "e60a8f6d2378105c3d3e4fe7cd2e3e470a64b6cf7cff7e13f38a2d56607c4d47",
     "carpeta.js": "bf999b0d6ca5a725edd4af2b7fe13713e3f69d618700b18d6d62b22d91b67a9a",
     "claude.js": "dcd56911c1458b44f1f7f3ab8732f96092402c17226aea92c1413f0a56ed05aa",
     "colegio.js": "9646ab8e5798baf10b02a9a1c0788ea0d07e7863e3ff11dad9e57a50be34a5da",
-    "commit.js": "be901346e9875096b9a2d6b4c57d24c4801910c78fdb0f94a0e247f24a1cd0cd",
+    "commit.js": "c81172a006892131b931c507e8a2d13bb822919cb6ef67a873c0aad50892c079",
     "convocatoria.js": "6e16a853abb35e37879cd282cfb0516380614672beeeab7413a2b53815b81202",
     "datos.js": "7f5fe37f8faeb6f8a052646f3e4c99a55221fb4aece303cbc03f9e72f4efac64",
     "dictado.js": "8eb138804969f3c5d0095cabee9ca0df6eaa0a85e4943790712b143b804eb86e",
@@ -105,7 +105,7 @@
     "rubricas.js": "fd2a316b445dd82c09f4cdc9e11ce00c94353aca72f7d0e26169cb970d6a92f3",
     "traer.js": "0d945e3835f82a69cfd93dc3dd8f92de600974442f124148aea345dd6048f893",
     "tutoria.js": "bdb20e920dfa584e855d31ec8d3dc4bdc6851956aa152377d278afcd423fbab3",
-    "version.js": "84c17b5d0fd264d09c004dc22f3c810c81ec1bfa346b746355b980b07b3fb3ea",
+    "version.js": "c9e6de9c3787c8f5690ac63fe95fbfef55fb5401888002c3a6437e6498715965",
     "zip.js": "c0e82cb562f3d7a9607ce4ed0d94e699949d5e556e1691523930ff2ec6bd2e2a"
   }
 }

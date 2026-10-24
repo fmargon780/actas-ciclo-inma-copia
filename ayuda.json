@@ -109,7 +109,8 @@
     ] },
     { "id": "apps", "titulo": "Mis apps", "texto": [
       "Mis apps es el panel con todas tus aplicaciones. Desde Mis actas llegas con el enlace «← Mis apps» de arriba del todo.",
-      "Cada app es un icono. Debajo están las webs de trabajo, que se abren en una pestaña nueva."
+      "Cada app es un icono. Debajo están las webs de trabajo, que se abren en una pestaña nueva.",
+      "La cabecera enseña el logo y el nombre del colegio que pusiste en Ajustes › Datos del colegio, y el curso. Si aún no los has puesto, o abres el panel en otro navegador, solo verás el logo de la Junta y el curso. Si cambias los datos, el panel los enseña la próxima vez que lo abras."
     ] },
     { "id": "preguntas", "titulo": "Preguntas frecuentes", "preguntas": [
       { "p": "¿Dónde consigo la clave de Claude?", "r": "Si alguien te ha dado una, pégala en Ajustes. Si no, créala en https://console.anthropic.com/settings/keys (necesitas una cuenta de Anthropic con saldo). Empieza por «sk-ant-» y solo se ve una vez al crearla: cópiala entera." },
