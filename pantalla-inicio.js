@@ -68,7 +68,10 @@
     nodos.push(h('button', { type: 'button', class: 'boton grande', id: 'libroActas', texto: 'Libro de actas del curso', onclick: function () { est.abrirLibro(); } }));
     nodos.push(h('button', { type: 'button', class: 'boton grande', id: 'reunionFamilias', texto: 'Reunión general con familias', onclick: function () { est.abrirReunion(); } }));
     nodos.push(h('button', { type: 'button', class: 'boton grande', id: 'actaEvaluacion', texto: 'Acta de evaluación', onclick: function () { est.abrirEvaluacion(); } }));
-    nodos.push(h('button', { type: 'button', class: 'boton grande', id: 'atencionDiversidad', texto: 'Atención a la diversidad', onclick: function () { est.abrirDiversidad(); } }));
+    var listas = 0;
+    try { listas = g.Peticion.contarListas(g.Peticion.visibles(await g.Peticion.listar(est.raiz), g.cursoEscolar(g.Peticion.hoyIso())), g.Peticion.hoyIso()); } catch (e) { /* sin carpeta: sin aviso */ }
+    nodos.push(h('button', { type: 'button', class: 'boton grande', id: 'atencionDiversidad', onclick: function () { est.abrirDiversidad(); } }, ['Atención a la diversidad',
+      listas ? h('span', { class: 'etiqueta cambiadas', id: 'avisoPeticiones', title: 'Peticiones que ya pueden pasar a solicitud', texto: String(listas) }) : null].filter(Boolean)));
     nodos.push(h('h2', { class: 'subtitulo', texto: 'Borradores' }));
     if (!lista.length) nodos.push(h('p', { class: 'suave', id: 'sinBorradores', texto: 'No tienes borradores. Lo que escribas en una acta nueva se guarda solo aquí.' }));
     else nodos.push(h('ul', { class: 'borradores', id: 'listaBorradores' }, lista.map(function (b) { return fila(est, b, refrescar); })));
