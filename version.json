@@ -1,6 +1,6 @@
 {
   "version": "actas v24",
-  "commit": "1537916",
+  "commit": "892a0c2",
   "ficheros": {
     "ABRIR MIS ACTAS.html": "92e4cdf0e6d55ebc4c57453d77e71b8db251f8f7e248ab3fbc78ec81a39f0eb6",
     "acta-docx.js": "d644c1cddc018e43fb8b6067bdce2c6e79e0b0f0516e45dcb91f92f14bb08d2b",
@@ -22,7 +22,7 @@
     "buscador-alumno.js": "e60a8f6d2378105c3d3e4fe7cd2e3e470a64b6cf7cff7e13f38a2d56607c4d47",
     "carpeta.js": "bf999b0d6ca5a725edd4af2b7fe13713e3f69d618700b18d6d62b22d91b67a9a",
     "claude.js": "dcd56911c1458b44f1f7f3ab8732f96092402c17226aea92c1413f0a56ed05aa",
-    "commit.js": "0825f9c11f98f029de33d9cadeb78f49a01eae8316ab72d90fc072a7af04b25f",
+    "commit.js": "5581121baba6b818d0f2044399adde8312cc7d5c25286b1758405be05c7d5148",
     "convocatoria.js": "6e16a853abb35e37879cd282cfb0516380614672beeeab7413a2b53815b81202",
     "datos.js": "7f5fe37f8faeb6f8a052646f3e4c99a55221fb4aece303cbc03f9e72f4efac64",
     "dictado.js": "8eb138804969f3c5d0095cabee9ca0df6eaa0a85e4943790712b143b804eb86e",
