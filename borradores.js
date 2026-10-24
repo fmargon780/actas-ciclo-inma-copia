@@ -96,6 +96,7 @@
           o.alumnado = g.Alumnado.alumnosCitados(String(p.notas || '') + g.Huecos.cajas(p).map(function (c) { return '\n' + c.hueco.notas; }).join(''));
         }
         if (p.parrafo) { o.parrafo = String(p.parrafo); o.notasRedactadas = String(p.notasRedactadas == null ? (g.Redaccion ? g.Redaccion.contenido(p) : p.notas || '') : p.notasRedactadas); o.manual = !!p.manual; }
+        if (p.versiones && ((p.versiones.parrafo || []).length || (p.versiones['parrafo@'] || []).length)) o.versiones = { parrafo: (p.versiones.parrafo || []).slice(), 'parrafo@': (p.versiones['parrafo@'] || []).slice(0, 1) };
         return o;
       })
     };

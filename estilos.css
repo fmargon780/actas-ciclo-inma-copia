@@ -220,3 +220,8 @@ a.boton { text-decoration: none; display: inline-block; }
 .campo-corto input { width: 5em; }
 .alumno-evaluacion summary { cursor: pointer; }
 @media (max-width: 800px) { .dos-col { grid-template-columns: minmax(0, 1fr); } }
+
+/* Botones de retoque junto a cada texto redactado (fila 64) */
+.retoque-caja { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
+.retoque-otro { align-items: center; flex-wrap: nowrap; }
+.retoque-libre { flex: 1; min-width: 0; }

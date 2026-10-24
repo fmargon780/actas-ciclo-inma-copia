@@ -95,7 +95,10 @@
       try {
         var clave = await g.Datos.leerClave(est.raiz);
         var res = await g.EntrevistaClaude.redactar(clave, e, rub.lista ? rub.lista.todos : [], { otraVersion: !!otra, estilo: await g.Estilo.paraClaude(est.raiz, rub.lista ? rub.lista.todos : []) });
-        E.ponerTextos(e, res.textos); e.editado = false; e.notasRedactadas = E.firmaNotas(e.notas); avisoNombres = res.aviso || '';
+        var antes = {};
+        F.CAJAS_ENTREVISTA.forEach(function (c) { antes[c[0]] = e.textos[c[0]]; });
+        E.ponerTextos(e, res.textos); e.editado = false;
+        F.CAJAS_ENTREVISTA.forEach(function (c) { g.Retoque.cambiar(e, c[0], antes[c[0]], e.textos[c[0]]); }); /* «Deshacer» de cada caja recoge también este cambio */ e.notasRedactadas = E.firmaNotas(e.notas); avisoNombres = res.aviso || '';
         cambio();
       } catch (x) { decirError(x); }
       finally { ocupado = false; estado.textContent = ''; pintarRedaccion(); pintarAvisoNotas(); }
@@ -129,6 +132,17 @@
       pintarTextos(); pintarCompromisos(); pintarFin();
     }
 
+    /* «Más escueto», «Desarrolla más»… junto a cada texto (fila 64): Claude parte del texto tal como está, con las correcciones a mano. */
+    function barraRetoque(clave) {
+      return g.PantallaRetoque.barra({
+        est: est, id: 'seneca-' + clave, almacen: e, clave: clave, ocupado: ocupado, limite: g.Retoque.LIMITE_SENECA, todos: function () { return rub.lista ? rub.lista.todos : []; },
+        leer: function () { return e.textos[clave] || ''; },
+        escribir: function (t, aviso) { E.editarTexto(e, clave, t); avisoNombres = aviso || ''; },
+        ocupar: function (si) { ocupado = si; if (si) g.Dom.decir(avisoClaude, ''); estado.textContent = si ? 'Claude está cambiando el texto…' : ''; pintarRedaccion(); pintarAvisoNotas(); },
+        alCambiar: function () { cambio(); pintarRedaccion(); pintarAvisoNotas(); }, error: decirError
+      });
+    }
+
     /* Los tres textos finales, cada uno con «Copiar» */
     function pintarTextos() {
       zonaTextos.textContent = '';
@@ -142,7 +156,9 @@
           dicho.textContent = (await copiarTexto(area.value)) ? 'Copiado' : 'No he podido copiar';
         } });
         area.oninput = function () { E.editarTexto(e, clave, area.value); e.editado = true; dicho.textContent = ''; cambio(); pintarCompromisos(); pintarFin(); pintarAvisoNotas(); };
-        zonaTextos.appendChild(h('div', { class: 'texto-seneca', 'data-seneca': clave }, [h('div', { class: 'cabeza-hueco' }, [h('strong', { texto: c[1] }), h('span', { class: 'fila' }, [dicho, copiar])]), area]));
+        var partes = [h('div', { class: 'cabeza-hueco' }, [h('strong', { texto: c[1] }), h('span', { class: 'fila' }, [dicho, copiar])]), area];
+        if (String(e.textos[clave] || '').trim()) partes.push(barraRetoque(clave));
+        zonaTextos.appendChild(h('div', { class: 'texto-seneca', 'data-seneca': clave }, partes));
       });
     }
 

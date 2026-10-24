@@ -19,12 +19,32 @@
       if (x && x.tipo === 'clave') avisoClaude.appendChild(h('button', { type: 'button', class: 'boton chico', id: 'irAjustes', texto: 'Ir a Ajustes', onclick: function () { est.irAjustes(); } }));
     }
 
+    /* Todas las cajas con su clave: 'seneca-1'… 'seneca-5' y 'anexo-IA'… (las claves de las versiones para «Deshacer»). */
+    function todosLosTextos() {
+      var t = {};
+      E.CAJAS_SENECA.forEach(function (x, i) { t['seneca-' + (i + 1)] = (e.textos.seneca || [])[i] || ''; });
+      E.PARTES_ANEXO.forEach(function (p) { t['anexo-' + p.id] = (e.textos.anexo || {})[p.id] || ''; });
+      return t;
+    }
+    /* «Más escueto», «Desarrolla más»… junto a cada caja (fila 64): Claude parte del texto tal como está, con las correcciones a mano. */
+    function barraRetoque(clave, leer, poner, limite) {
+      return g.PantallaRetoque.barra({
+        est: est, id: clave, almacen: e, clave: clave, ocupado: ocupado, limite: limite, todos: function () { return ctx.todos; },
+        leer: leer, escribir: function (t, aviso) { poner(t); avisoNombres = aviso || ''; },
+        ocupar: function (si) { ocupado = si; if (si) g.Dom.decir(avisoClaude, ''); estado.textContent = si ? 'Claude está cambiando el texto…' : ''; pintarRedaccion(); },
+        alCambiar: function () { cambio(); pintarTextos(); pintarFinSinReprintar(); notasCambiaron(); }, error: decirError
+      });
+    }
+
     async function redactar(otra) {
       preguntando = null; ocupado = true; g.Dom.decir(avisoClaude, ''); estado.textContent = 'Claude está redactando…'; pintarRedaccion();
       try {
         var clave = await g.Datos.leerClave(est.raiz);
         var res = await g.EvaluacionClaude.redactar(clave, e, ctx.todos, { otraVersion: !!otra, estilo: await g.Estilo.paraClaude(est.raiz, ctx.todos) });
+        var antes = todosLosTextos();
         E.ponerRedaccion(e, res.textos); avisoNombres = res.aviso || '';
+        var ahora = todosLosTextos();
+        Object.keys(ahora).forEach(function (k) { g.Retoque.cambiar(e, k, antes[k], ahora[k]); }); /* «Deshacer» de cada caja recoge también este cambio */
         cambio();
       } catch (x) { decirError(x); }
       finally { ocupado = false; estado.textContent = ''; pintarRedaccion(); notasCambiaron(); }
@@ -83,12 +103,16 @@
           dicho.textContent = (await g.PantallaEntrevista.copiarTexto(a.value)) ? 'Copiado' : 'No he podido copiar';
         } });
         a.addEventListener('input', function () { dicho.textContent = ''; });
-        seneca.appendChild(h('div', { class: 'texto-seneca', 'data-seneca': String(i + 1) }, [h('div', { class: 'cabeza-hueco' }, [h('strong', { texto: titulo }), h('span', { class: 'fila' }, [dicho, copiar])]), a]));
+        var partes = [h('div', { class: 'cabeza-hueco' }, [h('strong', { texto: titulo }), h('span', { class: 'fila' }, [dicho, copiar])]), a];
+        if (String(e.textos.seneca[i] || '').trim()) partes.push(barraRetoque('seneca-' + (i + 1), function () { return e.textos.seneca[i] || ''; }, function (t) { e.textos.seneca[i] = t; }, g.Retoque.LIMITE_SENECA));
+        seneca.appendChild(h('div', { class: 'texto-seneca', 'data-seneca': String(i + 1) }, partes));
       });
       E.PARTES_ANEXO.forEach(function (p) {
         if (p.soloInicial && e.sesion !== 'inicial') return;
         var a = area(e.textos.anexo[p.id], 'anexo-' + p.id, function (v) { e.textos.anexo[p.id] = v; });
-        anexo.appendChild(h('div', { class: 'texto-seneca', 'data-anexo': p.id }, [h('div', { class: 'cabeza-hueco' }, [h('strong', { texto: p.titulo })]), a]));
+        var partesA = [h('div', { class: 'cabeza-hueco' }, [h('strong', { texto: p.titulo })]), a];
+        if (String(e.textos.anexo[p.id] || '').trim()) partesA.push(barraRetoque('anexo-' + p.id, function () { return e.textos.anexo[p.id] || ''; }, function (t) { e.textos.anexo[p.id] = t; }));
+        anexo.appendChild(h('div', { class: 'texto-seneca', 'data-anexo': p.id }, partesA));
       });
       function boton(id, texto) {
         return h('button', { type: 'button', class: 'boton' + (pestana === id ? ' principal' : ''), 'data-pestana': id, texto: texto, onclick: function () { pestana = id; pintarTextos(); } });

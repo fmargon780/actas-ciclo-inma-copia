@@ -96,6 +96,13 @@
     return p;
   }
 
+  /* Claude retoca el texto tal como está (fila 64): la marca de «cambiado a mano» se queda como estaba y el punto sigue ligado a sus notas. */
+  function ponerRetocado(p, texto) {
+    p.parrafo = String(texto || '').trim();
+    if (p.notasRedactadas == null) p.notasRedactadas = contenido(p);
+    return p;
+  }
+
   /* Inma escribe encima. Si borra todo el párrafo, el punto vuelve a no tener texto. */
   function editarParrafo(p, texto) {
     p.parrafo = String(texto || '');
@@ -198,7 +205,7 @@
   g.Redaccion = {
     TEXTO_PENDIENTE: TEXTO_PENDIENTE, estadoPunto: estadoPunto, indicesPorRedactar: indicesPorRedactar, hayQuePreguntar: hayQuePreguntar,
     contenido: contenido, hayContenido: hayNotas, verContenido: verContenido, tieneActaAnterior: tieneActaAnterior, anadirActaAnterior: anadirActaAnterior, ponerMarcados: ponerMarcados,
-    peticion: peticion, prepararPeticion: prepararPeticion, ponerParrafo: ponerParrafo, editarParrafo: editarParrafo, quitarParrafo: quitarParrafo,
+    peticion: peticion, prepararPeticion: prepararPeticion, ponerParrafo: ponerParrafo, ponerRetocado: ponerRetocado, editarParrafo: editarParrafo, quitarParrafo: quitarParrafo,
     motivoQueImpide: motivoQueImpide, leerRespuesta: leerRespuesta, armarEnvio: armarEnvio, fechaActaAnterior: fechaActaAnterior
   };
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -60,7 +60,7 @@
       if (!hallado) { i = fin; continue; }
       if (i > ultimo) res.push({ texto: t.slice(ultimo, i) });
       var alumnos = Object.keys(hallado.e.alumnos).map(function (c) { return hallado.e.alumnos[c]; });
-      if (alumnos.length === 1) res.push({ alumno: { nombre: alumnos[0].nombre, grupo: alumnos[0].grupo, enLista: true } });
+      if (alumnos.length === 1) res.push({ alumno: { nombre: alumnos[0].nombre, grupo: alumnos[0].grupo, enLista: true }, original: t.slice(i, i + hallado.largo) });
       else res.push({ ambiguo: { texto: t.slice(i, i + hallado.largo) } });
       ultimo = i + hallado.largo; i = ultimo;
     }

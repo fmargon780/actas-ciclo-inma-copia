@@ -81,6 +81,7 @@
         var res = await g.ReunionClaude.redactar(clave, r, indices, lista ? lista.todos : [], { otraVersion: !!otra, estilo: await g.Estilo.paraClaude(est.raiz, lista ? lista.todos : []) });
         Object.keys(res.parrafos).forEach(function (n) {
           var p = r.puntos[n - 1];
+          g.Retoque.cambiar(p, 'redactado', p.redactado, res.parrafos[n]); /* «Deshacer» guarda el texto de antes, con lo corregido a mano */
           p.redactado = res.parrafos[n]; p.notasRedactadas = R.firmaNotas(p); p.editado = false; avisosNombres[n] = res.avisos[n] || '';
         });
         cambio();
@@ -133,6 +134,13 @@
         var quitar = h('button', { type: 'button', class: 'boton chico', 'data-accion': 'quitar-redaccion', texto: 'Quitar la redacción', onclick: function () { p.redactado = ''; p.notasRedactadas = ''; p.editado = false; cambio(); pintarBotones(); } });
         otra.disabled = ocupado;
         zonaRedactado.appendChild(h('div', { class: 'fila' }, [otra, quitar]));
+        zonaRedactado.appendChild(g.PantallaRetoque.barra({
+          est: est, id: 'punto-' + n, almacen: p, clave: 'redactado', ocupado: ocupado, todos: function () { return lista ? lista.todos : []; },
+          leer: function () { return p.redactado || ''; },
+          escribir: function (t, aviso) { p.redactado = t; avisosNombres[n] = aviso || ''; },
+          ocupar: function (si) { ocupado = si; if (si) g.Dom.decir(avisoClaude, ''); estado.textContent = si ? 'Claude está cambiando el texto…' : ''; pintarBotones(); },
+          alCambiar: function () { cambio(); pintarBotones(); }, error: decirError
+        }));
         if (preguntando[n]) zonaRedactado.appendChild(h('div', { class: 'aviso pregunta', 'data-pregunta-sustituir': String(n) }, [
           h('span', { texto: 'Has corregido este texto a mano. ¿Sustituirlo por uno nuevo? ' }),
           h('button', { type: 'button', class: 'boton chico principal', 'data-accion': 'si-sustituir', texto: 'Sí, sustituir', onclick: function () { preguntando[n] = false; redactar([i], true); } }),

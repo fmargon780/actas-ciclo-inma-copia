@@ -59,7 +59,9 @@
         indices.forEach(function (i) {
           var p = b.puntos[i], n = i + 1;
           R.ponerMarcados(p, res.marcados[n] || { notas: res.notasMarcadas[n] }); /* los nombres que Inma escribió sueltos quedan marcados */
+          var antes = p.parrafo;
           R.ponerParrafo(p, res.parrafos[n]);
+          g.Retoque.cambiar(p, 'parrafo', antes, p.parrafo); /* «Deshacer» guarda el texto de antes, con lo corregido a mano */
           if (res.avisos[n]) avisosNombres[i] = res.avisos[n]; else delete avisosNombres[i];
         });
         cambio();
@@ -73,7 +75,7 @@
       var p = b.puntos[i];
       if (!confirmado && R.hayQuePreguntar(p)) { preguntas[i] = !!otraVersion ? 'otra' : 'nueva'; pintar(); return Promise.resolve(); }
       delete preguntas[i];
-      if (!R.hayContenido(p)) { R.quitarParrafo(p); cambio(); pintar(); return Promise.resolve(); }
+      if (!R.hayContenido(p)) { g.Retoque.guardarVersion(p, 'parrafo', p.parrafo); R.quitarParrafo(p); cambio(); pintar(); return Promise.resolve(); }
       return redactarPuntos([i], otraVersion);
     }
 
@@ -84,6 +86,17 @@
       todos.forEach(function (i) { if (R.hayQuePreguntar(b.puntos[i])) preguntas[i] = 'nueva'; else directos.push(i); });
       if (!directos.length) { g.Dom.decir(avisoClaude, ''); pintar(); return Promise.resolve(); }
       return redactarPuntos(directos, false);
+    }
+
+    /* «Más escueto», «Desarrolla más»… junto al párrafo (fila 64): Claude parte del párrafo tal como está, con las correcciones a mano. */
+    function barraRetoque(p, i) {
+      return g.PantallaRetoque.barra({
+        est: est, id: 'punto-' + i, almacen: p, clave: 'parrafo', ocupado: ocupado, todos: async function () { var rub = await g.Rubricas.cargar(est); return rub.lista ? rub.lista.todos : null; },
+        leer: function () { return p.parrafo || ''; },
+        escribir: function (t, aviso) { R.ponerRetocado(p, t); if (aviso) avisosNombres[i] = aviso; else delete avisosNombres[i]; },
+        ocupar: function (si) { ocupado = si; if (si) g.Dom.decir(avisoClaude, ''); estadoRedaccion.textContent = si ? 'Claude está cambiando el texto…' : ''; pintar(); },
+        alCambiar: function () { cambio(); pintar(); }, error: decirError
+      });
     }
 
     function tarjeta(p, i) {
@@ -105,6 +118,7 @@
         h('div', { class: 'der' }, [h('div', { class: 'suave', texto: 'Párrafo del acta' }),
           h('div', { class: 'caja-marcas' }, [h('div', { class: 'fondo', 'data-fondo': String(i), 'aria-hidden': 'true' }), area]), h('div', { class: 'marcas-frases', 'data-marcas': String(i) })])
       ]), acciones];
+      if (String(p.parrafo || '').trim()) nodos.push(barraRetoque(p, i));
       var avisoNombres = avisosNombres[i] || (g.AlumnadoClaude.quedanMarcas(p.parrafo) ? g.AlumnadoClaude.AVISO_NOMBRES : '');
       if (avisoNombres) nodos.push(h('div', { class: 'aviso', 'data-aviso-nombres': String(i), texto: avisoNombres }));
       if (preguntas[i]) {

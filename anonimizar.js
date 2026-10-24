@@ -17,21 +17,29 @@
   var SECUENCIA = new RegExp(PALABRA + '(?:\\s+(?:(?:de|del|la|las|los|y)\\s+)?' + PALABRA + ')+', 'g');
   var CAPITALIZADA = new RegExp(PALABRA, 'g');
 
-  function marca(nombre) { var i = AC.iniciales(nombre); return '[' + (i || 'X.') + ']'; }
+  /* Con un registro activo (`reversible`), cada texto tapado recibe una marca propia y se anota qué había debajo. */
+  function marcar(reg, original, ini) {
+    if (!reg) return '[' + ini + ']';
+    var k = A.normalizar(original).replace(/\s+/g, ' ');
+    if (reg.porOriginal[k]) return reg.porOriginal[k];
+    var n = reg.usadas[ini] = (reg.usadas[ini] || 0) + 1, m = '[' + ini + (n > 1 ? n : '') + ']';
+    reg.porOriginal[k] = m; reg.marcas[m] = original;
+    return m;
+  }
 
   /* Capa 3: una secuencia de palabras con mayúscula es nombre salvo que todas sus palabras sean corrientes. */
-  function tapar3(texto, esTitulo) {
+  function tapar3(texto, esTitulo, reg) {
     return texto.replace(SECUENCIA, function (run, pos) {
       var palabras = run.match(CAPITALIZADA) || [];
       if (esTitulo && pos === 0) palabras = palabras.slice(1); /* la primera palabra de un título va con mayúscula sin ser nombre */
       if (palabras.length < 2) return run;
       var raras = palabras.filter(function (w) { return CORRIENTES.indexOf(A.normalizar(w)) < 0; });
-      return raras.length ? marca(run) : run;
+      return raras.length ? marcar(reg, run, AC.iniciales(run) || 'X.') : run;
     });
   }
 
   function crear(todos) {
-    var ind = todos && todos.length ? AC.indice(todos) : null, sueltas = {};
+    var ind = todos && todos.length ? AC.indice(todos) : null, sueltas = {}, reg = null;
     (todos || []).forEach(function (a) {
       A.palabras(a.nombre).forEach(function (w) {
         var n = A.normalizar(w);
@@ -42,12 +50,18 @@
     function tapar12(texto) {
       var trozos = ind ? AC.detectar(texto, ind) : [{ texto: texto }];
       return trozos.map(function (x) {
-        if (x.alumno) return marca(x.alumno.nombre);
-        if (x.ambiguo) return marca(x.ambiguo.texto);
-        return x.texto.replace(CAPITALIZADA, function (w) { return sueltas[A.normalizar(w)] ? '[' + w.charAt(0) + '.]' : w; });
+        if (x.alumno) return marcar(reg, x.original || x.alumno.nombre, AC.iniciales(x.alumno.nombre) || 'X.');
+        if (x.ambiguo) return marcar(reg, x.ambiguo.texto, AC.iniciales(x.ambiguo.texto) || 'X.');
+        return x.texto.replace(CAPITALIZADA, function (w) { return sueltas[A.normalizar(w)] ? marcar(reg, w, w.charAt(0) + '.') : w; });
       }).join('');
     }
-    return { texto: function (t, esTitulo) { return tapar3(tapar12(String(t == null ? '' : t)), !!esTitulo); } };
+    function texto(t, esTitulo) { return tapar3(tapar12(String(t == null ? '' : t)), !!esTitulo, reg); }
+    /* Como `texto`, pero devuelve también { '[M.S.P.]': 'lo que había' } para poder devolver los nombres a lo que vuelva de Claude. */
+    function reversible(t) {
+      reg = { marcas: {}, porOriginal: {}, usadas: {} };
+      try { return { texto: texto(t), marcas: reg.marcas }; } finally { reg = null; }
+    }
+    return { texto: texto, reversible: reversible };
   }
 
   g.Anonimizar = { crear: crear };
