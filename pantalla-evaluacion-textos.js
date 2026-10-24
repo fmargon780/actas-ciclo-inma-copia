@@ -23,7 +23,7 @@
       preguntando = null; ocupado = true; g.Dom.decir(avisoClaude, ''); estado.textContent = 'Claude está redactando…'; pintarRedaccion();
       try {
         var clave = await g.Datos.leerClave(est.raiz);
-        var res = await g.EvaluacionClaude.redactar(clave, e, ctx.todos, { otraVersion: !!otra });
+        var res = await g.EvaluacionClaude.redactar(clave, e, ctx.todos, { otraVersion: !!otra, estilo: await g.Estilo.paraClaude(est.raiz, ctx.todos) });
         E.ponerRedaccion(e, res.textos); avisoNombres = res.aviso || '';
         cambio();
       } catch (x) { decirError(x); }

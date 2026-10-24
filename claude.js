@@ -29,9 +29,9 @@
   var FRASE_SIN_CLAVE = 'Falta la clave de Claude. Ponla en Ajustes.';
 
   /* El cuerpo exacto que se envía. Solo lleva INSTRUCCIONES y los puntos (n, titulo, notas). */
-  function cuerpo(puntos, otraVersion) {
+  function cuerpo(puntos, otraVersion, estilo) {
     return {
-      model: MODELO, max_tokens: 4000, system: INSTRUCCIONES + (otraVersion ? '\n' + OTRA_VERSION : ''),
+      model: MODELO, max_tokens: 4000, system: INSTRUCCIONES + (estilo ? '\n' + estilo : '') + (otraVersion ? '\n' + OTRA_VERSION : ''),
       messages: [{ role: 'user', content: JSON.stringify({ puntos: puntos }) }]
     };
   }
@@ -59,7 +59,7 @@
     var indices = puntos.map(function (p) { return p.n - 1; });
     var ultimo = null;
     for (var intento = 0; intento < 2; intento++) {
-      var texto = await llamar(clave, cuerpo(puntos, opciones.otraVersion), opciones.buscar);
+      var texto = await llamar(clave, cuerpo(puntos, opciones.otraVersion, opciones.estilo), opciones.buscar);
       try { return g.Redaccion.leerRespuesta(texto, indices); } catch (err) { ultimo = err; }
     }
     var f = new Error('Claude ha contestado algo que no he podido leer. Vuelve a intentarlo.'); f.tipo = 'formato'; f.detalle = ultimo; throw f;

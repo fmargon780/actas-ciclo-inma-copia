@@ -55,7 +55,7 @@
       try {
         var clave = await g.Datos.leerClave(est.raiz);
         var rub = await g.Rubricas.cargar(est);
-        var res = await g.Claude.redactarConAlumnado(clave, b, indices, rub.lista ? rub.lista.todos : null, { otraVersion: !!otraVersion });
+        var res = await g.Claude.redactarConAlumnado(clave, b, indices, rub.lista ? rub.lista.todos : null, { otraVersion: !!otraVersion, estilo: await g.Estilo.paraClaude(est.raiz, rub.lista ? rub.lista.todos : null) });
         indices.forEach(function (i) {
           var p = b.puntos[i], n = i + 1;
           R.ponerMarcados(p, res.marcados[n] || { notas: res.notasMarcadas[n] }); /* los nombres que Inma escribió sueltos quedan marcados */

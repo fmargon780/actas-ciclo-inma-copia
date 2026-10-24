@@ -78,7 +78,7 @@
       ocupado = true; g.Dom.decir(avisoClaude, ''); estado.textContent = 'Claude está redactando…'; pintarBotones();
       try {
         var clave = await g.Datos.leerClave(est.raiz);
-        var res = await g.ReunionClaude.redactar(clave, r, indices, lista ? lista.todos : [], { otraVersion: !!otra });
+        var res = await g.ReunionClaude.redactar(clave, r, indices, lista ? lista.todos : [], { otraVersion: !!otra, estilo: await g.Estilo.paraClaude(est.raiz, lista ? lista.todos : []) });
         Object.keys(res.parrafos).forEach(function (n) {
           var p = r.puntos[n - 1];
           p.redactado = res.parrafos[n]; p.notasRedactadas = R.firmaNotas(p); p.editado = false; avisosNombres[n] = res.avisos[n] || '';

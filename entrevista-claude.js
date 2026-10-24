@@ -73,9 +73,9 @@
   }
 
   /* La petición exacta que se manda. Lleva solo INSTRUCCIONES y las cajas; nunca el nombre del alumno. */
-  function cuerpo(prep, otraVersion) {
+  function cuerpo(prep, otraVersion, estilo) {
     return {
-      model: g.Claude.MODELO, max_tokens: 4000, system: INSTRUCCIONES + (otraVersion ? '\n' + OTRA_VERSION : ''),
+      model: g.Claude.MODELO, max_tokens: 4000, system: INSTRUCCIONES + (estilo ? '\n' + estilo : '') + (otraVersion ? '\n' + OTRA_VERSION : ''),
       messages: [{ role: 'user', content: JSON.stringify(prep.cuerpo) }]
     };
   }
@@ -103,7 +103,7 @@
     if (!prep.envia.temas && !prep.envia.decisiones && !prep.envia.otros) { var v = new Error('Escribe primero alguna nota para que Claude la redacte.'); v.tipo = 'vacio'; throw v; }
     var ultimo = null, mal = null;
     for (var intento = 0; intento < 2; intento++) {
-      var texto = await g.Claude.llamar(clave, cuerpo(prep, opciones.otraVersion), opciones.buscar), res;
+      var texto = await g.Claude.llamar(clave, cuerpo(prep, opciones.otraVersion, opciones.estilo), opciones.buscar), res;
       try { res = leerRespuesta(texto, prep.envia); } catch (err) { ultimo = err; continue; }
       if (marcasBien(res, prep.marcas)) return { textos: restaurar(res, prep.marcas), aviso: avisoDe(prep) };
       mal = res;

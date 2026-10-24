@@ -94,7 +94,7 @@
       preguntando = null; ocupado = true; g.Dom.decir(avisoClaude, ''); estado.textContent = 'Claude está redactando…'; pintarRedaccion();
       try {
         var clave = await g.Datos.leerClave(est.raiz);
-        var res = await g.EntrevistaClaude.redactar(clave, e, rub.lista ? rub.lista.todos : [], { otraVersion: !!otra });
+        var res = await g.EntrevistaClaude.redactar(clave, e, rub.lista ? rub.lista.todos : [], { otraVersion: !!otra, estilo: await g.Estilo.paraClaude(est.raiz, rub.lista ? rub.lista.todos : []) });
         E.ponerTextos(e, res.textos); e.editado = false; e.notasRedactadas = E.firmaNotas(e.notas); avisoNombres = res.aviso || '';
         cambio();
       } catch (x) { decirError(x); }

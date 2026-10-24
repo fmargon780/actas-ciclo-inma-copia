@@ -29,9 +29,9 @@
   }
 
   /* La petición exacta que se manda: INSTRUCCIONES y los puntos (n, titulo, notas). */
-  function cuerpo(puntos, otraVersion) {
+  function cuerpo(puntos, otraVersion, estilo) {
     return {
-      model: g.Claude.MODELO, max_tokens: 3000, system: INSTRUCCIONES + (otraVersion ? '\n' + OTRA_VERSION : ''),
+      model: g.Claude.MODELO, max_tokens: 3000, system: INSTRUCCIONES + (estilo ? '\n' + estilo : '') + (otraVersion ? '\n' + OTRA_VERSION : ''),
       messages: [{ role: 'user', content: JSON.stringify({ puntos: puntos }) }]
     };
   }
@@ -39,7 +39,7 @@
   async function pedir(clave, puntos, opciones) {
     var indices = puntos.map(function (p) { return p.n - 1; }), ultimo = null;
     for (var intento = 0; intento < 2; intento++) {
-      var texto = await g.Claude.llamar(clave, cuerpo(puntos, opciones.otraVersion), opciones.buscar);
+      var texto = await g.Claude.llamar(clave, cuerpo(puntos, opciones.otraVersion, opciones.estilo), opciones.buscar);
       try { return g.Redaccion.leerRespuesta(texto, indices); } catch (err) { ultimo = err; }
     }
     var f = new Error('Claude ha contestado algo que no he podido leer. Vuelve a intentarlo.'); f.tipo = 'formato'; f.detalle = ultimo; throw f;
