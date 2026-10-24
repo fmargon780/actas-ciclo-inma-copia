@@ -39,7 +39,7 @@
     async function redactar(otra) {
       preguntando = null; ocupado = true; g.Dom.decir(avisoClaude, ''); estado.textContent = 'Claude está redactando…'; pintarRedaccion();
       try {
-        var clave = await g.Datos.leerClave(est.raiz);
+        var clave = await g.Claude.claveDe(est.raiz);
         var res = await g.EvaluacionClaude.redactar(clave, e, ctx.todos, { otraVersion: !!otra, estilo: await g.Estilo.paraClaude(est.raiz, ctx.todos) });
         var antes = todosLosTextos();
         E.ponerRedaccion(e, res.textos); avisoNombres = res.aviso || '';

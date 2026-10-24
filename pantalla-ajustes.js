@@ -1,10 +1,24 @@
-/* Ajustes: los datos del colegio (colegio.json), los datos del curso (ficha.json), la clave de Claude (clave.json, o copiarla de la carpeta RÚBRICAS) y Mi tutoría. */
+/* Ajustes: los datos del colegio (colegio.json), los datos del curso (ficha.json), las redacciones de Claude (en la app de internet, cuántas quedan este mes; en la copia sin internet, la clave de clave.json o copiada de la carpeta RÚBRICAS) y Mi tutoría. */
 (function (g) {
   'use strict';
   var h = g.Dom.h;
 
+  /* La línea de las redacciones de este mes, a partir de lo que dice el servicio ('yo'). */
+  function fraseRedacciones(r) {
+    if (r.tope === 'sin tope') return 'Redacciones de Claude: sin tope (' + r.redacciones + ' este mes).';
+    return 'Redacciones de Claude este mes: te quedan ' + Math.max(Number(r.tope) - r.redacciones, 0) + ' de ' + r.tope + '.';
+  }
+  async function tarjetaRedacciones() {
+    var texto = h('p', { id: 'redaccionesMes', texto: 'Mirando cuántas redacciones te quedan…' });
+    var r = await g.Servicio.llamar('yo');
+    if (r && r.ok) { g.Servicio.recordarSaldo({ tope: r.tope, redacciones: r.redacciones }); texto.textContent = fraseRedacciones(r); }
+    else texto.textContent = 'No he podido mirar cuántas redacciones te quedan. Inténtalo más tarde.';
+    return h('section', { class: 'tarjeta ancha', id: 'tarjetaRedacciones' }, [h('h2', { texto: 'Redacciones de Claude' }), texto]);
+  }
+
   async function pintarAjustes(est, refrescar) {
-    var actual = await g.Datos.leerClave(est.raiz);
+    var enServicio = g.Claude.enServicio();
+    var actual = enServicio ? '' : await g.Datos.leerClave(est.raiz);
     var aviso = g.Dom.aviso();
     var dicho = h('div', { class: 'aviso ok', id: 'clavePuesta', hidden: '' });
     var campo = h('input', { type: 'password', id: 'campoClave', autocomplete: 'off', placeholder: 'Pega aquí la clave de Claude', value: actual });
@@ -37,11 +51,12 @@
       h('div', { class: 'fila' }, [h('button', { type: 'button', class: 'boton', id: 'traerDesdeAjustes', texto: 'Traer actas del documento antiguo', onclick: function () { est.abrirTraer(); } })])
     ]);
     var cuenta = g.Entrada.tarjeta(), invitados = await g.PantallaInvitados.tarjeta();
-    g.Dom.montar([cuenta, invitados, colegio, datosCurso, h('section', { class: 'tarjeta ancha' }, [
+    var claude = enServicio ? await tarjetaRedacciones() : h('section', { class: 'tarjeta ancha' }, [
       h('h2', { texto: 'Clave de Claude ' }, [g.Ayuda.aviso('clave-claude')]),
       h('p', { class: 'suave', texto: 'Se guarda en tu carpeta ACTAS. La usará Claude para redactar las actas.' }),
       campo, h('div', { class: 'fila' }, [guardar, deRubricas, g.Ayuda.aviso('clave-rubricas')]), dicho, aviso
-    ]), estilo, traer, tutoria].filter(Boolean));
+    ]);
+    g.Dom.montar([cuenta, invitados, colegio, datosCurso, claude, estilo, traer, tutoria].filter(Boolean));
     /* «Ir a Ajustes» desde un aviso de falta de datos del colegio: baja hasta su tarjeta */
     if (est.destinoAjustes) { var d = est.destinoAjustes; est.destinoAjustes = null; var t = document.getElementById(d === 'colegio' ? 'tarjetaColegio' : d); if (t && t.scrollIntoView) t.scrollIntoView({ block: 'start' }); }
   }

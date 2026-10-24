@@ -38,7 +38,7 @@
     if (aprender.length) {
       await g.Rubricas.cargar(est);
       var lista = est.alumnado && est.alumnado.estado === 'ok' ? est.alumnado.lista.todos : null;
-      var clave = await g.Datos.leerClave(est.raiz);
+      var clave = await g.Claude.claveDe(est.raiz);
       var res = await g.HabitualClaude.aprenderDe(clave, aprender, lista, { progreso: function (n, t) { avisar('Aprendiendo de tus actas… (' + n + ' de ' + t + ')'); } });
       res.forEach(function (a) { hechas += H.aprender(habitual, a) ? 1 : 0; });
     }

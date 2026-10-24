@@ -19,7 +19,7 @@
     async function redactar(nombres) {
       preguntando = false; ocupado = true; g.Dom.decir(avisoClaude, ''); estado.textContent = 'Claude está redactando…'; repintar();
       try {
-        var clave = await g.Datos.leerClave(est.raiz);
+        var clave = await g.Claude.claveDe(est.raiz);
         var res = await g.PraClaude.redactar(clave, p, ctx.todos, nombres, { estilo: await g.Estilo.paraClaude(est.raiz, ctx.todos) });
         res.areas.forEach(function (a) { P.ponerCasillas(p, a.nombre, a.casillas); });
         p.notasRedactadas = P.firmaNotas(p); avisoNombres = res.aviso || '';

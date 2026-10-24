@@ -27,7 +27,7 @@
     async function redactar() {
       ocupado = true; g.Dom.decir(avisoClaude, ''); estado.textContent = 'Claude está redactando…'; repintar();
       try {
-        var clave = await g.Datos.leerClave(est.raiz);
+        var clave = await g.Claude.claveDe(est.raiz);
         var res = await c.redactar(clave, { estilo: await g.Estilo.paraClaude(est.raiz, c.todos) });
         g.Retoque.cambiar(c.almacen, 'texto', c.almacen[c.campo] || '', res.texto);
         c.almacen[c.campo] = res.texto; c.almacen.notasRedactadas = c.firma(); avisoNombres = res.aviso || ''; creado = null;

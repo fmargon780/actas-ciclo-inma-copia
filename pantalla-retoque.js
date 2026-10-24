@@ -17,7 +17,7 @@
       var texto = o.leer();
       o.ocupar(true);
       try {
-        var clave = await g.Datos.leerClave(o.est.raiz), todos = o.todos ? await o.todos() : null;
+        var clave = await g.Claude.claveDe(o.est.raiz), todos = o.todos ? await o.todos() : null;
         var r = await T.retocar(clave, texto, orden, { estilo: await g.Estilo.paraClaude(o.est.raiz, todos), todos: todos, limite: o.limite });
         T.cambiar(o.almacen, o.clave, texto, r.texto);
         o.escribir(r.texto, r.aviso);

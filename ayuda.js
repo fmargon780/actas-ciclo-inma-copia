@@ -14,22 +14,34 @@
       await new Promise(function (ok) { var s = document.createElement('script'); s.src = 'ayuda-datos.js'; s.onload = s.onerror = ok; document.head.appendChild(s); });
       d = g.AYUDA_DATOS || null;
     }
+    if (d && g.Claude && g.Claude.enServicio()) d = sinCopia(d);
     g.Ayuda.datos = d;
     return d;
   }
 
+  /* En la app de internet no hay clave de Claude: se quitan el paso de la guía y la pregunta que solo valen para la copia sin internet. */
+  function sinCopia(d) {
+    var c = Object.assign({}, d);
+    c.guia = d.guia.filter(function (p) { return !p.soloCopia; });
+    c.pantallas = d.pantallas.map(function (s) { return s.preguntas ? Object.assign({}, s, { preguntas: s.preguntas.filter(function (q) { return !q.soloCopia; }) }) : s; });
+    return c;
+  }
+
   function hoyIso() { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+
+  /* En la app de internet no hay paso de la clave: se quita su casilla. */
+  function sinClave(r) { if (g.Claude && g.Claude.enServicio()) r.splice(4, 1); return r; }
 
   /* [carpeta, colegio, alumnado, datos del curso, clave, primera acta] -> true/false. Sin carpeta (est nulo) solo puede faltar todo. */
   async function pasosHechos(est) {
     var r = [!!est, false, false, false, false, false];
-    if (!est) return r;
+    if (!est) return sinClave(r);
     try { var c = await g.Colegio.leer(est.raiz); r[1] = !!(c && c.nombre); } catch (e) { r[1] = false; }
     try { var a = est.alumnado && est.alumnado.estado ? est.alumnado : await g.Rubricas.cargar(est); r[2] = a.estado === 'ok'; } catch (e) { r[2] = false; }
     try { r[3] = !g.FichaCurso.problema(g.FichaCurso.datosIniciales(await g.Datos.leerFicha(est.raiz), hoyIso())); } catch (e) { r[3] = false; }
     try { r[4] = !!(await g.Datos.leerClave(est.raiz)); } catch (e) { r[4] = false; }
     try { r[5] = (await g.Datos.listarBorradores(est.raiz)).length > 0 || (await g.Envios.listar(est.raiz)).length > 0; } catch (e) { r[5] = false; }
-    return r;
+    return sinClave(r);
   }
 
   /* «Cerrar la guía» se recuerda en la carpeta ACTAS (vale en todos los equipos); antes de elegir carpeta, en el navegador. */

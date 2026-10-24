@@ -4,14 +4,14 @@
     { "id": "colegio", "titulo": "Datos del colegio", "texto": "Escribe el nombre de tu colegio y, si quieres, su dirección, teléfono, correo y logo. Saldrán en la cabecera y en el pie de todos tus PDF y Word. Se guardan en tu carpeta ACTAS." },
     { "id": "alumnado", "titulo": "Tu alumnado", "texto": "Tu alumnado se mete en la app Rúbricas, en «Mis grupos», con el listado de cada grupo bajado de Séneca. Después abre aquí la carpeta RÚBRICAS para que Mis actas lo lea." },
     { "id": "datos-curso", "titulo": "Datos del curso", "texto": "Escribe el curso, el ciclo, la coordinadora y el profesorado del ciclo. Los asistentes de cada acta saldrán de aquí." },
-    { "id": "clave", "titulo": "Clave de Claude", "texto": "Pega tu clave de Claude. Si alguien te ha dado una, pégala aquí. Si no, créala en https://console.anthropic.com/settings/keys (necesitas una cuenta de Anthropic con saldo). Empieza por «sk-ant-». Solo se ve una vez al crearla: cópiala entera. Si ya la tienes en Rúbricas, pulsa «Usar la de Rúbricas»." },
+    { "id": "clave", "soloCopia": true, "titulo": "Clave de Claude", "texto": "Pega tu clave de Claude. Si alguien te ha dado una, pégala aquí. Si no, créala en https://console.anthropic.com/settings/keys (necesitas una cuenta de Anthropic con saldo). Empieza por «sk-ant-». Solo se ve una vez al crearla: cópiala entera. Si ya la tienes en Rúbricas, pulsa «Usar la de Rúbricas»." },
     { "id": "acta", "titulo": "Tu primera acta", "texto": "Empieza tu primera acta, o prepara la convocatoria de la próxima reunión." }
   ],
   "guiaTodoListo": "Todo listo. Puedes volver a esta guía desde el botón ?",
   "pantallas": [
     { "id": "primeros-pasos", "titulo": "Primeros pasos", "texto": [
       "Para usar la app en internet entras con tu cuenta de Google. La app está en prueba con un grupo cerrado de docentes: solo pasan las cuentas invitadas. Si tu cuenta del colegio no te deja entrar, prueba con tu cuenta personal de Google. La entrada se recuerda 30 días en ese navegador.", "Mis actas te ayuda a escribir las actas de tu ciclo y a llevar las entrevistas con las familias. Antes de empezar hay seis cosas que preparar. Se hacen una sola vez.",
-      "1. Elige tu carpeta ACTAS. 2. Rellena los datos de tu colegio. 3. Abre la carpeta RÚBRICAS, de donde sale tu alumnado. 4. Rellena los datos del curso. 5. Pega tu clave de Claude. 6. Empieza tu primera acta.",
+      "1. Elige tu carpeta ACTAS. 2. Rellena los datos de tu colegio. 3. Abre la carpeta RÚBRICAS, de donde sale tu alumnado. 4. Rellena los datos del curso. 5. Empieza tu primera acta. En la copia sin internet, antes de empezar pega tu clave de Claude en Ajustes.",
       "La guía te marca ✓ lo que ya está hecho. Puedes abrirla otra vez con el botón «Ver la guía de primeros pasos» de esta página."
     ] },
     { "id": "carpeta", "titulo": "Elegir la carpeta ACTAS", "texto": [
@@ -91,7 +91,7 @@
     { "id": "ajustes", "titulo": "Ajustes", "texto": [
       "Arriba ves con qué cuenta has entrado («Has entrado como…») y el botón «Salir». Quien administra la app ve además «Invitados»: escribe el correo de Google y pulsa «Invitar». En la lista puede cambiar el tope de redacciones de cada persona («Cambiar tope») o quitarla («Quitar»).", "«Datos del colegio»: el nombre, la dirección, el código postal y la localidad, el teléfono, el correo y el código de centro, más el logo («Subir logo» y «Quitar logo»). Salen en la cabecera y en el pie de todos los PDF y Word. Si tu colegio no usa el logo de la Junta de Andalucía, marca «Sin logo de la Junta». Sin el nombre del colegio la app no saca ningún documento: te avisa y te trae aquí.",
       "«Datos del curso»: el curso, el ciclo, la localidad, la coordinadora y la tabla del profesorado, con una fila por docente. Los asistentes de cada acta salen de esa tabla, en ese orden.",
-      "«Clave de Claude»: pega aquí tu clave y pulsa «Guardar la clave». Si ya la guardaste en Rúbricas, pulsa «Usar la de Rúbricas».",
+      "«Redacciones de Claude»: te dice cuántas redacciones te quedan este mes. No necesitas ninguna clave. En la copia sin internet esta tarjeta es «Clave de Claude»: pega tu clave y pulsa «Guardar la clave» (o «Usar la de Rúbricas»).",
       "«Estilo de redacción»: elige si quieres los textos escuetos, normales o desarrollados, y el lenguaje sencillo, normal o técnico. Si quieres, escribe tus propias instrucciones («di siempre el alumnado»). Vale para todo lo que redacta Claude y se guarda solo.",
       "«Mi tutoría»: tu grupo y tu nombre, para las entrevistas con las familias.",
       "«Actas del documento antiguo»: el botón «Traer actas del documento antiguo» te lleva a la pantalla para traer las actas de este curso que tengas en un documento de Word."
@@ -113,7 +113,8 @@
       "La cabecera enseña el logo y el nombre del colegio que pusiste en Ajustes › Datos del colegio, y el curso. Si aún no los has puesto, o abres el panel en otro navegador, solo verás el logo de la Junta y el curso. Si cambias los datos, el panel los enseña la próxima vez que lo abras."
     ] },
     { "id": "preguntas", "titulo": "Preguntas frecuentes", "preguntas": [
-      { "p": "¿Dónde consigo la clave de Claude?", "r": "Si alguien te ha dado una, pégala en Ajustes. Si no, créala en https://console.anthropic.com/settings/keys (necesitas una cuenta de Anthropic con saldo). Empieza por «sk-ant-» y solo se ve una vez al crearla: cópiala entera." },
+      { "p": "¿Dónde consigo la clave de Claude?", "soloCopia": true, "r": "Si alguien te ha dado una, pégala en Ajustes. Si no, créala en https://console.anthropic.com/settings/keys (necesitas una cuenta de Anthropic con saldo). Empieza por «sk-ant-» y solo se ve una vez al crearla: cópiala entera." },
+      { "p": "¿Cuántas redacciones puedo pedir a Claude?", "r": "Cada pulsación de un botón que pide un texto a Claude es una redacción. Cada invitado tiene 25 al mes y el día 1 vuelve a tener 25. En Ajustes ves cuántas te quedan, y la app te avisa cuando te quedan 5 o menos. Si se acaban, el resto de la app sigue funcionando y puedes escribir tú el texto." },
       { "p": "¿De dónde sale el alumnado?", "r": "De la app Rúbricas: en «Mis grupos» se sube el listado de cada grupo bajado de Séneca. Después se abre aquí la carpeta RÚBRICAS, una sola vez. Mis actas solo la lee, nunca escribe en ella." },
       { "p": "¿Dónde queda el acta que creo?", "r": "En tu carpeta ACTAS, dentro de «documentos» y del curso (por ejemplo, ACTAS › documentos › 2026-2027), en PDF y en Word. Con «Abrir PDF» y «Abrir Word», en el aviso al crearla o en «Actas hechas» del inicio, la abres sin buscarla. Si creas otra acta el mismo día, el nombre lleva (2), (3)…; nunca se borra un acta distinta." },
       { "p": "¿Qué se envía a Claude?", "r": "Solo los títulos de los puntos, tus notas y las iniciales del alumnado (por ejemplo, M.S.P.). Nunca un nombre completo." },

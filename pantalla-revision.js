@@ -53,7 +53,7 @@
       if (!indices.length) return true;
       ocupado = true; g.Dom.decir(avisoClaude, ''); estadoRedaccion.textContent = 'Claude está redactando…'; pintar();
       try {
-        var clave = await g.Datos.leerClave(est.raiz);
+        var clave = await g.Claude.claveDe(est.raiz);
         var rub = await g.Rubricas.cargar(est);
         var res = await g.Claude.redactarConAlumnado(clave, b, indices, rub.lista ? rub.lista.todos : null, { otraVersion: !!otraVersion, estilo: await g.Estilo.paraClaude(est.raiz, rub.lista ? rub.lista.todos : null) });
         indices.forEach(function (i) {

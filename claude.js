@@ -1,4 +1,5 @@
-/* La llamada a Claude, desde la página, con la clave de ACTAS/clave.json. Un único sitio para el modelo.
+/* La llamada a Claude, desde la página. En la app de internet (https) pasa por el servicio, con la sesión y sin clave; en la copia sin internet (file:)
+   sigue con la clave de ACTAS/clave.json. Un único sitio para el modelo.
    Respuesta en JSON fijo y un reintento si llega mal. A Claude solo le llegan títulos y notas de los puntos. */
 (function (g) {
   'use strict';
@@ -27,6 +28,55 @@
 
   var FRASE_RED = 'Desde esta red no llego a Claude: redacta en casa o escribe tú el párrafo.';
   var FRASE_SIN_CLAVE = 'Falta la clave de Claude. Ponla en Ajustes.';
+  var AVISAR_DESDE = 5; /* si quedan tantas o menos, se avisa tras redactar */
+  var FRASES_SERVICIO = {
+    sesion: 'Tu sesión ha caducado. Recarga la página y vuelve a entrar.',
+    'no-invitado': 'Tu cuenta ya no está en la lista de invitados.',
+    'sin-saldo': 'Las redacciones de Claude no están disponibles ahora mismo. Vuelve a intentarlo más tarde o escribe tú el texto.',
+    ocupado: 'Claude está muy ocupado ahora mismo. Vuelve a intentarlo en un momento.'
+  };
+
+  /* La app de internet usa el servicio; la copia (file:) y las pruebas en http siguen con la clave de la carpeta. */
+  function enServicio() { return !!(g.location && g.location.protocol === 'https:' && g.Servicio); }
+  function fraseTope(tope) { return 'Has usado tus ' + tope + ' redacciones de este mes. El día 1 vuelves a tener ' + tope + '. Mientras tanto, puedes escribir tú el texto.'; }
+  function fraseQuedan(n) { return 'Te quedan ' + n + (n === 1 ? ' redacción' : ' redacciones') + ' este mes.'; }
+  function pulsacionNueva() { return 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10); }
+
+  /* Lo que cada pantalla pasa como «clave» al pulsar un botón de redactar: en el servicio, una marca con el identificador de esa pulsación
+     (varias llamadas de la misma pulsación cuentan como una sola redacción); en la copia, la clave de la carpeta. */
+  async function claveDe(raiz) {
+    if (enServicio()) return { servicio: true, pulsacion: pulsacionNueva() };
+    return g.Datos.leerClave(raiz);
+  }
+
+  /* Aviso pequeño y pasajero junto a la pantalla (no depende de qué pantalla pidió la redacción). */
+  function avisoPasajero(texto) {
+    if (typeof document === 'undefined' || !document.body) return;
+    var viejo = document.getElementById('avisoQuedan'); if (viejo) viejo.remove();
+    var e = document.createElement('div'); e.id = 'avisoQuedan'; e.className = 'aviso ok saldo-claude'; e.setAttribute('role', 'status'); e.textContent = texto;
+    document.body.appendChild(e);
+    setTimeout(function () { if (e.parentNode) e.remove(); }, 9000);
+  }
+
+  /* Una llamada por el servicio. Mismos errores (e.tipo) que la llamada directa, con frases del servicio. */
+  async function llamarServicio(marca, cuerpoPeticion, buscar) {
+    var datos = { pulsacion: marca.pulsacion, messages: cuerpoPeticion.messages, max_tokens: cuerpoPeticion.max_tokens };
+    if (cuerpoPeticion.system) datos.system = cuerpoPeticion.system;
+    var r = await g.Servicio.llamar('redactar', datos, buscar);
+    if (r && r.ok) {
+      var quedan = typeof r.tope === 'number' ? r.tope - r.redacciones : null;
+      g.Servicio.recordarSaldo({ tope: r.tope, redacciones: r.redacciones });
+      if (quedan !== null && quedan <= AVISAR_DESDE) avisoPasajero(fraseQuedan(Math.max(quedan, 0)));
+      return r.texto;
+    }
+    var motivo = r && r.motivo, e;
+    if (motivo === 'red' || !r) { e = new Error(FRASE_RED); e.tipo = 'red'; throw e; }
+    if (motivo === 'tope') { e = new Error(fraseTope(r.tope)); e.tipo = 'tope'; throw e; }
+    if (motivo === 'sesion') g.Servicio.olvidar();
+    e = new Error(FRASES_SERVICIO[motivo] || 'Claude no está respondiendo bien ahora mismo. Vuelve a intentarlo en un momento.');
+    e.tipo = motivo === 'sin-saldo' ? 'saldo' : 'servicio';
+    throw e;
+  }
 
   /* El cuerpo exacto que se envía. Solo lleva INSTRUCCIONES y los puntos (n, titulo, notas). */
   function cuerpo(puntos, otraVersion, estilo) {
@@ -38,6 +88,7 @@
 
   /* Una llamada. Devuelve el texto de la respuesta. Lanza errores con frase en español (e.tipo: 'red' | 'clave' | 'servicio'). */
   async function llamar(clave, cuerpoPeticion, buscar) {
+    if (clave && clave.servicio) return llamarServicio(clave, cuerpoPeticion, buscar);
     var resp;
     try {
       resp = await (buscar || g.fetch.bind(g))(URL_API, {
@@ -85,5 +136,5 @@
     return { parrafos: parrafos, avisos: avisos, notasMarcadas: prep.notasMarcadas, marcados: prep.marcados };
   }
 
-  g.Claude = { MODELO: MODELO, URL_API: URL_API, llamar: llamar, cuerpo: cuerpo, redactar: redactar, redactarConAlumnado: redactarConAlumnado, FRASE_RED: FRASE_RED, FRASE_SIN_CLAVE: FRASE_SIN_CLAVE };
+  g.Claude = { MODELO: MODELO, URL_API: URL_API, llamar: llamar, claveDe: claveDe, enServicio: enServicio, cuerpo: cuerpo, redactar: redactar, redactarConAlumnado: redactarConAlumnado, FRASE_RED: FRASE_RED, FRASE_SIN_CLAVE: FRASE_SIN_CLAVE };
 })(typeof window !== 'undefined' ? window : globalThis);

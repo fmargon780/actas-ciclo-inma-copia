@@ -18,15 +18,19 @@
   function olvidar() { try { localStorage.removeItem(CLAVE); } catch (e) { /* nada que borrar */ } }
 
   /* POST text/plain con JSON (sin comprobación previa del navegador). Devuelve el JSON del servicio; si no responde, { ok: false, motivo: 'red' }. */
-  async function llamar(accion, datos) {
+  async function llamar(accion, datos, buscar) {
     var cuerpo = Object.assign({ accion: accion }, datos || {});
     var s = sesion();
     if (s && accion !== 'entrar') cuerpo.sesion = s.sesion;
     try {
-      var r = await fetch(g.SERVICIO_URL || URL_SERVICIO, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(cuerpo) });
+      var r = await (buscar || fetch)(g.SERVICIO_URL || URL_SERVICIO, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(cuerpo) });
       return await r.json();
     } catch (e) { return { ok: false, motivo: 'red' }; }
   }
 
-  g.Servicio = { CLIENT_ID: CLIENT_ID, URL: URL_SERVICIO, llamar: llamar, guardar: guardar, sesion: sesion, olvidar: olvidar };
+  /* Lo último que dijo el servicio de las redacciones de esta persona: { tope: número | 'sin tope', redacciones }. Solo en memoria. */
+  var saldo = null;
+  function recordarSaldo(s) { saldo = s || null; }
+
+  g.Servicio = { saldo: function () { return saldo; }, recordarSaldo: recordarSaldo, CLIENT_ID: CLIENT_ID, URL: URL_SERVICIO, llamar: llamar, guardar: guardar, sesion: sesion, olvidar: olvidar };
 })(window);
