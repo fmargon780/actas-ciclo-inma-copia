@@ -55,7 +55,10 @@
     var viejo = document.getElementById('avisoQuedan'); if (viejo) viejo.remove();
     var e = document.createElement('div'); e.id = 'avisoQuedan'; e.className = 'aviso ok saldo-claude'; e.setAttribute('role', 'status'); e.textContent = texto;
     document.body.appendChild(e);
-    setTimeout(function () { if (e.parentNode) e.remove(); }, 9000);
+    /* El botón «Soporte» sube por encima del aviso mientras se ve. */
+    var raiz = document.documentElement, estilo = raiz && raiz.style;
+    if (estilo) estilo.setProperty('--soporte-abajo', (e.offsetHeight + 32) + 'px');
+    setTimeout(function () { if (e.parentNode) e.remove(); if (estilo) estilo.removeProperty('--soporte-abajo'); }, 9000);
   }
 
   /* Una llamada por el servicio. Mismos errores (e.tipo) que la llamada directa, con frases del servicio. */

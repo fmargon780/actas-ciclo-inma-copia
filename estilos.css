@@ -169,7 +169,7 @@ button.enlace:hover { text-decoration: underline; }
 button.info { font: 700 12px/1 "Figtree", system-ui, sans-serif; width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--azul); background: var(--azul-claro); color: var(--azul); cursor: pointer; padding: 0; }
 .burbuja { display: none; position: absolute; left: 0; top: 24px; z-index: 40; width: 300px; max-width: 80vw; background: #fff; color: var(--tinta); border: 1px solid var(--azul); border-radius: 8px; padding: 8px 10px; box-shadow: 0 3px 10px rgba(20,30,45,.2); text-align: left; white-space: normal; }
 .info-caja:hover .burbuja, .info-caja.abierta .burbuja { display: block; }
-.guia-fondo { position: fixed; inset: 0; z-index: 100; background: rgba(20,30,45,.5); display: flex; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 24px 12px; }
+.guia-fondo { position: fixed; inset: 0; z-index: 2147483002; /* por encima del botón «Soporte» */ background: rgba(20,30,45,.5); display: flex; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 24px 12px; }
 .guia-caja { background: #fff; border-radius: 10px; padding: 18px 20px; width: 100%; max-width: 720px; display: flex; flex-direction: column; gap: 10px; }
 .guia-caja h2 { margin: 0; }
 .guia-pasos { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }

@@ -11,6 +11,7 @@
   }
 
   var app = { est: null };
+  window.estadoActas = function () { return app.est; }; /* para el botón «Soporte» (soporte-app.js) */
   function ctxAyuda() { return { est: app.est, elegirCarpeta: elegirYAbrir }; }
   /* El botón «?»: abre la página de ayuda en la sección de la pantalla donde estabas (antes se guarda lo que estuvieras escribiendo). */
   async function abrirAyuda() {
