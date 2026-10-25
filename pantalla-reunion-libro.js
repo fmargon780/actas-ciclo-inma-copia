@@ -1,5 +1,5 @@
 /* «Libro de reuniones con familias» (fila 57): junta las reuniones creadas del curso (las del grupo de tu tutoría) en un solo PDF y un solo Word,
-   por orden de fecha, y los guarda en ACTAS › documentos › <curso>. */
+   por orden de fecha, y los guarda en ACTAS › documentos › <curso> › Familias. */
 (function (g) {
   'use strict';
   var h = g.Dom.h;
@@ -18,7 +18,7 @@
       var r = await g.ReunionDocs.libro(est.raiz, est.ficha, tut);
       g.Dom.montar([h('section', { class: 'tarjeta ancha' }, [
         h('h2', { texto: 'Libro de reuniones con familias ' + r.grupo + ' · ' + r.curso }),
-        h('p', { id: 'libroReunionesGuardado', texto: 'He juntado ' + r.reuniones + (r.reuniones === 1 ? ' reunión' : ' reuniones') + ' del curso, por orden de fecha, en PDF y en Word, en la carpeta ACTAS › documentos › ' + r.curso + '.' }),
+        h('p', { id: 'libroReunionesGuardado', texto: 'He juntado ' + r.reuniones + (r.reuniones === 1 ? ' reunión' : ' reuniones') + ' del curso, por orden de fecha, en PDF y en Word, en la carpeta ' + g.Envios.carpetaTexto(r.pdf) + '.' }),
         h('div', { class: 'fila' }, [abrir(r, 'pdf'), abrir(r, 'docx'), botonVolver()]), aviso
       ])]);
     } catch (e) {

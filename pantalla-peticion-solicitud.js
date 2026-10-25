@@ -36,7 +36,7 @@
       redactar: function (clave, op) { return g.PeticionClaude.redactarSolicitud(clave, p, ctx.todos, op); },
       crear: function () { return g.PeticionDocs.crearSolicitud(est.raiz, p, est.ficha, ctx.tut, new Date()); },
       alCrear: function () { est.refrescar(); },
-      textoCreado: function (d) { return 'La solicitud está en PDF y en Word, en la carpeta ACTAS › documentos › ' + d.curso + '. Entrégala en jefatura de estudios. '; }
+      textoCreado: function (d) { return 'La solicitud está en PDF y en Word, en la carpeta ' + g.Envios.carpetaTexto(d.pdf) + '. Entrégala en jefatura de estudios. '; }
     });
     var motivo = s.motivoAdelanto ? h('p', { class: 'suave', id: 'motivoGuardado', texto: 'Solicitud adelantada: ' + s.motivoAdelanto + '.' }) : null;
     return h('div', { id: 'solicitudPeticion' }, [

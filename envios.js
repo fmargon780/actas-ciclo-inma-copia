@@ -13,13 +13,22 @@
   async function leerBueno(raiz, ruta) { try { return await raiz.leerJSON(ruta); } catch (e) { return null; } }
 
   var BASE = 'Acta equipo de ciclo', DOCS = 'documentos';
+  /* Las cuatro subcarpetas de ACTAS/documentos/<curso>/ (fila 94): cada papel va a la de su tipo. */
+  var SUB = { actas: 'Actas de ciclo', familias: 'Familias', evaluacion: 'Evaluación', diversidad: 'Atención a la diversidad' };
+  function carpeta(curso, sub) { return DOCS + '/' + curso + '/' + sub; }
+  /* «ACTAS › documentos › 2026-2027 › Evaluación» a partir de la ruta de un fichero guardado (o de su carpeta). */
+  function carpetaTexto(ruta) { return 'ACTAS › ' + String(ruta).split('/').slice(0, -1).join(' › '); }
+  /* ¿Se pueden reutilizar los ficheros que ya tiene el papel (los sustituye al rehacerlo)? Solo si ya están en su subcarpeta y empiezan por la misma fecha. */
+  function reutilizable(docs, curso, fecha, sub) {
+    return !!(docs && docs.curso === curso && String(docs.base).indexOf(fecha) === 0 && String(docs.pdf || '').indexOf(carpeta(curso, sub) + '/') === 0);
+  }
 
   /* El nombre sin extensión para los ficheros del acta: «2026-09-07 Acta equipo de ciclo». Si ya existe otra acta (otro id) con ese nombre,
      «… (2)», «… (3)»; si es la misma acta (mismo id) vuelve a ser el suyo, para sustituir sus ficheros. */
   async function nombreLibre(raiz, curso, fecha, id) {
     var previo = await leerBueno(raiz, HECHAS + '/' + id + '.json');
-    if (previo && previo.documentos && previo.documentos.curso === curso && String(previo.documentos.base).indexOf(fecha) === 0) return previo.documentos.base;
-    var usados = ((await raiz.listar(DOCS + '/' + curso)) || []).map(function (x) { return x.nombre; });
+    if (previo && reutilizable(previo.documentos, curso, fecha, SUB.actas)) return previo.documentos.base;
+    var usados = ((await raiz.listar(carpeta(curso, SUB.actas))) || []).map(function (x) { return x.nombre; });
     var base = fecha + ' ' + BASE, n = 1, candidato = base;
     while (usados.indexOf(candidato + '.pdf') >= 0 || usados.indexOf(candidato + '.docx') >= 0) { n++; candidato = base + ' (' + n + ')'; }
     return candidato;
@@ -28,7 +37,7 @@
   /* Guarda el PDF, el Word y los datos del acta (en enviadas/, ya recogida: el documento de Google no la escribe) y borra el borrador.
      Los ficheros van primero: si algo falla, el borrador sigue ahí. Devuelve el envío guardado. */
   async function guardarCreada(raiz, envio, pdf, docx, curso) {
-    var base = await nombreLibre(raiz, curso, envio.fecha, envio.id), ruta = DOCS + '/' + curso + '/' + base;
+    var base = await nombreLibre(raiz, curso, envio.fecha, envio.id), ruta = carpeta(curso, SUB.actas) + '/' + base;
     await raiz.escribirBinario(ruta + '.pdf', pdf);
     await raiz.escribirBinario(ruta + '.docx', docx);
     var guardado = Object.assign({}, envio, { montadaPor: 'app', documentos: { curso: curso, base: base, pdf: ruta + '.pdf', docx: ruta + '.docx' } });
@@ -39,7 +48,7 @@
 
   /* Guarda un acta traída del documento antiguo (o la rehace tras revisarla): su PDF, su Word y sus datos en enviadas/. Misma acta (mismo id) = mismos ficheros. */
   async function guardarTraida(raiz, datos, pdf, docx, curso) {
-    var base = await nombreLibre(raiz, curso, datos.fecha, datos.id), ruta = DOCS + '/' + curso + '/' + base;
+    var base = await nombreLibre(raiz, curso, datos.fecha, datos.id), ruta = carpeta(curso, SUB.actas) + '/' + base;
     await raiz.escribirBinario(ruta + '.pdf', pdf);
     await raiz.escribirBinario(ruta + '.docx', docx);
     var guardado = Object.assign({}, datos, { documentos: { curso: curso, base: base, pdf: ruta + '.pdf', docx: ruta + '.docx' } });
@@ -107,5 +116,5 @@
     return item.estado === 'error' ? 'No se pudo llevar al documento: ' + item.motivo : ETIQUETAS[item.estado];
   }
 
-  g.Envios = { PARA: PARA, HECHAS: HECHAS, DOCS: DOCS, enviar: enviar, nombreLibre: nombreLibre, guardarCreada: guardarCreada, guardarTraida: guardarTraida, abrir: abrir, fechasHechas: fechasHechas, fechasEsperando: fechasEsperando, listar: listar, reintentar: reintentar, etiqueta: etiqueta };
+  g.Envios = { PARA: PARA, HECHAS: HECHAS, DOCS: DOCS, SUB: SUB, carpeta: carpeta, carpetaTexto: carpetaTexto, reutilizable: reutilizable, enviar: enviar, nombreLibre: nombreLibre, guardarCreada: guardarCreada, guardarTraida: guardarTraida, abrir: abrir, fechasHechas: fechasHechas, fechasEsperando: fechasEsperando, listar: listar, reintentar: reintentar, etiqueta: etiqueta };
 })(typeof window !== 'undefined' ? window : globalThis);

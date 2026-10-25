@@ -34,7 +34,7 @@
     });
     if (!modelos.length) { var vacio = new Error('Todavía no hay actas de este curso: crea una con «Nueva acta de ciclo» o trae las del documento antiguo.'); vacio.enEspanol = true; throw vacio; }
     var mem = cm.mem, opc = { pie: g.Membrete.textoPie(ficha.ciclo), tituloLibro: 'Libro de actas del curso ' + curso };
-    var ruta = g.Envios.DOCS + '/' + curso + '/Libro de actas del curso ' + curso;
+    var ruta = g.Envios.carpeta(curso, g.Envios.SUB.actas) + '/Libro de actas del curso ' + curso;
     await raiz.escribirBinario(ruta + '.pdf', await g.ActaPdf.crearLibro(modelos, mem, opc));
     await raiz.escribirBinario(ruta + '.docx', await g.ActaDocx.crearLibro(modelos, mem, opc));
     return { curso: curso, pdf: ruta + '.pdf', docx: ruta + '.docx', actas: modelos.length, fallos: fallos };

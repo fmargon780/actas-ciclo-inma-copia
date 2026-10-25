@@ -169,7 +169,7 @@
         function abrir(tipo) { return async function () { var r = await g.Envios.abrir(est.raiz, guardado, tipo); g.Dom.decir(aviso, r === 'falta' ? 'No encuentro el fichero en la carpeta ACTAS.' : ''); }; }
         g.Dom.montar([h('section', { class: 'tarjeta ancha' }, [
           h('h2', { texto: 'Acta guardada en tu carpeta ACTAS' }),
-          h('p', { id: 'actaGuardada', texto: 'El acta del ' + g.fechaCorta(b.fecha) + ' está en PDF y en Word, en la carpeta ACTAS › ' + guardado.documentos.curso + '.' }),
+          h('p', { id: 'actaGuardada', texto: 'El acta del ' + g.fechaCorta(b.fecha) + ' está en PDF y en Word, en la carpeta ' + g.Envios.carpetaTexto(guardado.documentos.pdf) + '.' }),
           h('div', { class: 'fila' }, [
             h('button', { type: 'button', class: 'boton principal', id: 'abrirPdf', texto: 'Abrir PDF', onclick: abrir('pdf') }),
             h('button', { type: 'button', class: 'boton principal', id: 'abrirWord', texto: 'Abrir Word', onclick: abrir('docx') }),

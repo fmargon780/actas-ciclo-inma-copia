@@ -1,4 +1,4 @@
-/* La reunión general con familias, en ficheros (fila 57): al «Crear acta» la app monta el PDF y el Word y los guarda en ACTAS/documentos/<curso>/;
+/* La reunión general con familias, en ficheros (fila 57): al «Crear acta» la app monta el PDF y el Word y los guarda en ACTAS/documentos/<curso>/Familias/;
    «Libro de reuniones con familias» junta las del curso en un solo PDF y un solo Word. El documento de Google ya no las recibe.
    Sin pantalla: se prueba con node --test. */
 (function (g) {
@@ -12,12 +12,15 @@
     return { mem: cm.mem, colegio: cm.colegio.nombre, opc: { pie: g.ReunionModelo.PIE } };
   }
 
-  /* El nombre sin extensión: «2026-09-09 Reunión general con familias 4º A». Otra reunión (otro id) con el mismo nombre -> « (2)»; la misma, el suyo. */
+  /* El nombre sin extensión y sin «(2)»: «2026-09-09 Reunión general con familias · 4º A». */
+  function nombreBase(r) { return r.fecha + ' ' + g.ReunionModelo.BASE + ' · ' + sinRaros(r.grupo); }
+
+  /* Otra reunión (otro id) con el mismo nombre -> « (2)»; la misma, el suyo. */
   async function nombreLibre(raiz, curso, r) {
     var d = r.documentos;
-    if (d && d.curso === curso && String(d.base).indexOf(r.fecha) === 0) return d.base;
-    var usados = ((await raiz.listar(g.Envios.DOCS + '/' + curso)) || []).map(function (x) { return x.nombre; });
-    var base = r.fecha + ' ' + g.ReunionModelo.BASE + ' ' + sinRaros(r.grupo), n = 1, candidato = base;
+    if (g.Envios.reutilizable(d, curso, r.fecha, g.Envios.SUB.familias)) return d.base;
+    var usados = ((await raiz.listar(g.Envios.carpeta(curso, g.Envios.SUB.familias))) || []).map(function (x) { return x.nombre; });
+    var base = nombreBase(r), n = 1, candidato = base;
     while (usados.indexOf(candidato + '.pdf') >= 0 || usados.indexOf(candidato + '.docx') >= 0) { n++; candidato = base + ' (' + n + ')'; }
     return candidato;
   }
@@ -26,7 +29,7 @@
   async function crear(raiz, r, ficha, ahora) {
     var o = await opciones(raiz), modelo = g.ReunionModelo.montar(r, o.colegio), curso = g.cursoEscolar(r.fecha);
     var pdf = await g.ActaPdf.crear(modelo, o.mem, o.opc), docx = await g.ActaDocx.crear(modelo, o.mem, o.opc);
-    var base = await nombreLibre(raiz, curso, r), ruta = g.Envios.DOCS + '/' + curso + '/' + base;
+    var base = await nombreLibre(raiz, curso, r), ruta = g.Envios.carpeta(curso, g.Envios.SUB.familias) + '/' + base;
     await raiz.escribirBinario(ruta + '.pdf', pdf);
     await raiz.escribirBinario(ruta + '.docx', docx);
     r.documentos = { curso: curso, base: base, pdf: ruta + '.pdf', docx: ruta + '.docx' };
@@ -48,12 +51,12 @@
     var curso = anio + '-' + (anio + 1), lista = delLibro(await R.listar(raiz), ficha, tut.grupo);
     if (!lista.length) { var e = new Error('Todavía no hay reuniones creadas de ' + tut.grupo + ' este curso: crea una con «Crear acta».'); e.enEspanol = true; throw e; }
     var o = await opciones(raiz), modelos = lista.map(function (x) { return g.ReunionModelo.montar(x, o.colegio); });
-    var nombre = 'Libro de reuniones con familias ' + sinRaros(tut.grupo) + ' ' + curso, ruta = g.Envios.DOCS + '/' + curso + '/' + nombre;
+    var nombre = 'Libro de reuniones con familias ' + sinRaros(tut.grupo) + ' ' + curso, ruta = g.Envios.carpeta(curso, g.Envios.SUB.familias) + '/' + nombre;
     o.opc.tituloLibro = nombre;
     await raiz.escribirBinario(ruta + '.pdf', await g.ActaPdf.crearLibro(modelos, o.mem, o.opc));
     await raiz.escribirBinario(ruta + '.docx', await g.ActaDocx.crearLibro(modelos, o.mem, o.opc));
     return { curso: curso, grupo: tut.grupo, reuniones: modelos.length, pdf: ruta + '.pdf', docx: ruta + '.docx' };
   }
 
-  g.ReunionDocs = { crear: crear, nombreLibre: nombreLibre, delLibro: delLibro, libro: libro };
+  g.ReunionDocs = { crear: crear, nombreBase: nombreBase, nombreLibre: nombreLibre, delLibro: delLibro, libro: libro };
 })(typeof window !== 'undefined' ? window : globalThis);

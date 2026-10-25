@@ -1,4 +1,4 @@
-/* El anexo del acta de evaluación en ficheros (fila 59): «Crear anexo» monta el PDF y el Word con el membrete oficial y los guarda en ACTAS/documentos/<curso>/.
+/* El anexo del acta de evaluación en ficheros (fila 59): «Crear anexo» monta el PDF y el Word con el membrete oficial y los guarda en ACTAS/documentos/<curso>/Evaluación/.
    Reutiliza los generadores del acta de ciclo (acta-pdf.js y acta-docx.js) con un modelo propio. Sin pantalla: se prueba con node --test. */
 (function (g) {
   'use strict';
@@ -41,12 +41,15 @@
     return { mem: cm.mem, opc: { pie: PIE } };
   }
 
-  /* El nombre sin extensión: «2026-09-09 Acta de evaluación Inicial 4º A». Otra acta (otro id) con el mismo nombre -> « (2)»; la misma, el suyo. */
+  /* El nombre sin extensión y sin «(2)»: «2026-09-09 Acta de evaluación inicial · 4º A». */
+  function nombreBase(e) { return e.fecha + ' ' + BASE + ' ' + nombreSesion(e).toLowerCase() + ' · ' + sinRaros(e.clase); }
+
+  /* Otra acta (otro id) con el mismo nombre -> « (2)»; la misma, el suyo. */
   async function nombreLibre(raiz, curso, e) {
     var d = e.documentos;
-    if (d && d.curso === curso && String(d.base).indexOf(e.fecha) === 0) return d.base;
-    var usados = ((await raiz.listar(g.Envios.DOCS + '/' + curso)) || []).map(function (x) { return x.nombre; });
-    var base = e.fecha + ' ' + BASE + ' ' + nombreSesion(e) + ' ' + sinRaros(e.clase), n = 1, candidato = base;
+    if (g.Envios.reutilizable(d, curso, e.fecha, g.Envios.SUB.evaluacion)) return d.base;
+    var usados = ((await raiz.listar(g.Envios.carpeta(curso, g.Envios.SUB.evaluacion))) || []).map(function (x) { return x.nombre; });
+    var base = nombreBase(e), n = 1, candidato = base;
     while (usados.indexOf(candidato + '.pdf') >= 0 || usados.indexOf(candidato + '.docx') >= 0) { n++; candidato = base + ' (' + n + ')'; }
     return candidato;
   }
@@ -55,7 +58,7 @@
   async function crear(raiz, e, ficha, tut, ahora) {
     var o = await opciones(raiz), modelo = montar(e, tut, ficha && ficha.localidad), curso = g.cursoEscolar(e.fecha);
     var pdf = await g.ActaPdf.crear(modelo, o.mem, o.opc), docx = await g.ActaDocx.crear(modelo, o.mem, o.opc);
-    var base = await nombreLibre(raiz, curso, e), ruta = g.Envios.DOCS + '/' + curso + '/' + base;
+    var base = await nombreLibre(raiz, curso, e), ruta = g.Envios.carpeta(curso, g.Envios.SUB.evaluacion) + '/' + base;
     await raiz.escribirBinario(ruta + '.pdf', pdf);
     await raiz.escribirBinario(ruta + '.docx', docx);
     e.documentos = { curso: curso, base: base, pdf: ruta + '.pdf', docx: ruta + '.docx' };
@@ -64,5 +67,5 @@
     return e;
   }
 
-  g.EvaluacionDocs = { BASE: BASE, PIE: PIE, titulo: titulo, montar: montar, nombreLibre: nombreLibre, crear: crear };
+  g.EvaluacionDocs = { BASE: BASE, PIE: PIE, titulo: titulo, montar: montar, nombreBase: nombreBase, nombreLibre: nombreLibre, crear: crear };
 })(typeof window !== 'undefined' ? window : globalThis);

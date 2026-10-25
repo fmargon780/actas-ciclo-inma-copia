@@ -1,5 +1,5 @@
 /* Lo que Claude redacta del acta de evaluación (fila 59): «Para Séneca» (cinco cajas, cada una con «Copiar») y «Anexo» (I-IV), los dos editables,
-   y «Crear anexo», que guarda el PDF y el Word en ACTAS › documentos › curso. Lo usa pantalla-evaluacion.js. */
+   y «Crear anexo», que guarda el PDF y el Word en ACTAS › documentos › curso › Evaluación. Lo usa pantalla-evaluacion.js. */
 (function (g) {
   'use strict';
   var h = g.Dom.h, E = g.Evaluacion;
@@ -129,7 +129,7 @@
       if (!E.hayTextos(e)) return;
       if (creado) {
         var aviso = g.Dom.aviso();
-        zonaFin.appendChild(h('div', { class: 'aviso ok', id: 'anexoCreado' }, [h('span', { texto: 'El anexo del ' + fechaDe(e.fecha) + ' está en PDF y en Word, en la carpeta ACTAS › documentos › ' + creado.curso + '. ' })]));
+        zonaFin.appendChild(h('div', { class: 'aviso ok', id: 'anexoCreado' }, [h('span', { texto: 'El anexo del ' + fechaDe(e.fecha) + ' está en PDF y en Word, en la carpeta ' + g.Envios.carpetaTexto(creado.pdf) + '. ' })]));
         zonaFin.appendChild(h('div', { class: 'fila' }, ['pdf', 'docx'].map(function (t) {
           return h('button', { type: 'button', class: 'boton principal', 'data-accion': 'abrir-' + t, texto: t === 'pdf' ? 'Abrir PDF' : 'Abrir Word', onclick: async function () {
             g.Dom.decir(aviso, (await g.Envios.abrir(est.raiz, e, t)) === 'falta' ? 'No encuentro el fichero en la carpeta ACTAS.' : '');

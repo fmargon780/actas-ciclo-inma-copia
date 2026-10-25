@@ -1,4 +1,4 @@
-/* «Libro de actas del curso» (fila 56): junta todas las actas del curso en un solo PDF y un solo Word y los guarda en ACTAS › documentos › <curso>. */
+/* «Libro de actas del curso» (fila 56): junta todas las actas del curso en un solo PDF y un solo Word y los guarda en ACTAS › documentos › <curso> › Actas de ciclo. */
 (function (g) {
   'use strict';
   var h = g.Dom.h;
@@ -14,7 +14,7 @@
     function mostrar(r) {
       g.Dom.montar([h('section', { class: 'tarjeta ancha' }, [
         h('h2', { texto: 'Libro de actas del curso ' + r.curso }),
-        h('p', { id: 'libroGuardado', texto: 'He juntado ' + r.actas + (r.actas === 1 ? ' acta' : ' actas') + ' del curso, por orden de fecha, en PDF y en Word, en la carpeta ACTAS › documentos › ' + r.curso + '.' }),
+        h('p', { id: 'libroGuardado', texto: 'He juntado ' + r.actas + (r.actas === 1 ? ' acta' : ' actas') + ' del curso, por orden de fecha, en PDF y en Word, en la carpeta ' + g.Envios.carpetaTexto(r.pdf) + '.' }),
         r.fallos.length ? h('div', { class: 'aviso', id: 'libroFallos' }, r.fallos.map(function (f) { return h('div', { texto: 'No he podido incluir el acta del ' + g.fechaCorta(f.fecha) + ': ' + f.motivo }); })) : null,
         h('div', { class: 'fila' }, [abrir(r, 'pdf'), abrir(r, 'docx'), volver()]), aviso
       ])]);

@@ -1,9 +1,9 @@
 /* La petición a orientación en ficheros (fila 76): «Crear acta» y «Crear solicitud» montan el PDF y el Word con el membrete oficial y los guardan en
-   ACTAS/documentos/<curso>/. Reutilizan los generadores del acta de ciclo (acta-pdf.js y acta-docx.js) con un modelo propio. Sin pantalla: se prueba con node --test.
-   Los nombres de los ficheros llevan al alumno en iniciales; dentro de los documentos va el nombre completo. */
+   ACTAS/documentos/<curso>/Atención a la diversidad/. Reutilizan los generadores del acta de ciclo (acta-pdf.js y acta-docx.js) con un modelo propio. Sin pantalla: se prueba con node --test.
+   Los nombres de los ficheros llevan al alumno con nombre, apellidos y grupo (fila 94); a Claude siguen yendo solo iniciales. */
 (function (g) {
   'use strict';
-  var P = g.Peticion, AC = g.AlumnadoClaude;
+  var P = g.Peticion;
   var ACTA = { base: 'Acta reunión equipo docente', pie: 'Acta de la reunión del equipo docente', titulo: 'ACTA DE REUNIÓN DEL EQUIPO DOCENTE — DETECCIÓN DE INDICIOS DE NEAE' };
   var SOLICITUD = { base: 'Solicitud evaluación psicopedagógica', pie: 'Solicitud de evaluación psicopedagógica', titulo: 'SOLICITUD DE EVALUACIÓN PSICOPEDAGÓGICA' };
 
@@ -47,11 +47,14 @@
     return { mem: cm.mem, opc: { pie: tipo.pie } };
   }
 
-  /* El nombre sin extensión: «2026-11-06 Acta reunión equipo docente LHC». Otra petición con el mismo nombre -> « (2)»; la misma, el suyo. */
+  /* El nombre sin extensión y sin «(2)»: «2026-11-06 Acta reunión equipo docente · Pablo Ruiz Gómez (4º A)». */
+  function nombreBase(p, tipo, fecha) { return fecha + ' ' + tipo.base + ' · ' + sinRaros(nombreAlumno(p)); }
+
+  /* Otra petición con el mismo nombre -> « (2)»; la misma, el suyo. */
   async function nombreLibre(raiz, curso, p, tipo, fecha, docs) {
-    if (docs && docs.curso === curso && String(docs.base).indexOf(fecha) === 0) return docs.base;
-    var usados = ((await raiz.listar(g.Envios.DOCS + '/' + curso)) || []).map(function (x) { return x.nombre; });
-    var base = fecha + ' ' + tipo.base + ' ' + sinRaros(AC.iniciales(p.alumno.nombre).replace(/\./g, '')), n = 1, candidato = base;
+    if (g.Envios.reutilizable(docs, curso, fecha, g.Envios.SUB.diversidad)) return docs.base;
+    var usados = ((await raiz.listar(g.Envios.carpeta(curso, g.Envios.SUB.diversidad))) || []).map(function (x) { return x.nombre; });
+    var base = nombreBase(p, tipo, fecha), n = 1, candidato = base;
     while (usados.indexOf(candidato + '.pdf') >= 0 || usados.indexOf(candidato + '.docx') >= 0) { n++; candidato = base + ' (' + n + ')'; }
     return candidato;
   }
@@ -60,7 +63,7 @@
   async function escribir(raiz, p, ficha, modelo, tipo, fecha, docs) {
     var o = await opciones(raiz, tipo), curso = g.cursoEscolar(fecha);
     var pdf = await g.ActaPdf.crear(modelo, o.mem, o.opc), docx = await g.ActaDocx.crear(modelo, o.mem, o.opc);
-    var base = await nombreLibre(raiz, curso, p, tipo, fecha, docs), ruta = g.Envios.DOCS + '/' + curso + '/' + base;
+    var base = await nombreLibre(raiz, curso, p, tipo, fecha, docs), ruta = g.Envios.carpeta(curso, g.Envios.SUB.diversidad) + '/' + base;
     await raiz.escribirBinario(ruta + '.pdf', pdf);
     await raiz.escribirBinario(ruta + '.docx', docx);
     return { curso: curso, base: base, pdf: ruta + '.pdf', docx: ruta + '.docx' };
@@ -79,5 +82,5 @@
     return p;
   }
 
-  g.PeticionDocs = { ACTA: ACTA, SOLICITUD: SOLICITUD, montarActa: montarActa, montarSolicitud: montarSolicitud, nombreLibre: nombreLibre, crearActa: crearActa, crearSolicitud: crearSolicitud };
+  g.PeticionDocs = { ACTA: ACTA, SOLICITUD: SOLICITUD, montarActa: montarActa, montarSolicitud: montarSolicitud, nombreBase: nombreBase, nombreLibre: nombreLibre, crearActa: crearActa, crearSolicitud: crearSolicitud };
 })(typeof window !== 'undefined' ? window : globalThis);

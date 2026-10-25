@@ -30,6 +30,13 @@
     await window.Datos.comprobar(raiz);
     $('estadoCarpeta').textContent = 'Carpeta: ' + handle.name;
     try { await window.Colegio.alAbrir(raiz); } catch (e) { /* los datos del colegio se piden al sacar un documento; no impiden abrir la carpeta */ }
+    /* Fila 94: los papeles de antes pasan a la subcarpeta de su tipo; si no hay nada que ordenar no se escribe ni se avisa nada. */
+    var avisoOrden = '';
+    try {
+      var orden = window.Orden.mensaje(await window.Orden.ordenar(raiz)), previo = $('avisoApartados').textContent;
+      if (orden) window.Dom.decir($('avisoApartados'), previo ? previo + ' ' + orden : orden);
+      avisoOrden = orden;
+    } catch (e) { /* ordenar es un extra: si falla, los papeles siguen donde estaban y la app abre igual */ }
     var est = { raiz: raiz, ficha: await window.Datos.leerFicha(raiz), paso: 'inicio', borrador: null, estadoGuardado: $('estadoGuardado'), alSalir: null };
     var refrescar;
     var salir = async function () { if (est.alSalir) { var f = est.alSalir; est.alSalir = null; await f(); } };
@@ -54,6 +61,8 @@
     };
     refrescar = async function () {
       $('estadoGuardado').textContent = '';
+      /* El aviso de «He ordenado…» se va al cambiar de pantalla (el de ficheros dañados se queda). */
+      if (avisoOrden && est.paso !== 'inicio') { window.Dom.decir($('avisoApartados'), $('avisoApartados').textContent.replace(avisoOrden, '').trim()); avisoOrden = ''; }
       $('pasoInicio').classList.toggle('activo', est.paso === 'inicio' || est.paso === 'formulario' || est.paso === 'revision' || est.paso === 'fichas' || est.paso === 'habitual' || est.paso === 'traer' || est.paso === 'libro' || est.paso === 'convocatoria' || est.paso === 'entrevista' || est.paso === 'tutoria' || est.paso === 'reunion' || est.paso === 'evaluacion' || est.paso === 'diversidad');
       $('pasoAjustes').classList.toggle('activo', est.paso === 'ajustes');
       est.ficha = await window.Datos.leerFicha(raiz);

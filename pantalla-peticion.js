@@ -80,7 +80,7 @@
       redactar: function (clave, op) { return g.PeticionClaude.redactarActa(clave, p, todos, op); },
       crear: function () { return g.PeticionDocs.crearActa(est.raiz, p, est.ficha, tut, new Date()); },
       alCrear: function () { est.refrescar(); },
-      textoCreado: function (d) { return 'El acta está en PDF y en Word, en la carpeta ACTAS › documentos › ' + d.curso + '. '; }
+      textoCreado: function (d) { return 'El acta está en PDF y en Word, en la carpeta ' + g.Envios.carpetaTexto(d.pdf) + '. '; }
     });
     var hecha = p.estado !== 'borrador';
     var despues = hecha ? h('section', { class: 'tarjeta ancha', id: 'despuesDelActa' }, [h('h3', { texto: 'Después de la reunión' }),
