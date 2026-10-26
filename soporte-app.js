@@ -7,7 +7,7 @@
   var PANTALLAS = {
     inicio: 'Inicio', formulario: 'Acta del equipo de ciclo', revision: 'Revisar el acta', fichas: 'Fichas del alumnado', habitual: 'Lo habitual',
     convocatoria: 'Nueva convocatoria', entrevista: 'Entrevista con familia', tutoria: 'Mi tutoría', reunion: 'Reunión general con familias',
-    evaluacion: 'Acta de evaluación', diversidad: 'Atención a la diversidad', ajustes: 'Ajustes', libro: 'Libro de actas del curso',
+    evaluacion: 'Acta de evaluación', diversidad: 'Atención a la diversidad', ajustes: 'Ajustes', libro: 'Libro de actas del curso', papeles: 'Mis papeles',
     traer: 'Traer actas del documento antiguo', ayuda: 'Ayuda'
   };
   function estado() { try { return typeof g.estadoActas === 'function' ? g.estadoActas() : null; } catch (e) { return null; } }
