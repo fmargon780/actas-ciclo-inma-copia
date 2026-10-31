@@ -118,7 +118,7 @@
       try { await abrir(h); } catch (e) { window.Pantalla.pedirCarpeta(window.Carpeta.explicarError(e), elegirYAbrir); }
       return;
     }
-    window.Pantalla.pedirCarpeta('Chrome pide confirmar el permiso sobre tu carpeta ' + h.name + '.', async function () {
+    window.Pantalla.pedirCarpeta('Chrome necesita tu permiso para abrir la carpeta ' + h.name + '. Pulsa «Dar permiso» y, en la ventana de Chrome, elige «Permitir en cada visita»: así no te lo volverá a pedir en este dispositivo.', async function () {
       if (await window.Carpeta.pedirPermiso(h)) { try { await abrir(h); } catch (e) { window.Pantalla.pedirCarpeta(window.Carpeta.explicarError(e), elegirYAbrir); } }
       else window.Pantalla.pedirCarpeta('Sin permiso no puedo abrir la carpeta. Elígela otra vez.', elegirYAbrir);
     }, 'Dar permiso');

@@ -17,7 +17,7 @@
     { "id": "carpeta", "titulo": "Elegir la carpeta ACTAS", "texto": [
       "La primera vez, Mis actas te pide la carpeta ACTAS de tu Drive (Mi unidad › ACTAS). Pulsa «Elegir mi carpeta ACTAS» y elígela.",
       "Esa carpeta la crea el documento de actas de Google Docs la primera vez que usas su menú. Si no es la carpeta buena, te lo dice.",
-      "Chrome puede volver a pedirte permiso sobre la carpeta de vez en cuando. Pulsa «Dar permiso» y sigue.",
+      "Para abrir tus carpetas, Chrome te pide permiso. Pulsa «Dar permiso» y, en la ventana de Chrome, elige «Permitir en cada visita»: así no te lo volverá a pedir en ese dispositivo. En un dispositivo nuevo, o si borras los datos del navegador, te lo pedirá una vez más.",
       "Al abrirla, Mis actas ordena sola los PDF y Word que ya habías creado, cada uno en la subcarpeta de su tipo, y te avisa con «He ordenado N papeles en sus carpetas.». No borra nada ni toca lo que hayas puesto tú."
     ] },
     { "id": "inicio", "titulo": "Inicio", "texto": [
@@ -120,6 +120,7 @@
       "La cabecera enseña el logo y el nombre del colegio que pusiste en Ajustes › Datos del colegio, y el curso. Si aún no los has puesto, o abres el panel en otro navegador, solo verás el logo de la Junta y el curso. Si cambias los datos, el panel los enseña la próxima vez que lo abras."
     ] },
     { "id": "preguntas", "titulo": "Preguntas frecuentes", "preguntas": [
+      { "p": "Me pide permiso cada vez", "r": "Cuando Chrome te pregunte por el permiso de la carpeta, pulsa «Dar permiso» y en su ventana elige «Permitir en cada visita». Así no te lo vuelve a pedir en ese dispositivo. Si elegiste «Permitir esta vez», te lo pedirá en cada visita: pulsa «Dar permiso» otra vez y elige la otra opción." },
       { "p": "¿Dónde consigo la clave de Claude?", "soloCopia": true, "r": "Si alguien te ha dado una, pégala en Ajustes. Si no, créala en https://console.anthropic.com/settings/keys (necesitas una cuenta de Anthropic con saldo). Empieza por «sk-ant-» y solo se ve una vez al crearla: cópiala entera." },
       { "p": "¿Cuántas redacciones puedo pedir a Claude?", "r": "Cada pulsación de un botón que pide un texto a Claude es una redacción. Cada invitado tiene 25 al mes y el día 1 vuelve a tener 25. En Ajustes ves cuántas te quedan, y la app te avisa cuando te quedan 5 o menos. Si se acaban, el resto de la app sigue funcionando y puedes escribir tú el texto." },
       { "p": "¿De dónde sale el alumnado?", "r": "De la app Rúbricas: en «Mis grupos» se sube el listado de cada grupo bajado de Séneca. Después se abre aquí la carpeta RÚBRICAS, una sola vez. Mis actas solo la lee, nunca escribe en ella." },

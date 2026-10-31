@@ -53,7 +53,7 @@
       var texto = '', boton = 'Abrir la carpeta RÚBRICAS', permiso = false;
       if (!a) { avisoAlumnado.hidden = true; return; }
       if (a.estado === 'sinCarpeta') texto = a.texto || 'Para elegir alumnado de la lista, abre una vez la carpeta RÚBRICAS (Mi unidad › RÚBRICAS). Solo la leo: no escribo nada en ella.';
-      else if (a.estado === 'sinPermiso') { texto = 'Chrome pide confirmar el permiso sobre la carpeta RÚBRICAS.'; boton = 'Dar permiso'; permiso = true; }
+      else if (a.estado === 'sinPermiso') { texto = 'Chrome necesita tu permiso para abrir la carpeta RÚBRICAS. Pulsa «Dar permiso» y, en la ventana de Chrome, elige «Permitir en cada visita»: así no te lo volverá a pedir en este dispositivo.'; boton = 'Dar permiso'; permiso = true; }
       else if (a.estado === 'vacia') texto = 'En la carpeta RÚBRICAS no hay alumnado de este ciclo todavía.';
       else if (a.estado === 'error') texto = a.texto;
       avisoAlumnado.hidden = !texto;
