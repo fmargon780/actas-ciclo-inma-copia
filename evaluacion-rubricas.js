@@ -92,7 +92,15 @@
       });
       return { nombre: nombre, porcentaje: nombres.length ? Math.round(con * 100 / nombres.length) : null, con: con, de: nombres.length, sinFecha: d.sinFecha };
     }).filter(function (a) { return a.de > 0; });
-    return { estado: 'ok', nivel: String((suf && suf.nombre) || 'Suficiente'), areas: areas };
+    /* Por alumno (con el nombre que lleva en Rúbricas): las áreas en las que su media está por debajo del nivel. Lo usan los informes de final de curso (fila 101). */
+    var debajo = {};
+    Object.keys(porArea).forEach(function (nombre) {
+      Object.keys(porArea[nombre].alumnos).forEach(function (n) {
+        var v = porArea[nombre].alumnos[n];
+        if (v.reduce(function (s, x) { return s + x; }, 0) / v.length < umbral) (debajo[n] = debajo[n] || []).push(nombre);
+      });
+    });
+    return { estado: 'ok', nivel: String((suf && suf.nombre) || 'Suficiente'), areas: areas, debajo: debajo };
   }
 
   function frase(r, nivel) {

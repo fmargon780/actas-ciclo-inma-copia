@@ -247,3 +247,21 @@ a.boton { text-decoration: none; display: inline-block; }
 ul.papeles { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
 .papel { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .nombre-papel { flex: 1; min-width: 0; overflow-wrap: anywhere; font-size: 14px; }
+
+/* Final de curso (fila 101) */
+.barra-final { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.barra-final .derecha { margin-left: auto; font-weight: 600; color: var(--azul); }
+.mesa-final { display: grid; grid-template-columns: minmax(240px, 300px) minmax(0, 1fr); gap: 12px; align-items: start; }
+.lista-final { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.alumno-final { width: 100%; border: 0; border-bottom: 1px solid var(--linea); border-radius: 0; background: none; color: var(--texto, inherit); font: inherit; display: flex; justify-content: space-between; gap: 8px; align-items: center; text-align: left; padding: 7px 6px; cursor: pointer; }
+.alumno-final.activo { background: var(--azul-claro); font-weight: 600; }
+.lista-final li:last-child .alumno-final { border-bottom: 0; }
+.etiqueta.notas { background: var(--ambar); color: #7a5200; border: 1px solid #e0b34a; }
+.etiqueta.hecho { background: #e4f3ea; color: var(--verde); }
+.etiqueta.nada { background: #eceef4; color: var(--suave); }
+.sabe-final { margin: 4px 0 0; padding-left: 18px; font-size: 14px; }
+.detalle-final { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.fila.fin { align-items: flex-end; }
+@media (max-width: 800px) { .mesa-final { grid-template-columns: minmax(0, 1fr); } }
+.apartados-final { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 800px) { .apartados-final { grid-template-columns: minmax(0, 1fr); } }
