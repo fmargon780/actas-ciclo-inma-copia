@@ -125,14 +125,19 @@
   async function redactarConAlumnado(clave, b, indices, todos, opciones) {
     var AC = g.AlumnadoClaude, prep = g.Redaccion.prepararPeticion(b, indices, todos);
     var res = await redactar(clave, prep.puntos, opciones), mal = [];
-    prep.puntos.forEach(function (p) { if (!AC.marcasBien(res[p.n], prep.marcas[p.n])) mal.push(p); });
+    /* Las marcas de la lista deben estar todas y ninguna inventada; las de nombres que no están en la lista (`tapados`) pueden faltar. */
+    function bien(texto, n) {
+      var hay = AC.marcasEn(texto), marcas = prep.marcas[n], tapados = (prep.tapados || {})[n] || {};
+      return hay.every(function (m) { return marcas[m] != null || tapados[m] != null; }) && Object.keys(marcas).every(function (m) { return hay.indexOf(m) >= 0; });
+    }
+    prep.puntos.forEach(function (p) { if (!bien(res[p.n], p.n)) mal.push(p); });
     if (mal.length) {
       var otra = await redactar(clave, mal, opciones);
       mal.forEach(function (p) { res[p.n] = otra[p.n]; });
     }
     var parrafos = {}, avisos = {};
     prep.puntos.forEach(function (p) {
-      if (AC.marcasBien(res[p.n], prep.marcas[p.n])) parrafos[p.n] = AC.restaurar(res[p.n], prep.marcas[p.n]);
+      if (bien(res[p.n], p.n)) parrafos[p.n] = AC.restaurar(res[p.n], Object.assign({}, (prep.tapados || {})[p.n], prep.marcas[p.n]));
       else { parrafos[p.n] = res[p.n]; avisos[p.n] = AC.AVISO_NOMBRES; }
       if (prep.avisos[p.n]) avisos[p.n] = avisos[p.n] ? avisos[p.n] + '. ' + prep.avisos[p.n] : prep.avisos[p.n];
     });

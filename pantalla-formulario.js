@@ -86,9 +86,10 @@
       if (fijo) return h('div', { class: 'punto fijo', 'data-punto': String(i) }, [cabeza, h('p', { class: 'suave', texto: 'Este punto no lleva notas: su texto es fijo y se escribe solo al crear el acta.' })]);
       var notas = caja(i, p.notas, function (t) { p.notas = t; cambio(); }, false);
       var partes = [cabeza];
-      if (g.Huecos.tiene(p)) partes.push(g.PantallaHuecos.pintar(p, i, caja, cambio, pintarPuntos), h('div', { class: 'suave etiqueta-libres', texto: 'Notas libres (lo que no encaje en ningún hueco)' }));
-      else partes.push(g.PantallaHuecos.pintar(p, i, caja, cambio, pintarPuntos));
-      if (g.EvaluacionCiclo && Array.isArray(p.grupos) && p.grupos.length) partes.push(g.PantallaResumenCiclo.pintar(b, p, i, est.alumnado && est.alumnado.lista ? est.alumnado.lista.delCiclo : null, cambio, pintarPuntos));
+      /* Fila 106: en el punto de evaluación cada bloque de clase lleva «Subir o pegar». */
+      var ciclo = g.EvaluacionCiclo && Array.isArray(p.grupos) && p.grupos.length ? { b: b, est: est, todos: est.alumnado && est.alumnado.lista ? est.alumnado.lista.delCiclo : null } : null;
+      if (g.Huecos.tiene(p)) partes.push(g.PantallaHuecos.pintar(p, i, caja, cambio, pintarPuntos, ciclo), h('div', { class: 'suave etiqueta-libres', texto: 'Notas libres (lo que no encaje en ningún hueco)' }));
+      else partes.push(g.PantallaHuecos.pintar(p, i, caja, cambio, pintarPuntos, ciclo));
       partes.push(notas);
       return h('div', { class: 'punto', 'data-punto': String(i) }, partes);
     }

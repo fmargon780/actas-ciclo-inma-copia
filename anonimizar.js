@@ -57,8 +57,13 @@
     }
     function texto(t, esTitulo) { return tapar3(tapar12(String(t == null ? '' : t)), !!esTitulo, reg); }
     /* Como `texto`, pero devuelve también { '[M.S.P.]': 'lo que había' } para poder devolver los nombres a lo que vuelva de Claude. */
-    function reversible(t) {
+    function reversible(t, reservadas) {
       reg = { marcas: {}, porOriginal: {}, usadas: {} };
+      /* `reservadas`: marcas que ya existen en el mismo envío («[M.S.P.2]»); las nuevas no repiten ninguna. */
+      (reservadas || []).forEach(function (m) {
+        var d = /^\[((?:[^\s\]\d]\.)+)(\d*)\]$/.exec(m), n = d ? (d[2] ? parseInt(d[2], 10) : 1) : 0;
+        if (d && n > (reg.usadas[d[1]] || 0)) reg.usadas[d[1]] = n;
+      });
       try { return { texto: texto(t), marcas: reg.marcas }; } finally { reg = null; }
     }
     return { texto: texto, reversible: reversible };

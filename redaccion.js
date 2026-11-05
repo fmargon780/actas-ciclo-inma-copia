@@ -42,7 +42,7 @@
   function hayQuePreguntar(p) { return !!p.manual && hayParrafo(p); }
 
   /* Lo único que sale hacia Claude: el número de punto, su título, los huecos con algo escrito (con su título) y sus notas, con el alumnado solo en iniciales («[M.S.P.]»).
-     todos: todo el alumnado de Rúbricas (para la red de seguridad) o null. Devuelve { puntos, marcas, notasMarcadas, marcados, avisos } (ver alumnado-claude.js).
+     todos: todo el alumnado de Rúbricas (para la red de seguridad) o null. Devuelve { puntos, marcas, tapados, notasMarcadas, marcados, avisos } (ver alumnado-claude.js); `tapados[n]`: marcas de nombres que no están en la lista (fila 106), que vuelven a su nombre pero no se exigen en la respuesta.
      marcados[n] = { notas, cajas: { k: texto } }: lo escrito con los nombres sueltos ya marcados (cajas: la posición en Huecos.cajas). */
   function prepararPeticion(b, indices, todos) {
     var H = g.Huecos, crudos = [];
@@ -53,14 +53,20 @@
     });
     var prep = g.AlumnadoClaude.preparar(crudos, todos), porN = {};
     prep.puntos.forEach(function (x) { porN[x.n] = x; });
-    var res = { puntos: [], marcas: {}, notasMarcadas: {}, marcados: {}, avisos: {} };
+    var res = { puntos: [], marcas: {}, tapados: {}, notasMarcadas: {}, marcados: {}, avisos: {} };
     indices.forEach(function (i) {
       var n = i + 1, p = b.puntos[i], base = porN[n], salida = { n: n, titulo: base.titulo, notas: base.notas };
       var marcas = Object.assign({}, prep.marcas[n]), aviso = prep.avisos[n] || '', marcados = {}, sueltos = [], grupos = [], porGrupo = {};
+      /* Fila 106: en el punto de evaluación los huecos traen resúmenes de otras clases, con nombres que no están en la lista: también se tapan. */
+      var tapar = !!(g.Anonimizar && Array.isArray(p.grupos) && p.grupos.length), tapados = {};
       if (H) H.cajas(p).forEach(function (c, k) {
         var x = porN['h' + n + '.' + k];
         if (!x) return;
         Object.assign(marcas, prep.marcas['h' + n + '.' + k]);
+        if (tapar) {
+          var t = g.Anonimizar.crear(todos).reversible(x.notas, Object.keys(marcas).concat(Object.keys(tapados)));
+          x = { notas: t.texto }; Object.assign(tapados, t.marcas);
+        }
         if (prep.avisos['h' + n + '.' + k] && !aviso) aviso = prep.avisos['h' + n + '.' + k];
         marcados[k] = prep.notasMarcadas['h' + n + '.' + k];
         var item = { titulo: c.hueco.titulo, notas: x.notas };
@@ -73,7 +79,7 @@
       if (sueltos.length) salida.huecos = sueltos;
       if (grupos.length) salida.grupos = grupos;
       if (p.porGrupo && p.porGrupo.length) salida.bloques = true; /* sesión de evaluación: la respuesta va en bloques, uno por grupo */
-      res.puntos.push(salida); res.marcas[n] = marcas; res.notasMarcadas[n] = prep.notasMarcadas[n];
+      res.puntos.push(salida); res.marcas[n] = marcas; res.notasMarcadas[n] = prep.notasMarcadas[n]; res.tapados[n] = tapados;
       res.marcados[n] = { notas: prep.notasMarcadas[n], cajas: marcados };
       if (aviso) res.avisos[n] = aviso;
     });
