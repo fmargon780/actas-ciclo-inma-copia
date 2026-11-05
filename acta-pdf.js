@@ -87,7 +87,7 @@
         return;
       }
       var w = ancho(t, f);
-      pagina.drawText(t, Object.assign({ x: alin === 'centro' ? x + (maximo - w) / 2 : x }, opc));
+      pagina.drawText(t, Object.assign({ x: alin === 'centro' ? x + (maximo - w) / 2 : alin === 'der' ? x + maximo - w : x }, opc));
     }
     /* Un párrafo: opc = { negrita, alin: 'izq'|'centro'|'justificado', sangria, primera, antes, gris }. */
     function parrafo(texto, opc) {
@@ -279,7 +279,22 @@
       parrafo(modelo.cierre[modelo.cierre.length - 1], { negrita: true, alin: 'centro' });
     }
 
-    modelos.forEach(function (m, k) { if (k) primeraDeActa = true; nueva(); acta(m); });
+    /* Una carta a las familias (modelo.carta): título, texto, pie y, si lo lleva, el talón para recortar (fila 109). */
+    function carta(modelo) {
+      var c = modelo.carta;
+      parrafo(c.titulo, { negrita: true, alin: 'centro' }); vacio();
+      c.lineas.forEach(function (l) { if (l.vineta) vineta(l.texto); else parrafo(l.texto, { alin: 'justificado' }); });
+      vacio();
+      c.cierre.forEach(function (l) { parrafo(l, { alin: 'der' }); });
+      if (!c.talon) return;
+      hueco(LINEA * 11); y -= LINEA;
+      for (var xr = IZQ; xr < IZQ + ANCHO; xr += 9) pagina.drawRectangle({ x: xr, y: y, width: Math.min(5, IZQ + ANCHO - xr), height: 1, color: rgb(0.35, 0.35, 0.35) }); /* línea discontinua */
+      y -= LINEA;
+      parrafo(c.talon.aviso, { negrita: true, alin: 'centro', juntoConSiguiente: true });
+      c.talon.lineas.forEach(function (l) { parrafo(l, { alin: 'justificado' }); });
+    }
+
+    modelos.forEach(function (m, k) { if (k) primeraDeActa = true; nueva(); if (m.carta) carta(m); else acta(m); });
     return doc.save();
   }
 

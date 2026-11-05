@@ -6,7 +6,7 @@
   /* Los nombres en llano de cada pantalla (los mismos títulos que usa pagina/ayuda.json). */
   var PANTALLAS = {
     inicio: 'Inicio', formulario: 'Acta del equipo de ciclo', revision: 'Revisar el acta', fichas: 'Fichas del alumnado', habitual: 'Lo habitual',
-    convocatoria: 'Nueva convocatoria', entrevista: 'Entrevista con familia', tutoria: 'Mi tutoría', reunion: 'Reunión general con familias',
+    convocatoria: 'Nueva convocatoria', entrevista: 'Entrevista con familia', tutoria: 'Mi tutoría', reunion: 'Reunión general con familias', comunicaciones: 'Comunicaciones a familias',
     evaluacion: 'Acta de evaluación', diversidad: 'Atención a la diversidad', finalcurso: 'Final de curso', ajustes: 'Ajustes', libro: 'Libro de actas del curso', papeles: 'Mis papeles',
     traer: 'Traer actas del documento antiguo', ayuda: 'Ayuda'
   };

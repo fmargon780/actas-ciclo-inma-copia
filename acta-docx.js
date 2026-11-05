@@ -14,7 +14,8 @@
   /* opc: { negrita, gris, alin: 'left'|'center'|'both', antes, despues, sangria: { izq, primera }, lista } */
   function parrafo(texto, opc) {
     opc = opc || {};
-    var ppr = (opc.lista ? '<w:numPr><w:ilvl w:val="0"/><w:numId w:val="' + NUM_VINETA + '"/></w:numPr>' : '') +
+    var ppr = (opc.junto ? '<w:keepNext/><w:keepLines/>' : '') + (opc.lista ? '<w:numPr><w:ilvl w:val="0"/><w:numId w:val="' + NUM_VINETA + '"/></w:numPr>' : '') +
+      (opc.recortar ? '<w:pBdr><w:top w:val="dashed" w:sz="8" w:space="8" w:color="595959"/></w:pBdr>' : '') +
       '<w:spacing w:before="' + (opc.antes || 0) + '" w:after="' + (opc.despues == null ? 120 : opc.despues) + '" w:line="276" w:lineRule="auto"/>' +
       (opc.sangria ? '<w:ind w:left="' + opc.sangria.izq + '" w:hanging="' + (opc.sangria.izq - opc.sangria.primera) + '"/>' : '') +
       '<w:jc w:val="' + (opc.alin || 'left') + '"/>';
@@ -85,6 +86,19 @@
     x.push(parrafo(''));
     m.cierre.slice(0, -1).forEach(function (l) { x.push(parrafo(l, { alin: 'both' })); });
     x.push(parrafo(''), parrafo(m.cierre[m.cierre.length - 1], { negrita: true, alin: 'center' }));
+    return x.join('');
+  }
+
+  /* Una carta a las familias (modelo.carta): título, texto, pie y, si lo lleva, el talón para recortar bajo una línea discontinua (fila 109). */
+  function cuerpoCarta(m) {
+    var c = m.carta, x = [parrafo(c.titulo, { negrita: true, alin: 'center' }), parrafo('')];
+    c.lineas.forEach(function (l) { x.push(parrafo(l.texto, l.vineta ? { lista: true, alin: 'both' } : { alin: 'both' })); });
+    x.push(parrafo(''));
+    c.cierre.forEach(function (l) { x.push(parrafo(l, { alin: 'right', despues: 0 })); });
+    if (c.talon) {
+      x.push(parrafo(c.talon.aviso, { negrita: true, alin: 'center', recortar: true, antes: 360, junto: true }));
+      c.talon.lineas.forEach(function (l, i) { x.push(parrafo(l, i < c.talon.lineas.length - 1 ? { alin: 'both', junto: true } : { alin: 'both' })); });
+    }
     return x.join('');
   }
 
@@ -169,7 +183,7 @@
     var z = Object.assign({}, membrete.zip), dec = new TextDecoder(), enlaces = [];
     var doc = dec.decode(z['word/document.xml']), sect = /<w:sectPr[\s\S]*<\/w:sectPr>/.exec(doc), ini = doc.indexOf('<w:body>');
     if (!sect || ini < 0) throw new Error('La plantilla del membrete no es la esperada.');
-    var cuerpos = modelos.map(function (m, k) { return cuerpo(m, enlaces) + (k < modelos.length - 1 ? '<w:p><w:pPr>' + sect[0] + '</w:pPr></w:p>' : ''); });
+    var cuerpos = modelos.map(function (m, k) { return (m.carta ? cuerpoCarta(m) : cuerpo(m, enlaces)) + (k < modelos.length - 1 ? '<w:p><w:pPr>' + sect[0] + '</w:pPr></w:p>' : ''); });
     z['word/document.xml'] = doc.slice(0, ini) + '<w:body>' + cuerpos.join('') + sect[0] + '</w:body></w:document>';
     var num = dec.decode(z['word/numbering.xml']), primero = num.indexOf('<w:num ');
     z['word/numbering.xml'] = num.slice(0, primero) + NUMERACION + num.slice(primero).replace('</w:numbering>', NUM + '</w:numbering>');

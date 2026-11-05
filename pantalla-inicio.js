@@ -67,6 +67,7 @@
     nodos.push(h('button', { type: 'button', class: 'boton grande', id: 'miTutoria', texto: 'Mi tutoría', onclick: function () { est.abrirMiTutoria(); } }));
     nodos.push(h('button', { type: 'button', class: 'boton grande', id: 'libroActas', texto: 'Libro de actas del curso', onclick: function () { est.abrirLibro(); } }));
     nodos.push(h('button', { type: 'button', class: 'boton grande', id: 'reunionFamilias', texto: 'Reunión general con familias', onclick: function () { est.abrirReunion(); } }));
+    nodos.push(h('button', { type: 'button', class: 'boton grande', id: 'comunicacionesFamilias', texto: 'Comunicaciones a familias', onclick: function () { est.abrirComunicaciones(); } }));
     nodos.push(h('button', { type: 'button', class: 'boton grande', id: 'actaEvaluacion', texto: 'Acta de evaluación', onclick: function () { est.abrirEvaluacion(); } }));
     var listas = 0;
     try { listas = g.Peticion.contarListas(g.Peticion.visibles(await g.Peticion.listar(est.raiz), g.cursoEscolar(g.Peticion.hoyIso())), g.Peticion.hoyIso()); } catch (e) { /* sin carpeta: sin aviso */ }

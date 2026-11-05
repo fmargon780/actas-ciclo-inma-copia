@@ -45,6 +45,7 @@
     est.abrirFichas = function () { est.paso = 'fichas'; est.borrador = null; refrescar(); };
     est.abrirEntrevista = function (id) { est.paso = 'entrevista'; est.entrevistaId = id || null; est.entrevistaActual = null; est.borrador = null; refrescar(); };
     est.abrirReunion = function (id) { est.paso = 'reunion'; est.reunionId = id || null; est.reunionActual = null; est.borrador = null; refrescar(); };
+    est.abrirComunicaciones = function () { est.paso = 'comunicaciones'; est.comunicacionActual = null; est.borrador = null; refrescar(); };
     est.abrirEvaluacion = function (id) { est.paso = 'evaluacion'; est.evaluacionId = id || null; est.evaluacionActual = null; est.borrador = null; refrescar(); };
     est.abrirDiversidad = function () { est.paso = 'diversidad'; est.diversidad = null; est.praActual = null; est.peticionActual = null; est.borrador = null; refrescar(); };
     est.abrirFinalCurso = function () { est.paso = 'finalcurso'; est.borrador = null; refrescar(); };
@@ -65,11 +66,12 @@
       $('estadoGuardado').textContent = '';
       /* El aviso de «He ordenado…» se va al cambiar de pantalla (el de ficheros dañados se queda). */
       if (avisoOrden && est.paso !== 'inicio') { window.Dom.decir($('avisoApartados'), $('avisoApartados').textContent.replace(avisoOrden, '').trim()); avisoOrden = ''; }
-      $('pasoInicio').classList.toggle('activo', est.paso === 'inicio' || est.paso === 'formulario' || est.paso === 'revision' || est.paso === 'fichas' || est.paso === 'habitual' || est.paso === 'traer' || est.paso === 'libro' || est.paso === 'papeles' || est.paso === 'convocatoria' || est.paso === 'entrevista' || est.paso === 'tutoria' || est.paso === 'reunion' || est.paso === 'evaluacion' || est.paso === 'diversidad' || est.paso === 'finalcurso');
+      $('pasoInicio').classList.toggle('activo', est.paso === 'inicio' || est.paso === 'formulario' || est.paso === 'revision' || est.paso === 'fichas' || est.paso === 'habitual' || est.paso === 'traer' || est.paso === 'libro' || est.paso === 'papeles' || est.paso === 'convocatoria' || est.paso === 'entrevista' || est.paso === 'tutoria' || est.paso === 'reunion' || est.paso === 'comunicaciones' || est.paso === 'evaluacion' || est.paso === 'diversidad' || est.paso === 'finalcurso');
       $('pasoAjustes').classList.toggle('activo', est.paso === 'ajustes');
       est.ficha = await window.Datos.leerFicha(raiz);
       if (est.paso !== 'entrevista' && est.paso !== 'ayuda') { est.entrevistaId = null; est.entrevistaActual = null; }
       if (est.paso !== 'reunion' && est.paso !== 'ayuda') { est.reunionId = null; est.reunionActual = null; }
+      if (est.paso !== 'comunicaciones' && est.paso !== 'ayuda') est.comunicacionActual = null;
       if (est.paso !== 'evaluacion' && est.paso !== 'ayuda') { est.evaluacionId = null; est.evaluacionActual = null; }
       if (est.paso !== 'diversidad' && est.paso !== 'ayuda') { est.diversidad = null; est.praActual = null; est.peticionActual = null; }
       var alInicio = function () { est.paso = 'inicio'; est.borrador = null; refrescar(); };
@@ -89,6 +91,7 @@
       if (est.paso === 'convocatoria') { await window.PantallaConvocatoria.pintarConvocatoria(est, alInicio, est.fechaConvocatoria || hoyIso()); return; }
       if (est.paso === 'tutoria') { await window.PantallaMiTutoria.pintarMiTutoria(est, alInicio); return; }
       if (est.paso === 'reunion') { await window.PantallaReunion.pintarReunion(est, alInicio); return; }
+      if (est.paso === 'comunicaciones') { await window.PantallaComunicaciones.pintarComunicaciones(est, alInicio); return; }
       if (est.paso === 'evaluacion') { await window.PantallaEvaluacion.pintarEvaluacion(est, alInicio); return; }
       if (est.paso === 'finalcurso') { await window.PantallaFinalCurso.pintarFinalCurso(est, alInicio); return; }
       if (est.paso === 'diversidad') { await window.PantallaDiversidad.pintarDiversidad(est, alInicio); return; }

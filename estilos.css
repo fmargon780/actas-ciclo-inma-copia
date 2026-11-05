@@ -294,3 +294,27 @@ ul.papeles { list-style: none; margin: 0; padding: 0; display: flex; flex-direct
 .tabla-memoria th:first-child, .tabla-memoria td:first-child { text-align: left; }
 .tabla-memoria th { color: var(--suave); font-size: 12px; font-weight: 600; }
 .tabla-memoria td.falta { color: #7a5200; background: var(--ambar); }
+
+/* Comunicaciones a familias (fila 109) */
+.mesa-comunicacion { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; align-items: start; }
+.columna-comunicacion { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+@media (max-width: 800px) { .mesa-comunicacion { grid-template-columns: minmax(0, 1fr); } }
+.mesa-comunicacion textarea, .mesa-comunicacion input[type=text], .mesa-comunicacion input[type=date], .mesa-comunicacion input[type=time] { width: 100%; box-sizing: border-box; }
+.mesa-comunicacion textarea { resize: vertical; }
+.campos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.campos .campo { min-width: 0; }
+.campos .campo.ancho { grid-column: 1 / -1; }
+@media (max-width: 800px) { .campos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.hoja { background: #fff; border: 1px solid var(--linea); box-shadow: 0 1px 6px rgba(29, 34, 51, .14); padding: 20px 24px; }
+.hoja .memb { display: flex; justify-content: space-between; gap: 10px; font-size: 12px; border-bottom: 1px solid var(--linea); padding-bottom: 6px; margin-bottom: 10px; }
+.hoja .memb span:last-child { text-align: right; }
+.hoja h4 { margin: 0 0 8px; font-size: 16px; text-align: center; }
+.hoja p { margin: 0 0 6px; font-size: 13px; white-space: pre-wrap; }
+.hoja .pie-carta { font-size: 13px; text-align: right; margin-top: 8px; white-space: pre-line; }
+.hoja .talon { margin-top: 12px; padding-top: 10px; border-top: 2px dashed var(--suave); font-size: 13px; }
+.hoja .talon strong { display: block; text-align: center; margin-bottom: 6px; }
+.hoja .hueco { display: inline-block; min-width: 140px; border-bottom: 1px solid var(--tinta, #1d2233); }
+@media (max-width: 800px) { .hoja { padding: 14px; } }
+.entregas { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 2px 12px; }
+.entregas .entrega { display: flex; gap: 6px; align-items: center; font-size: 14px; padding: 3px 2px; border-bottom: 1px solid var(--linea); }
+.entregas .entrega.falta { background: var(--ambar); }
