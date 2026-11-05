@@ -61,13 +61,14 @@
     return vistos.indexOf('a') >= 0 ? 'a' : vistos.length ? 'o' : '';
   }
 
-  /* Lee todo lo guardado del curso: { entrevistas, evaluaciones, pras, peticiones, rubricas }. `raizRubricas` (la carpeta RÚBRICAS, solo lectura) puede ser null. */
+  /* Lee todo lo guardado del curso: { entrevistas, evaluaciones, pras, peticiones, reuniones, rubricas }. `raizRubricas` (la carpeta RÚBRICAS, solo lectura) puede ser null. */
   async function leerFuentes(raiz, raizRubricas, grupo, curso, hoy) {
     var f = {};
     f.entrevistas = await T.listarEntrevistas(raiz);
     f.evaluaciones = await g.Evaluacion.listar(raiz);
     f.pras = await g.Pra.listar(raiz);
     f.peticiones = await g.Peticion.listar(raiz);
+    f.reuniones = await g.Reunion.listar(raiz);
     f.rubricas = null;
     if (raizRubricas) {
       try {

@@ -48,6 +48,19 @@
     }
     function sabeDe(i) { return S.sabe(alumnos[i], curso, fuentes, hoy); }
 
+    /* La memoria final de tutoría (fila 108): una tarjeta encima de los informes. */
+    var memoria = await g.Memoria.existente(est.raiz, tut.grupo, curso);
+    function hechosInformes() { var fs = alumnos.map(function (a, i) { return informe(i); }); return { hechos: F.contarHechos(fs), total: fs.length }; }
+    function ctxMemoria() { return { est: est, tut: tut, curso: curso, hoy: hoy, alumnos: alumnos, fuentes: fuentes, todos: todos, informes: hechosInformes, volver: repintar }; }
+    function tarjetaMemoria() {
+      var d = g.PantallaMemoria.calcular(ctxMemoria()), e = g.Memoria.estado(memoria, d);
+      return h('section', { class: 'tarjeta memoria', id: 'tarjetaMemoria' }, [
+        h('div', { class: 'texto' }, [h('h3', { texto: g.Memoria.NOMBRE }), h('span', { class: 'suave', texto: 'Una sola memoria de todo el grupo, con lo guardado durante el curso.' })]),
+        h('span', { class: 'etiqueta ' + e, id: 'estadoMemoria', 'data-estado': e, texto: g.Memoria.ESTADOS[e] }),
+        h('button', { type: 'button', class: 'boton principal', id: 'abrirMemoria', texto: 'Abrir la memoria', onclick: async function () { if (est.alSalir) await est.alSalir(); g.PantallaMemoria.pintarMemoria(ctxMemoria()); } })
+      ]);
+    }
+
     var resumen = h('span', { class: 'derecha', id: 'resumenFinal' }), ul = h('ul', { class: 'lista-final', id: 'listaFinal' });
     var detalle = h('div', { id: 'zonaDetalle' }), avisoTodos = g.Dom.aviso(), boton = h('button', { type: 'button', class: 'boton principal', id: 'redactarTodos', texto: 'Redactar todos' });
     avisoTodos.id = 'avisoTodos';
@@ -107,6 +120,7 @@
     var nodos = [cabecera, h('div', { class: 'barra-final' }, [h('span', { class: 'etiqueta', id: 'tipoFinal', texto: tipo.nombre }),
       h('span', { class: 'suave', id: 'grupoFinal', texto: tut.grupo + ' · curso ' + curso }), g.Ayuda.aviso('final-curso'), resumen, boton])];
     nodos.push(avisoTodos);
+    if (alumnos.length) nodos.push(tarjetaMemoria());
     var avisoRub = g.PantallaFichas.avisoRubricas(est, repintar, 'Para ver a tu grupo, abre una vez la carpeta RÚBRICAS (Mi unidad › RÚBRICAS). Solo la leo: no escribo nada en ella.');
     if (avisoRub) nodos.push(avisoRub);
     if (!alumnos.length && !avisoRub) nodos.push(h('p', { class: 'suave', id: 'sinAlumnadoFinal', texto: 'No encuentro alumnado en el grupo ' + tut.grupo + '.' }));
