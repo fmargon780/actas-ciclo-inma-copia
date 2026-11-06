@@ -121,7 +121,7 @@
       h('span', { class: 'suave', id: 'grupoFinal', texto: tut.grupo + ' · curso ' + curso }), g.Ayuda.aviso('final-curso'), resumen, boton])];
     nodos.push(avisoTodos);
     if (alumnos.length) nodos.push(tarjetaMemoria());
-    var avisoRub = g.PantallaFichas.avisoRubricas(est, repintar, 'Para ver a tu grupo, abre una vez la carpeta RÚBRICAS (Mi unidad › RÚBRICAS). Solo la leo: no escribo nada en ella.');
+    var avisoRub = g.PantallaFichas.avisoRubricas(est, repintar);
     if (avisoRub) nodos.push(avisoRub);
     if (!alumnos.length && !avisoRub) nodos.push(h('p', { class: 'suave', id: 'sinAlumnadoFinal', texto: 'No encuentro alumnado en el grupo ' + tut.grupo + '.' }));
     nodos.push(h('div', { class: 'mesa-final' }, [h('section', { class: 'tarjeta' }, [h('h3', { texto: 'Tu grupo' }), ul]), detalle]));

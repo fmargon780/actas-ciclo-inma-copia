@@ -47,19 +47,16 @@
     g.Dom.montar([botones, h('div', { class: 'ficha', id: 'ficha' }, cuerpo)]);
   }
 
-  /* El aviso de la carpeta RÚBRICAS (el mismo de la fila 15): la ficha funciona igual con los alumnos citados en las actas. */
+  /* El aviso de la lista de alumnado (fila 111): si aún no hay alumnado en Rúbricas, lleva a la pestaña. La ficha funciona igual con los alumnos citados en las actas. */
+  var FRASE_PESTANA = 'Para ver a tu alumnado, abre la pestaña Rúbricas.';
   function avisoRubricas(est, repintar, textoSinCarpeta) {
-    var a = est.alumnado, texto = '', boton = 'Abrir la carpeta RÚBRICAS', permiso = false;
+    var a = est.alumnado, texto = '';
     if (!a || a.estado === 'ok') return null;
-    if (a.estado === 'sinCarpeta') texto = a.texto || textoSinCarpeta || 'Para buscar en toda la lista de alumnado, abre una vez la carpeta RÚBRICAS (Mi unidad › RÚBRICAS). Solo la leo: no escribo nada en ella.';
-    else if (a.estado === 'sinPermiso') { texto = 'Chrome necesita tu permiso para abrir la carpeta RÚBRICAS. Pulsa «Dar permiso» y, en la ventana de Chrome, elige «Permitir en cada visita»: así no te lo volverá a pedir en este dispositivo.'; boton = 'Dar permiso'; permiso = true; }
-    else if (a.estado === 'vacia') texto = 'En la carpeta RÚBRICAS no hay alumnado de este ciclo todavía.';
+    if (a.estado === 'sinCarpeta') texto = textoSinCarpeta || FRASE_PESTANA;
+    else if (a.estado === 'vacia') texto = 'En Rúbricas no hay alumnado de este ciclo todavía. Súbelo en la pestaña Rúbricas.';
     else texto = a.texto;
     var caja = h('div', { class: 'aviso', id: 'avisoAlumnado' }, [h('span', { id: 'textoAvisoAlumnado', texto: texto + ' ' })]);
-    caja.appendChild(h('button', { type: 'button', class: 'boton chico principal', id: 'abrirRubricas', texto: boton, onclick: async function () {
-      var mal = permiso ? (await g.Rubricas.darPermiso(est), '') : await g.Rubricas.abrir(est);
-      if (mal) caja.appendChild(h('div', { class: 'aviso error', id: 'errorRubricas', texto: mal })); else repintar();
-    } }));
+    caja.appendChild(h('button', { type: 'button', class: 'boton chico principal', id: 'abrirRubricas', texto: 'Ir a Rúbricas', onclick: function () { est.abrirRubricas(); } }));
     var info = g.Ayuda.aviso('carpeta-rubricas');
     if (info) caja.appendChild(info);
     return caja;
@@ -83,5 +80,5 @@
     buscador.enfocar();
   }
 
-  g.PantallaFichas = { pintarFichas: pintarFichas, avisoRubricas: avisoRubricas };
+  g.PantallaFichas = { pintarFichas: pintarFichas, avisoRubricas: avisoRubricas, FRASE_PESTANA: FRASE_PESTANA };
 })(window);

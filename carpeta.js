@@ -180,7 +180,7 @@
   async function pedirPermiso(h) { try { return (await h.requestPermission({ mode: 'readwrite' })) === 'granted'; } catch (e) { return false; } }
   async function olvidar() { try { await usarBD('readwrite', function (s) { return s.delete(CLAVE); }); } catch (e) { /* nada */ } }
 
-  /* La carpeta RÚBRICAS (solo se lee): se elige una vez, se recuerda aparte de ACTAS y no se vuelve a pedir. */
+  /* La carpeta RÚBRICAS de siempre (solo se lee): la usan solo «Pasar tus rúbricas aquí» y «Ya tenía una carpeta RÚBRICAS», en la pestaña Rúbricas. */
   async function elegirRubricas() {
     if (typeof g.showDirectoryPicker !== 'function') throw propio('Este navegador no puede abrir carpetas. Hace falta Google Chrome en el ordenador.');
     return g.showDirectoryPicker({ mode: 'read', id: 'rubricas-origen' });

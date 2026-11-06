@@ -1,5 +1,5 @@
 /* Mi tutoría (fila 40): el grupo de tutoría y el nombre de la tutora. Sale la primera vez que se entra en «Entrevista con familia» y se cambia en Ajustes.
-   El grupo se elige de los grupos de la lista de Rúbricas (carpeta RÚBRICAS abierta una vez); el nombre se propone con el de la coordinadora de la ficha. */
+   El grupo se elige de los grupos de la lista de Rúbricas (ACTAS/rubricas); el nombre se propone con el de la coordinadora de la ficha. */
 (function (g) {
   'use strict';
   var h = g.Dom.h;
@@ -27,7 +27,7 @@
       h('h2', { texto: 'Mi tutoría' }),
       h('p', { class: 'suave', texto: 'El grupo del que eres tutora y tu nombre. Se guardan en tu carpeta ACTAS y los usan las entrevistas con las familias.' })
     ];
-    var avisoRub = g.PantallaFichas && g.PantallaFichas.avisoRubricas(est, function () { (repintar || alGuardar || function () {})(); }, 'Para elegir tu grupo, abre una vez la carpeta RÚBRICAS (Mi unidad › RÚBRICAS). Solo la leo: no escribo nada en ella.');
+    var avisoRub = g.PantallaFichas && g.PantallaFichas.avisoRubricas(est, function () { (repintar || alGuardar || function () {})(); });
     if (avisoRub) nodos.push(avisoRub);
     nodos.push(h('label', { class: 'campo' }, ['Grupo de tutoría', selector]), h('label', { class: 'campo' }, ['Tu nombre como tutora', nombre]), h('div', { class: 'fila' }, [guardar]), hecho, aviso);
     return h('section', { class: 'tarjeta ancha', id: 'tarjetaTutoria' }, nodos);

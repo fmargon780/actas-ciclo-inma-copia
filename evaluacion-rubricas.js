@@ -1,4 +1,4 @@
-/* Acta de evaluación (fila 60): el «% con dificultades» de cada área sale de las notas de Rúbricas. Sin pantalla; solo LEE la carpeta RÚBRICAS
+/* Acta de evaluación (fila 60): el «% con dificultades» de cada área sale de las notas de Rúbricas. Sin pantalla; solo LEE ACTAS/rubricas
    (la carpeta entra por parámetro como el adaptador de carpeta.js: leerJSON y listarJSON). Se prueba con node --test.
    Con dificultades = media del alumno en el área por debajo del valor de «Suficiente» de la escala del curso de Rúbricas.
    Resultado de leer: { estado: 'ok' | 'sinDatos', nivel, areas: [{ nombre, porcentaje, con, de, sinFecha }] }. */

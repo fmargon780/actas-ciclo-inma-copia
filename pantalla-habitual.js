@@ -87,7 +87,7 @@
     if (await H.sumarCreadas(est.raiz, habitual, est.ficha)) await H.guardar(est.raiz, habitual);
     var repintar = function () { pintarHabitual(est, alInicio); };
     await g.Rubricas.cargar(est);
-    var avisoRub = g.PantallaFichas.avisoRubricas(est, repintar, 'Para que Claude aprenda también de lo que se dijo en cada punto, abre una vez la carpeta RÚBRICAS (Mi unidad › RÚBRICAS). Solo la leo. Sin ella, a Claude solo le mando los títulos.');
+    var avisoRub = g.PantallaFichas.avisoRubricas(est, repintar);
     var estado = h('div', { class: 'aviso', id: 'estadoAprender', hidden: '', 'aria-live': 'polite' });
     var boton = h('button', { type: 'button', class: 'boton principal', id: 'aprenderActas', texto: 'Aprender de actas antiguas', onclick: async function () {
       var avisar = function (t) { estado.className = 'aviso'; estado.textContent = t; estado.hidden = !t; };

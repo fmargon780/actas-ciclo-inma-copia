@@ -183,7 +183,7 @@
     }
     function asistencia() {
       var nodos = [h('h3', { texto: 'Asistencia de padres · ' + r.grupo })];
-      if (!r.asistencia.length) nodos.push(h('div', { class: 'aviso', id: 'sinLista', texto: 'No tengo la lista del alumnado de ' + r.grupo + '. Abre la carpeta RÚBRICAS (en el inicio, «Fichas del alumnado») y vuelve a entrar. Sin ella, el anexo de asistencia saldrá vacío.' }));
+      if (!r.asistencia.length) nodos.push(h('div', { class: 'aviso', id: 'sinLista', texto: 'No tengo la lista del alumnado de ' + r.grupo + '. Abre la pestaña Rúbricas, sube ahí el listado del grupo y vuelve a entrar. Sin él, el anexo de asistencia saldrá vacío.' }));
       nodos.push(h('ul', { class: 'asistencia', id: 'listaAsistencia' }, r.asistencia.map(function (a, k) {
         function radio(valor, texto) {
           var x = h('input', { type: 'radio', name: 'asiste-' + k, value: valor, 'data-asiste': valor });

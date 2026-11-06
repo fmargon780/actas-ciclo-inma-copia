@@ -61,7 +61,7 @@
     return vistos.indexOf('a') >= 0 ? 'a' : vistos.length ? 'o' : '';
   }
 
-  /* Lee todo lo guardado del curso: { entrevistas, evaluaciones, pras, peticiones, reuniones, rubricas }. `raizRubricas` (la carpeta RÚBRICAS, solo lectura) puede ser null. */
+  /* Lee todo lo guardado del curso: { entrevistas, evaluaciones, pras, peticiones, reuniones, rubricas }. `raizRubricas` (ACTAS/rubricas) puede ser null. */
   async function leerFuentes(raiz, raizRubricas, grupo, curso, hoy) {
     var f = {};
     f.entrevistas = await T.listarEntrevistas(raiz);

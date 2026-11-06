@@ -1,53 +1,22 @@
-/* La lista de alumnado de Rúbricas. Cuando la docente ya ha pasado sus rúbricas a Mis actas (marca ACTAS/rubricas-pasadas.json) se lee
-   la subcarpeta ACTAS/rubricas; mientras no, solo se LEE la carpeta RÚBRICAS de siempre (nunca se escribe en ella; Carpeta la recuerda).
+/* La lista de alumnado de Rúbricas. Los datos de Rúbricas viven en ACTAS/rubricas (marca ACTAS/rubricas-pasadas.json): de ahí sale el alumnado.
+   La carpeta RÚBRICAS de siempre ya no se lee desde aquí (fila 111): solo la leen «Pasar tus rúbricas aquí» y «Ya tenía una carpeta RÚBRICAS», en la pestaña.
    est.alumnado guarda el último resultado:
-   { estado: 'ok' | 'sinCarpeta' | 'sinPermiso' | 'vacia' | 'error', lista: { todos, delCiclo, grupos } | null, handle, raiz, texto }. */
+   { estado: 'ok' | 'sinCarpeta' | 'vacia' | 'error', lista: { todos, delCiclo, grupos } | null, handle: null, raiz, texto }. */
 (function (g) {
   'use strict';
-  var FRASE_NO_ES = 'Esta no es tu carpeta de Rúbricas: está en Mi unidad › RÚBRICAS.';
 
   async function cargar(est) {
     var r = { estado: 'sinCarpeta', lista: null, handle: null, raiz: null, texto: '' };
     try {
-      /* Con la marca, los datos de Rúbricas están en ACTAS/rubricas. */
-      var recordada = g.RubPasar && est.raiz && await g.Carpeta.rubricasRecordada();
-      if (g.RubPasar && est.raiz && await g.RubPasar.leerMarca(est) && !(recordada && await g.RubPasar.nuevaSinTrabajo(est))) {
+      if (g.RubPasar && est.raiz && await g.RubPasar.leerMarca(est)) {
         r.raiz = await est.raiz.sub('rubricas');
         r.lista = await g.Alumnado.leerLista(r.raiz, est.ficha && est.ficha.ciclo);
         r.estado = r.lista.delCiclo.length ? 'ok' : 'vacia';
-        est.alumnado = r;
-        return r;
       }
-      var h = recordada || await g.Carpeta.rubricasRecordada();
-      if (!h) { est.alumnado = r; return r; }
-      r.handle = h;
-      if ((await g.Carpeta.permisoLectura(h)) !== 'granted') { r.estado = 'sinPermiso'; est.alumnado = r; return r; }
-      var raiz = g.Carpeta.adaptador(h);
-      if (!(await raiz.leerJSON('rubricas.json'))) { r.texto = FRASE_NO_ES; est.alumnado = r; return r; }
-      r.raiz = raiz;
-      r.lista = await g.Alumnado.leerLista(raiz, est.ficha && est.ficha.ciclo);
-      r.estado = r.lista.delCiclo.length ? 'ok' : 'vacia';
     } catch (e) { r.estado = 'error'; r.texto = 'No he podido leer la lista de alumnado: ' + ((e && e.message) || e); }
     est.alumnado = r;
     return r;
   }
 
-  /* El botón «Abrir la carpeta RÚBRICAS»: la elige (una vez), comprueba que es la buena y la recuerda. Devuelve un texto de error o ''. */
-  async function abrir(est) {
-    try {
-      var h = await g.Carpeta.elegirRubricas();
-      if (!(await g.Carpeta.adaptador(h).leerJSON('rubricas.json'))) return FRASE_NO_ES;
-      await g.Carpeta.guardarRubricas(h);
-    } catch (e) { return e && e.name === 'AbortError' ? '' : ((e && e.message) || String(e)); }
-    await cargar(est);
-    return '';
-  }
-
-  /* Cuando el navegador retira el permiso: un clic de Inma lo da de nuevo. */
-  async function darPermiso(est) {
-    if (est.alumnado && est.alumnado.handle) await g.Carpeta.pedirPermisoLectura(est.alumnado.handle);
-    await cargar(est);
-  }
-
-  g.Rubricas = { FRASE_NO_ES: FRASE_NO_ES, cargar: cargar, abrir: abrir, darPermiso: darPermiso };
+  g.Rubricas = { cargar: cargar };
 })(window);

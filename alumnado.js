@@ -41,7 +41,7 @@
   }
   function cursoDelGrupo(nombre) { var m = /\d/.exec(String(nombre || '')); return m ? Number(m[0]) : null; }
 
-  /* Lee la carpeta RÚBRICAS (solo lee): formato 2 (cursos/<curso>/...) o formato 1 (grupos.json y alumnado/ en la raíz).
+  /* Lee ACTAS/rubricas (solo lee): formato 2 (cursos/<curso>/...) o formato 1 (grupos.json y alumnado/ en la raíz).
      raiz: el adaptador de carpeta.js (leerJSON). Devuelve { todos, delCiclo, grupos }; cada alumno { nombre, pila, apellidos, grupo, grupoId }. */
   async function leerLista(raiz, cicloFicha) {
     var base = '', config = await raiz.leerJSON('config.json');

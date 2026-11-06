@@ -46,25 +46,20 @@
       if (est.alumnado && est.alumnado.lista && g.Huecos.completarGrupos(b, est.alumnado.lista.grupos)) { cambio(); pintarPuntos(); traerResumenes(); return; }
       var a = est.alumnado, ok = !!(a && a.estado === 'ok'), cargando = !a;
       alumnadoVisto.forEach(function (x) {
-        x.recordatorio.textContent = ok || cargando ? 'Alumnado: escríbelo y elígelo de la lista, o usa + Alumno' : 'Sin lista de alumnado: abre la carpeta RÚBRICAS';
+        x.recordatorio.textContent = ok || cargando ? 'Alumnado: escríbelo y elígelo de la lista, o usa + Alumno' : 'Sin lista de alumnado: abre la pestaña Rúbricas';
         x.masAlumno.disabled = !ok;
       });
       avisoAlumnado.textContent = '';
-      var texto = '', boton = 'Abrir la carpeta RÚBRICAS', permiso = false;
+      var texto = '';
       if (!a) { avisoAlumnado.hidden = true; return; }
-      if (a.estado === 'sinCarpeta') texto = a.texto || 'Para elegir alumnado de la lista, abre una vez la carpeta RÚBRICAS (Mi unidad › RÚBRICAS). Solo la leo: no escribo nada en ella.';
-      else if (a.estado === 'sinPermiso') { texto = 'Chrome necesita tu permiso para abrir la carpeta RÚBRICAS. Pulsa «Dar permiso» y, en la ventana de Chrome, elige «Permitir en cada visita»: así no te lo volverá a pedir en este dispositivo.'; boton = 'Dar permiso'; permiso = true; }
-      else if (a.estado === 'vacia') texto = 'En la carpeta RÚBRICAS no hay alumnado de este ciclo todavía.';
+      if (a.estado === 'sinCarpeta') texto = g.PantallaFichas.FRASE_PESTANA;
+      else if (a.estado === 'vacia') texto = 'En Rúbricas no hay alumnado de este ciclo todavía. Súbelo en la pestaña Rúbricas.';
       else if (a.estado === 'error') texto = a.texto;
       avisoAlumnado.hidden = !texto;
       if (!texto) return;
       avisoAlumnado.appendChild(h('span', { id: 'textoAvisoAlumnado', texto: texto + ' ' }));
       var infoRub = g.Ayuda.aviso('carpeta-rubricas');
-      avisoAlumnado.appendChild(h('button', { type: 'button', class: 'boton chico principal', id: 'abrirRubricas', texto: boton, onclick: async function () {
-        var mal = permiso ? (await g.Rubricas.darPermiso(est), '') : await g.Rubricas.abrir(est);
-        pintarAlumnado();
-        if (mal) { avisoAlumnado.hidden = false; avisoAlumnado.appendChild(h('div', { class: 'aviso error', id: 'errorRubricas', texto: mal })); }
-      } }));
+      avisoAlumnado.appendChild(h('button', { type: 'button', class: 'boton chico principal', id: 'abrirRubricas', texto: 'Ir a Rúbricas', onclick: function () { est.abrirRubricas(); } }));
       if (infoRub) avisoAlumnado.appendChild(infoRub);
     }
     function pintarPuntos() {
@@ -115,7 +110,8 @@
       try {
         if (!est.raiz || !g.EvaluacionCiclo || !g.EvaluacionCiclo.puntosDeEvaluacion(b).length) return;
         var r = g.EvaluacionCiclo.traerPropia(b, await g.Evaluacion.listar(est.raiz));
-        avisoResumenes.textContent = ''; avisoResumenes.hidden = !r.avisos.length;
+        if (r.avisos.length) avisoResumenes.textContent = ''; /* se llama dos veces seguidas: la segunda no trae nada nuevo y no debe borrar el aviso de la primera */
+        if (r.avisos.length) avisoResumenes.hidden = false;
         r.avisos.forEach(function (t) { avisoResumenes.appendChild(h('div', { texto: t })); });
         if (r.cambiado) { cambio(); pintarPuntos(); }
       } catch (x) { /* sin acta de evaluación legible: el borrador sigue como estaba */ }

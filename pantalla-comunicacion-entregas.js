@@ -12,7 +12,7 @@
       var cab = [h('h3', { texto: 'Autorizaciones entregadas' })];
       if (!n.total) {
         caja.appendChild(h('div', { class: 'barra-form' }, cab));
-        caja.appendChild(h('div', { class: 'aviso', id: 'sinListaEntregas', texto: 'No tengo la lista del alumnado de ' + c.grupo + '. Abre la carpeta RÚBRICAS (en el inicio, «Fichas del alumnado») y vuelve a entrar.' }));
+        caja.appendChild(h('div', { class: 'aviso', id: 'sinListaEntregas', texto: 'No tengo la lista del alumnado de ' + c.grupo + '. Abre la pestaña Rúbricas, sube ahí el listado del grupo y vuelve a entrar.' }));
         return;
       }
       cab.push(h('span', { class: 'etiqueta ' + (n.todas ? 'hecho' : 'cambiadas'), id: 'cuentaEntregas', texto: n.si + ' de ' + n.total }));

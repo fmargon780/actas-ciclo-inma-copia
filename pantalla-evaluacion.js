@@ -19,7 +19,7 @@
     var grupos = lista ? lista.grupos.slice() : [];
     if (tut && grupos.indexOf(tut.grupo) < 0) grupos.unshift(tut.grupo);
     var clase = grupos.length ? h('select', { id: 'claseEvaluacion' }, grupos.map(function (n) { return h('option', { value: n, texto: n }); })) : h('input', { type: 'text', id: 'claseEvaluacion', placeholder: 'Por ejemplo: 4º A' });
-    /* Lo elegido sobrevive a repintar la pantalla (por ejemplo, tras abrir la carpeta RÚBRICAS). */
+    /* Lo elegido sobrevive a repintar la pantalla (por ejemplo, tras volver de la pestaña Rúbricas). */
     var previo = est.nuevaEvaluacion || {};
     if (previo.clase && grupos.length && grupos.indexOf(previo.clase) < 0) previo.clase = '';
     clase.value = previo.clase || (tut ? tut.grupo : '');
@@ -149,7 +149,7 @@
         if (notas) { det.setAttribute('open', ''); abrirCaja(); }
         return det;
       });
-      if (!alumnado.length) nodos = [h('p', { class: 'suave', id: 'sinAlumnado', texto: lista ? 'No hay alumnado de ' + e.clase + ' en la lista de Rúbricas.' : 'Abre la carpeta RÚBRICAS para ver aquí el alumnado.' })];
+      if (!alumnado.length) nodos = [h('p', { class: 'suave', id: 'sinAlumnado', texto: lista ? 'No hay alumnado de ' + e.clase + ' en la lista de Rúbricas.' : 'Abre la pestaña Rúbricas para ver aquí el alumnado.' })];
       return h('section', { class: 'tarjeta ancha', id: 'alumnadoEvaluacion' }, [h('h3', { texto: 'Por alumno' }),
         h('p', { class: 'suave', texto: 'Solo saldrán en el acta los alumnos con algo apuntado.' }), h('div', { class: 'dos-col' }, nodos)]);
     }

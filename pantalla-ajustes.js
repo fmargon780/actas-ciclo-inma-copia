@@ -1,4 +1,4 @@
-/* Ajustes: los datos del colegio (colegio.json), los datos del curso (ficha.json), la escala de las rúbricas (ACTAS/rubricas/config.json), las redacciones de Claude (en la app de internet, cuántas quedan este mes; en la copia sin internet, la clave de clave.json o copiada de la carpeta RÚBRICAS) y Mi tutoría. */
+/* Ajustes: los datos del colegio (colegio.json), los datos del curso (ficha.json), la escala de las rúbricas (ACTAS/rubricas/config.json), las redacciones de Claude (en la app de internet, cuántas quedan este mes; en la copia sin internet, la clave de clave.json) y Mi tutoría. */
 (function (g) {
   'use strict';
   var h = g.Dom.h;
@@ -29,18 +29,6 @@
       if (!v) { g.Dom.decir(aviso, 'Escribe o pega la clave primero.'); return; }
       try { await g.Datos.guardarClave(est.raiz, v); ok('Clave guardada.'); } catch (e) { g.Dom.decir(aviso, e.message || String(e)); }
     } });
-    var deRubricas = h('button', { type: 'button', class: 'boton', id: 'claveDeRubricas', texto: 'Usar la de Rúbricas', onclick: async function () {
-      try {
-        var otra = await g.Carpeta.elegirRubricas();
-        var raiz = g.Carpeta.adaptador(otra);
-        var marca = await raiz.leerJSON('rubricas.json');
-        if (!marca) { g.Dom.decir(aviso, g.Rubricas.FRASE_NO_ES); return; }
-        await g.Carpeta.guardarRubricas(otra); est.alumnado = null; /* la lista de alumnado usa esta misma carpeta */
-        var c = await g.Datos.leerClave(raiz);
-        if (!c) { g.Dom.decir(aviso, 'En Rúbricas todavía no hay ninguna clave guardada.'); return; }
-        await g.Datos.guardarClave(est.raiz, c); campo.value = c; ok('Clave copiada de Rúbricas.');
-      } catch (e) { if (e && e.name === 'AbortError') return; g.Dom.decir(aviso, e.message || String(e)); }
-    } });
     var tutoria = await g.PantallaTutoria.tarjeta(est, function () { refrescar(); });
     var colegio = await g.PantallaColegio.tarjeta(est, function () { est.colegioGuardado = true; est.destinoAjustes = 'colegio'; return refrescar(); });
     var datosCurso = await g.PantallaDatosCurso.tarjeta(est), escala = await g.PantallaEscala.tarjeta(est).catch(function () { return null; });
@@ -54,7 +42,7 @@
     var claude = enServicio ? await tarjetaRedacciones() : h('section', { class: 'tarjeta ancha' }, [
       h('h2', { texto: 'Clave de Claude ' }, [g.Ayuda.aviso('clave-claude')]),
       h('p', { class: 'suave', texto: 'Se guarda en tu carpeta ACTAS. La usará Claude para redactar las actas.' }),
-      campo, h('div', { class: 'fila' }, [guardar, deRubricas, g.Ayuda.aviso('clave-rubricas')]), dicho, aviso
+      campo, h('div', { class: 'fila' }, [guardar]), dicho, aviso
     ]);
     g.Dom.montar([cuenta, invitados, colegio, datosCurso, escala, claude, estilo, traer, tutoria].filter(Boolean));
     /* «Ir a Ajustes» desde un aviso de falta de datos del colegio: baja hasta su tarjeta */

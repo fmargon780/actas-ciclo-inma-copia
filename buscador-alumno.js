@@ -18,7 +18,7 @@
     function pintar() {
       resultados.textContent = '';
       var texto = campo.value.trim();
-      if (!datos) { resultados.appendChild(h('p', { class: 'suave', texto: 'No hay lista de alumnado: abre la carpeta RÚBRICAS.' })); return; }
+      if (!datos) { resultados.appendChild(h('p', { class: 'suave', texto: 'No hay lista de alumnado: abre la pestaña Rúbricas.' })); return; }
       if (Array.from(A.normalizar(texto)).length < 3) { resultados.appendChild(h('p', { class: 'suave', texto: 'Escribe al menos 3 letras.' })); return; }
       var encontrados = A.sugerir(datos.delCiclo, texto, MAXIMO);
       encontrados.forEach(function (a) {

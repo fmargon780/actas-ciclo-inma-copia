@@ -41,7 +41,7 @@
   function pintar(p, i, caja, cambio, repintar, ciclo) {
     var nodos = [];
     if (p.porGrupo && p.porGrupo.length && !Array.isArray(p.grupos)) {
-      nodos.push(h('p', { class: 'suave', 'data-sin-grupos': String(i), texto: 'Para ver un bloque por cada grupo, abre la carpeta RÚBRICAS (arriba).' }));
+      nodos.push(h('p', { class: 'suave', 'data-sin-grupos': String(i), texto: 'Para ver un bloque por cada grupo, abre la pestaña Rúbricas (arriba).' }));
     }
     (p.grupos || []).forEach(function (gr, j) {
       /* Fila 106: cada bloque de clase del punto de evaluación lleva «Subir o pegar» (ciclo: { b, est, todos } del formulario). */
