@@ -18,7 +18,7 @@
     var est = app.est;
     if (!est) { window.PantallaAyuda.pintarAyuda({ seccion: 'carpeta', alVolver: empezar, alGuia: function () { window.PantallaAyuda.abrirGuia(ctxAyuda()); } }); return; }
     await est.salir();
-    if (est.paso !== 'ayuda') { est.pasoAnterior = est.paso; est.seccionAyuda = est.paso; est.paso = 'ayuda'; }
+    if (est.paso !== 'ayuda') { est.pasoAnterior = est.paso; est.seccionAyuda = est.paso === 'rubricas' ? window.RubTab.seccionAyuda(est) : est.paso; est.paso = 'ayuda'; }
     est.refrescar();
   }
   $('botonAyuda').onclick = abrirAyuda;
@@ -42,6 +42,7 @@
     var salir = async function () { if (est.alSalir) { var f = est.alSalir; est.alSalir = null; await f(); } };
     est.salir = salir; app.est = est;
     est.abrirBorrador = function (b) { est.borrador = b; est.paso = 'formulario'; refrescar(); };
+    est.abrirRubricas = async function () { await salir(); est.paso = 'rubricas'; est.borrador = null; refrescar(); };
     est.abrirFichas = function () { est.paso = 'fichas'; est.borrador = null; refrescar(); };
     est.abrirEntrevista = function (id) { est.paso = 'entrevista'; est.entrevistaId = id || null; est.entrevistaActual = null; est.borrador = null; refrescar(); };
     est.abrirReunion = function (id) { est.paso = 'reunion'; est.reunionId = id || null; est.reunionActual = null; est.borrador = null; refrescar(); };
@@ -67,6 +68,7 @@
       /* El aviso de «He ordenado…» se va al cambiar de pantalla (el de ficheros dañados se queda). */
       if (avisoOrden && est.paso !== 'inicio') { window.Dom.decir($('avisoApartados'), $('avisoApartados').textContent.replace(avisoOrden, '').trim()); avisoOrden = ''; }
       $('pasoInicio').classList.toggle('activo', est.paso === 'inicio' || est.paso === 'formulario' || est.paso === 'revision' || est.paso === 'fichas' || est.paso === 'habitual' || est.paso === 'traer' || est.paso === 'libro' || est.paso === 'papeles' || est.paso === 'convocatoria' || est.paso === 'entrevista' || est.paso === 'tutoria' || est.paso === 'reunion' || est.paso === 'comunicaciones' || est.paso === 'evaluacion' || est.paso === 'diversidad' || est.paso === 'finalcurso');
+      $('pasoRubricas').classList.toggle('activo', est.paso === 'rubricas');
       $('pasoAjustes').classList.toggle('activo', est.paso === 'ajustes');
       est.ficha = await window.Datos.leerFicha(raiz);
       if (est.paso !== 'entrevista' && est.paso !== 'ayuda') { est.entrevistaId = null; est.entrevistaActual = null; }
@@ -97,11 +99,13 @@
       if (est.paso === 'diversidad') { await window.PantallaDiversidad.pintarDiversidad(est, alInicio); return; }
       if (est.paso === 'entrevista') { await window.PantallaEntrevista.pintarEntrevista(est, alInicio); return; }
       if (est.paso === 'fichas') { await window.PantallaFichas.pintarFichas(est, alInicio); return; }
+      if (est.paso === 'rubricas') { await window.RubTab.pintar(est); return; }
       if (est.paso === 'ajustes') { await window.PantallaAjustes.pintarAjustes(est, refrescar); return; }
       await window.PantallaInicio.pintarInicio(est, refrescar);
     };
     est.refrescar = refrescar;
     $('pasoInicio').onclick = async function () { await salir(); est.paso = 'inicio'; est.borrador = null; refrescar(); };
+    $('pasoRubricas').onclick = async function () { await salir(); est.paso = 'rubricas'; est.borrador = null; refrescar(); };
     $('pasoAjustes').onclick = async function () { await salir(); est.paso = 'ajustes'; est.borrador = null; refrescar(); };
     window.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden' && est.alSalir) est.alSalir(); });
     await refrescar();

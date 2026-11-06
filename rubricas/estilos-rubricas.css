@@ -1,0 +1,171 @@
+/* Rúbricas dentro de Mis actas (fila 110): todo cuelga de #rubricas, con los colores de Mis actas. */
+#rubricas .rub-barra { background: #fff; border: 1px solid var(--linea); border-radius: 8px; margin-bottom: 12px; overflow: hidden; }
+#rubricas .rub-fila { display: flex; align-items: center; gap: 12px; padding: 8px 16px; flex-wrap: wrap; }
+#rubricas .curso-sel { display: flex; align-items: center; gap: 6px; font-size: 14px; }
+#rubricas .seleccion { flex: 1; background: var(--azul-claro); border-radius: 6px; padding: 4px 10px; min-width: 160px; }
+#rubricas .tarjeta h2 { display: flex; justify-content: space-between; align-items: baseline; }
+#rubricas .dos { grid-template-columns: minmax(0, 1fr) 320px; }
+#rubricas .hueco { border-left: 0; padding-left: 0; flex-direction: row; gap: 0; }
+#rubricas .unir-fila .punto { border: 0; padding: 0; display: block; }
+#rubricas .aviso-paso { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+/* (también fuera de #rubricas: está en Ajustes) */
+.escala-niveles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+
+#rubricas .pasos-r { display: flex; gap: 4px; padding: 6px 16px; background: #fff; border-bottom: 1px solid var(--linea); }
+#rubricas .pasos-r button { flex: 1; font: inherit; border: 1px solid var(--linea); background: var(--fondo); color: var(--suave); border-radius: 6px; padding: 6px 4px; }
+#rubricas .pasos-r button.activo { background: var(--azul); color: #fff; border-color: var(--azul); }
+#rubricas .pasos-r button:disabled { opacity: .55; }
+#rubricas .rejilla { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 12px; }
+#rubricas .tarjeta.elegida { border-color: var(--azul); box-shadow: 0 0 0 2px var(--azul-claro); }
+#rubricas .cuenta { font-size: 13px; color: var(--suave); font-weight: normal; }
+#rubricas .areas { display: flex; flex-wrap: wrap; gap: 6px; }
+#rubricas .area { display: inline-flex; align-items: center; border: 1px solid var(--azul); border-radius: 14px; background: #fff; }
+#rubricas .area.elegida { background: var(--azul); color: #fff; }
+#rubricas .area button { font: inherit; border: 0; background: none; color: inherit; padding: 3px 8px; cursor: pointer; }
+#rubricas .area .quitar { padding-left: 2px; opacity: .7; }
+#rubricas .fila input { flex: 1; min-width: 0; }
+#rubricas .zona { border: 2px dashed var(--linea); border-radius: 6px; padding: 10px; text-align: center; color: var(--suave); }
+#rubricas .zona.encima { border-color: var(--azul); background: var(--azul-claro); }
+#rubricas .nueva { margin-top: 12px; display: flex; gap: 6px; max-width: 420px; }
+#rubricas .nueva input { flex: 1; }
+#rubricas .barra { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+#rubricas .competencia { background: #fff; border: 1px solid var(--linea); border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; }
+#rubricas .competencia h3 { margin: 0 0 6px; font-size: 14px; font-weight: 500; }
+#rubricas .criterios { display: flex; flex-direction: column; gap: 4px; }
+#rubricas .criterio { font: inherit; text-align: left; border: 1px solid var(--linea); background: var(--fondo); border-radius: 6px; padding: 5px 8px; cursor: pointer; color: var(--tinta); }
+#rubricas .criterio.marcado { background: var(--azul-claro); border-color: var(--azul); box-shadow: 0 0 0 2px var(--azul-claro); }
+#rubricas .lateral { position: sticky; top: 8px; }
+#rubricas .lateral .codigo { font-weight: 700; font-size: 18px; margin: 0; color: var(--azul); }
+#rubricas .lateral p { margin: 0; }
+@media (max-width: 800px) { #rubricas .dos { grid-template-columns: 1fr; } }
+/* Fila 3: actividad, rúbrica y calificar. Los cinco niveles van de rojo suave a verde oscuro y de más claro a más oscuro (se distinguen también sin color). */
+:root { --n0: #f6d5d0; --n1: #f3d9a8; --n2: #dfe3a0; --n3: #a9d3a4; --n4: #5fa882; }
+#rubricas .n0 { background: var(--n0); } #rubricas .n1 { background: var(--n1); } #rubricas .n2 { background: var(--n2); } #rubricas .n3 { background: var(--n3); } #rubricas .n4 { background: var(--n4); }
+#rubricas .titulo-paso { margin: 0 0 8px; font-size: 18px; }
+#rubricas .tabla-ancha { overflow-x: auto; margin-bottom: 8px; }
+#rubricas table.rubrica, #rubricas table.calificar { border-collapse: collapse; width: 100%; background: #fff; }
+#rubricas .rubrica th, #rubricas .rubrica td, #rubricas .calificar th, #rubricas .calificar td { border: 1px solid var(--linea); padding: 4px; vertical-align: top; }
+#rubricas .rubrica th.nivel { text-align: center; font-weight: 600; } #rubricas .rubrica th.nivel span { display: block; }
+#rubricas .rubrica th.nivel input.valor { width: 64px; margin-top: 2px; text-align: center; }
+#rubricas .rubrica textarea { width: 100%; min-height: 84px; resize: vertical; border: 1px solid transparent; background: transparent; }
+#rubricas .rubrica td.nivel textarea:focus, #rubricas .rubrica td.quemira textarea:focus { border-color: var(--azul); background: #fff; }
+#rubricas .rubrica .quemira { min-width: 150px; } #rubricas .rubrica .peso { width: 70px; } #rubricas .rubrica input.pesoFila { width: 56px; }
+#rubricas .acciones { white-space: nowrap; width: 1%; }
+#rubricas button.mini { font: inherit; min-width: 32px; min-height: 32px; border: 1px solid var(--linea); background: #fff; border-radius: 6px; cursor: pointer; }
+#rubricas .calificar th.alumno { text-align: left; white-space: nowrap; font-weight: 500; background: #fff; }
+#rubricas .calificar th.colfila { min-width: 230px; font-weight: 500; text-align: left; }
+#rubricas .niveles { display: flex; gap: 2px; }
+#rubricas .nivelBtn { display: inline-flex; align-items: center; justify-content: center; flex: 1; min-width: 44px; min-height: 44px; font: inherit; font-size: 12px; border: 2px solid transparent; border-radius: 6px; cursor: pointer; color: var(--tinta); }
+#rubricas .nivelBtn.puesto { border-color: var(--tinta); font-weight: 800; box-shadow: inset 0 0 0 2px #fff; }
+#rubricas .nivelBtn.puesto::before { content: "✓ "; }
+#rubricas .calificar td.nota { text-align: center; font-weight: 700; font-size: 17px; min-width: 60px; }
+#rubricas .casilla { display: flex; gap: 6px; align-items: baseline; padding: 3px 0; }
+#rubricas .criterios-lista { display: flex; flex-direction: column; gap: 2px; max-height: 260px; overflow-y: auto; border: 1px solid var(--linea); border-radius: 6px; padding: 4px 8px; }
+#rubricas .pasos-r-sesion { display: flex; flex-direction: column; gap: 6px; }
+#rubricas .lista { display: flex; flex-direction: column; gap: 4px; }
+#rubricas a.boton { text-decoration: none; display: inline-block; font: inherit; border: 1px solid var(--azul); background: #fff; color: var(--azul); border-radius: 6px; padding: 5px 12px; }
+/* Fila 4: Claude. */
+#rubricas .caja-ia { border: 1px solid var(--azul); background: var(--azul-claro); border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+#rubricas .caja-ia h3 { margin: 0; font-size: 15px; }
+#rubricas .caja-ia textarea { min-height: 64px; }
+#rubricas .etiqueta-ia { display: inline-block; align-self: flex-start; margin: 0; padding: 2px 8px; border-radius: 12px; background: var(--ambar); border: 1px solid #e0b34a; font-size: 13px; font-weight: 600; }
+#rubricas .propuesta-ia { display: flex; flex-direction: column; gap: 6px; }
+/* Fila 5: Situaciones de Aprendizaje. */
+#rubricas .criterio-sit { display: flex; gap: 6px; align-items: center; background: var(--fondo); border: 1px solid var(--linea); border-radius: 6px; padding: 4px 8px; margin-bottom: 4px; }
+#rubricas .criterio-sit button { margin-left: auto; min-height: 44px; min-width: 44px; }
+#rubricas .actividad-sit { display: grid; grid-template-columns: 24px minmax(0, 2fr) minmax(0, 1.2fr) 72px minmax(0, 1fr) auto auto 44px; gap: 6px; align-items: end; margin-bottom: 6px; }
+#rubricas .actividad-sit button { min-height: 44px; }
+#rubricas .estado-rubrica { font-size: 12px; border-radius: 12px; padding: 2px 8px; border: 1px solid var(--linea); white-space: nowrap; align-self: center; }
+#rubricas .estado-rubrica.lista { background: var(--azul-claro); border-color: var(--azul); }
+#rubricas .estado-hoja { font-size: 12px; border-radius: 12px; padding: 2px 8px; border: 1px solid var(--linea); white-space: nowrap; align-self: center; }
+#rubricas .estado-hoja.si { background: var(--azul-claro); border-color: var(--azul); }
+#rubricas .estado-hoja.no { background: var(--ambar); border-color: #e0b34a; }
+#rubricas .estado-rubrica.pendiente, #rubricas .estado-rubrica.sin-crear { background: var(--ambar); border-color: #e0b34a; }
+#rubricas .apartado-seneca { margin: 8px 0; display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
+#rubricas .apartado-seneca h4 { margin: 0; }
+#rubricas .apartado-seneca textarea { min-height: 60px; }
+@media (max-width: 800px) { #rubricas .actividad-sit { grid-template-columns: 1fr 1fr; } }
+#rubricas .curso-sel { display: flex; align-items: center; gap: 6px; font-size: 14px; }
+#rubricas .curso-sel select { font: inherit; border-radius: 6px; border: 0; padding: 3px 6px; }
+#rubricas .aviso-curso { background: #ffe9b0; border-bottom: 2px solid #c98a00; padding: 8px 16px; font-weight: 600; display: flex; align-items: center; gap: 12px; }
+#rubricas .aviso-curso[hidden] { display: none; }
+#rubricas .marcar-areas { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 14px; }
+#rubricas .marcar-areas label { display: inline-flex; align-items: center; gap: 4px; }
+#rubricas .curso-nuevo { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+/* Fila 23: varios criterios por actividad. */
+#rubricas .criterio-act { display: flex; gap: 6px; align-items: center; padding: 3px 0; }
+#rubricas .criterio-act button { margin-left: auto; }
+#rubricas .rubrica tr.grupo-criterio td, #rubricas .rubrica tr.grupo-vacio td { background: var(--azul-claro); padding: 6px 8px; }
+#rubricas .rubrica tr.grupo-criterio button { margin-left: 12px; }
+#rubricas .rubrica select.selCriterioFila { width: 100%; margin-bottom: 2px; font: inherit; }
+#rubricas .calificar th.critgrupo { background: var(--azul-claro); font-weight: 600; text-align: left; }
+#rubricas .calificar th.nota { min-width: 60px; text-align: center; }
+#rubricas table.listado-seneca { border-collapse: collapse; background: #fff; }
+#rubricas .listado-seneca th, #rubricas .listado-seneca td { border: 1px solid var(--linea); padding: 4px 8px; }
+#rubricas .listado-seneca th span { display: block; margin-bottom: 2px; }
+#rubricas .listado-seneca td.nota { text-align: center; }
+/* Fila 25: hoja del alumno. El papel mide lo que mide un folio A4 con márgenes de 1,5 cm (180 mm de ancho) y se ve igual al imprimir. */
+#rubricas .barra-hoja { align-items: center; }
+#rubricas .campo-fila { display: inline-flex; align-items: center; gap: 4px; }
+#rubricas .fila-caras { font-weight: 600; margin: 4px 0; }
+#rubricas .ed-ejercicio .campo { margin-top: 4px; }
+#rubricas .ed-ejercicio textarea { min-height: 54px; }
+#rubricas .ed-ejercicio .ed-numero { width: 90px; }
+#rubricas .fila-figuras { display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0; }
+#rubricas .papel-wrap { overflow-x: auto; margin-top: 12px; }
+#rubricas .hoja-papel { width: 180mm; min-height: 100px; background: #fff; color: #000; border: 1px solid var(--linea); box-shadow: 0 1px 6px rgba(0,0,0,.15); font-size: 14pt; line-height: 1.35; margin: 0 auto; }
+#rubricas .hoja-papel.hoja-adaptada { font-size: 18pt; line-height: 1.5; }
+#rubricas .hoja-adaptada .hoja-cabecera h2 { font-size: 22pt; }
+#rubricas .hoja-adaptada .ejercicio { padding: 18px 0 14px; }
+#rubricas .hoja-adaptada .linea { height: 2cm; }
+#rubricas .hoja-adaptada .recuadro { min-height: 3cm; }
+#rubricas .hoja-adaptada .recuadro.grande { min-height: 7cm; }
+#rubricas .hoja-adaptada .unir-fila { min-height: 2.4em; }
+#rubricas .pestanas-hoja { display: flex; gap: 6px; margin: 8px 0; }
+#rubricas .pestanas-hoja .boton[aria-selected="true"] { background: var(--azul-claro); border-color: var(--azul); font-weight: 700; }
+#rubricas .sol-wrap { display: none; }
+#rubricas .ver-sol .sol-wrap { display: block; }
+#rubricas .hoja-papel p { margin: 0; }
+#rubricas .hoja-cabecera { padding: 0 0 10px; border-bottom: 2px solid #000; text-align: center; }
+#rubricas .hoja-cabecera .colegio { font-weight: 700; }
+#rubricas .hoja-cabecera h2 { margin: 4px 0 8px; font-size: 18pt; }
+#rubricas .nombre-fecha { display: flex; justify-content: space-between; gap: 16px; text-align: left; margin-top: 8px; }
+#rubricas .rellenar { display: inline-block; border-bottom: 1px solid #000; width: 7cm; height: 1em; vertical-align: baseline; }
+#rubricas .rellenar.corto { width: 3.5cm; }
+#rubricas .ejercicio { padding: 12px 0 8px; break-inside: avoid; }
+#rubricas .ejercicio .enunciado { margin-bottom: 6px; }
+#rubricas .opcion, #rubricas .ordenar, #rubricas .vf { display: flex; align-items: center; gap: 8px; padding: 3px 0; }
+#rubricas .opcion .marca, #rubricas .ordenar .marca { width: 0.9em; height: 0.9em; border: 2px solid #000; flex: none; }
+#rubricas .ordenar .marca { width: 1.4em; height: 1.4em; }
+#rubricas .vf-cajas { display: inline-flex; gap: 4px; flex: none; }
+#rubricas .caja { display: inline-block; border: 2px solid #000; width: 1.5em; text-align: center; font-weight: 700; }
+#rubricas .hueco { display: inline-block; border-bottom: 1px solid #000; width: 3cm; }
+#rubricas .texto-huecos { line-height: 2; }
+#rubricas .unir-fila { display: grid; grid-template-columns: 1fr 10px 4cm 10px 1fr; align-items: center; min-height: 1.9em; }
+#rubricas .unir-fila .punto { width: 8px; height: 8px; border-radius: 50%; background: #000; }
+#rubricas .rodear { display: flex; flex-wrap: wrap; gap: 8px 18px; padding: 4px 0; }
+#rubricas .rodear .elemento { padding: 2px 8px; }
+#rubricas .linea { border-bottom: 1px solid #000; height: 1.5cm; }
+#rubricas .recuadro { border: 1.5px solid #000; min-height: 2.2cm; padding: 2px 6px; margin-bottom: 6px; }
+#rubricas .recuadro.grande { min-height: 6cm; }
+#rubricas .tabla-vacia { border-collapse: collapse; width: 100%; margin-bottom: 8px; }
+#rubricas .tabla-vacia td { border: 1.5px solid #000; height: 1.2cm; }
+#rubricas .dibujo-musica, #rubricas .dibujo-recta { display: block; max-width: 100%; }
+#rubricas .hoja-soluciones { padding: 0; }
+#rubricas .hoja-soluciones .solo-maestra { font-weight: 700; border: 2px solid #000; text-align: center; padding: 4px; }
+#rubricas .sol-ejercicio { padding: 8px 0; border-bottom: 1px dashed #000; break-inside: avoid; }
+#rubricas .sol-respuesta { white-space: pre-line; font-weight: 600; }
+#rubricas .sol-fila { font-size: 11pt; }
+/* Hoja del alumno: al imprimir solo sale el papel. */
+@media print {
+  @page { size: A4 portrait; margin: 1.5cm; }
+  body.imprime-hoja, body.imprime-soluciones { background: #fff; display: block; min-height: 0; }
+  body.imprime-hoja .cabecera, body.imprime-hoja .pie, body.imprime-hoja .rub-barra, body.imprime-hoja .aviso-curso, body.imprime-hoja .aviso-apartados, body.imprime-hoja .saldo-claude,
+  body.imprime-soluciones .cabecera, body.imprime-soluciones .pie, body.imprime-soluciones .rub-barra, body.imprime-soluciones .aviso-curso, body.imprime-soluciones .aviso-apartados, body.imprime-soluciones .saldo-claude { display: none !important; }
+  body.imprime-hoja main, body.imprime-soluciones main { padding: 0; }
+  body.imprime-hoja #panelHoja > :not(#hojaPapelWrap), body.imprime-soluciones #panelHoja > :not(#hojaSolWrap) { display: none; }
+  body.imprime-hoja #hojaSolWrap, body.imprime-soluciones #hojaPapelWrap { display: none; }
+  body.imprime-soluciones #hojaSolWrap { display: block; }
+  #rubricas .papel-wrap { overflow: visible; margin: 0; }
+  #rubricas .hoja-papel { border: 0; box-shadow: none; margin: 0; width: auto; }
+}

@@ -37,7 +37,7 @@
     var r = [!!est, false, false, false, false, false];
     if (!est) return sinClave(r);
     try { var c = await g.Colegio.leer(est.raiz); r[1] = !!(c && c.nombre); } catch (e) { r[1] = false; }
-    try { var a = est.alumnado && est.alumnado.estado ? est.alumnado : await g.Rubricas.cargar(est); r[2] = a.estado === 'ok'; } catch (e) { r[2] = false; }
+    try { var a = await g.Rubricas.cargar(est); r[2] = a.estado === 'ok'; } catch (e) { r[2] = false; }
     try { r[3] = !g.FichaCurso.problema(g.FichaCurso.datosIniciales(await g.Datos.leerFicha(est.raiz), hoyIso())); } catch (e) { r[3] = false; }
     try { r[4] = !!(await g.Datos.leerClave(est.raiz)); } catch (e) { r[4] = false; }
     try { r[5] = (await g.Datos.listarBorradores(est.raiz)).length > 0 || (await g.Envios.listar(est.raiz)).length > 0; } catch (e) { r[5] = false; }

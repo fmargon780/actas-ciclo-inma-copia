@@ -37,14 +37,7 @@
     function acciones(id) {
       var ir = function (txt, fn, ident) { return h('button', { type: 'button', class: 'boton chico principal', id: ident, texto: txt, onclick: fn }); };
       if (id === 'carpeta') return ctx.est ? [] : [ir('Ir', function () { cerrarVentana(); ctx.elegirCarpeta(); }, 'guiaIr-carpeta')];
-      if (id === 'alumnado') return [
-        h('a', { class: 'boton chico', href: 'https://rubricas-inma.vercel.app', target: '_blank', rel: 'noopener', texto: 'Abrir Rúbricas' }),
-        ir('Abrir la carpeta RÚBRICAS', conCarpeta(ctx, async function (est) {
-          /* la ventana ya se cerró: se vuelve a abrir con el resultado */
-          var mal = await g.Rubricas.abrir(est);
-          await abrirGuia(ctx);
-          if (mal) { var e = document.getElementById('guiaPrimerosPasos'); if (e) g.Dom.decir(e.querySelector('.aviso.error'), mal); }
-        }), 'guiaIr-alumnado')];
+      if (id === 'alumnado') return [ir('Ir a Rúbricas', conCarpeta(ctx, function (est) { est.abrirRubricas(); }), 'guiaIr-alumnado')];
       if (id === 'colegio') return [ir('Ir', conCarpeta(ctx, async function (est) { await est.irAjustes(); bajarA('#tarjetaColegio'); }), 'guiaIr-colegio')];
       if (id === 'datos-curso') return [ir('Ir', conCarpeta(ctx, async function (est) { await est.irAjustes(); bajarA('#tarjetaDatosCurso'); }), 'guiaIr-datos-curso')];
       if (id === 'clave') return [ir('Ir', conCarpeta(ctx, async function (est) { await est.irAjustes(); bajarA('#campoClave'); }), 'guiaIr-clave')];

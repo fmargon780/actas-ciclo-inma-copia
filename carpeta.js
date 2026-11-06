@@ -121,6 +121,12 @@
         return l.sort();
       }
     };
+    /* Esta misma carpeta vista desde una subcarpeta (se crea si no existe): Rúbricas vive en ACTAS/rubricas. */
+    a.sub = async function (ruta) {
+      var s = adaptador(await subcarpeta(raiz, ruta, true), ahora);
+      s.alApartar = function (lista) { if (a.alApartar) a.alApartar(lista); };
+      return s;
+    };
     /* Aparta el fichero dañado: copia su texto a «.roto-» y quita el original. Si no se puede (carpeta de solo lectura), solo se avisa. */
     async function apartar(d, n, texto) {
       var nuevo = n.replace(/\.json$/, '') + '.roto-' + marcaFecha(ahora || new Date()) + '.json', movido = true;

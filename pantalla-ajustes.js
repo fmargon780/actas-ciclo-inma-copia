@@ -1,4 +1,4 @@
-/* Ajustes: los datos del colegio (colegio.json), los datos del curso (ficha.json), las redacciones de Claude (en la app de internet, cuántas quedan este mes; en la copia sin internet, la clave de clave.json o copiada de la carpeta RÚBRICAS) y Mi tutoría. */
+/* Ajustes: los datos del colegio (colegio.json), los datos del curso (ficha.json), la escala de las rúbricas (ACTAS/rubricas/config.json), las redacciones de Claude (en la app de internet, cuántas quedan este mes; en la copia sin internet, la clave de clave.json o copiada de la carpeta RÚBRICAS) y Mi tutoría. */
 (function (g) {
   'use strict';
   var h = g.Dom.h;
@@ -43,7 +43,7 @@
     } });
     var tutoria = await g.PantallaTutoria.tarjeta(est, function () { refrescar(); });
     var colegio = await g.PantallaColegio.tarjeta(est, function () { est.colegioGuardado = true; est.destinoAjustes = 'colegio'; return refrescar(); });
-    var datosCurso = await g.PantallaDatosCurso.tarjeta(est);
+    var datosCurso = await g.PantallaDatosCurso.tarjeta(est), escala = await g.PantallaEscala.tarjeta(est).catch(function () { return null; });
     var estilo = await g.PantallaEstilo.tarjeta(est);
     var traer = h('section', { class: 'tarjeta ancha' }, [
       h('h2', { texto: 'Actas del documento antiguo ' }, [g.Ayuda.aviso('traer-actas')]),
@@ -56,7 +56,7 @@
       h('p', { class: 'suave', texto: 'Se guarda en tu carpeta ACTAS. La usará Claude para redactar las actas.' }),
       campo, h('div', { class: 'fila' }, [guardar, deRubricas, g.Ayuda.aviso('clave-rubricas')]), dicho, aviso
     ]);
-    g.Dom.montar([cuenta, invitados, colegio, datosCurso, claude, estilo, traer, tutoria].filter(Boolean));
+    g.Dom.montar([cuenta, invitados, colegio, datosCurso, escala, claude, estilo, traer, tutoria].filter(Boolean));
     /* «Ir a Ajustes» desde un aviso de falta de datos del colegio: baja hasta su tarjeta */
     if (est.destinoAjustes) { var d = est.destinoAjustes; est.destinoAjustes = null; var t = document.getElementById(d === 'colegio' ? 'tarjetaColegio' : d); if (t && t.scrollIntoView) t.scrollIntoView({ block: 'start' }); }
   }

@@ -1,19 +1,30 @@
-/* La lista de alumnado de «Rúbricas de Inma»: solo se LEE la carpeta RÚBRICAS, nunca se escribe en ella.
-   Se abre una sola vez (Carpeta la recuerda). est.alumnado guarda el último resultado:
-   { estado: 'ok' | 'sinCarpeta' | 'sinPermiso' | 'vacia' | 'error', lista: { todos, delCiclo, grupos } | null, handle, texto }. */
+/* La lista de alumnado de Rúbricas. Cuando la docente ya ha pasado sus rúbricas a Mis actas (marca ACTAS/rubricas-pasadas.json) se lee
+   la subcarpeta ACTAS/rubricas; mientras no, solo se LEE la carpeta RÚBRICAS de siempre (nunca se escribe en ella; Carpeta la recuerda).
+   est.alumnado guarda el último resultado:
+   { estado: 'ok' | 'sinCarpeta' | 'sinPermiso' | 'vacia' | 'error', lista: { todos, delCiclo, grupos } | null, handle, raiz, texto }. */
 (function (g) {
   'use strict';
   var FRASE_NO_ES = 'Esta no es tu carpeta de Rúbricas: está en Mi unidad › RÚBRICAS.';
 
   async function cargar(est) {
-    var r = { estado: 'sinCarpeta', lista: null, handle: null, texto: '' };
+    var r = { estado: 'sinCarpeta', lista: null, handle: null, raiz: null, texto: '' };
     try {
-      var h = await g.Carpeta.rubricasRecordada();
+      /* Con la marca, los datos de Rúbricas están en ACTAS/rubricas. */
+      var recordada = g.RubPasar && est.raiz && await g.Carpeta.rubricasRecordada();
+      if (g.RubPasar && est.raiz && await g.RubPasar.leerMarca(est) && !(recordada && await g.RubPasar.nuevaSinTrabajo(est))) {
+        r.raiz = await est.raiz.sub('rubricas');
+        r.lista = await g.Alumnado.leerLista(r.raiz, est.ficha && est.ficha.ciclo);
+        r.estado = r.lista.delCiclo.length ? 'ok' : 'vacia';
+        est.alumnado = r;
+        return r;
+      }
+      var h = recordada || await g.Carpeta.rubricasRecordada();
       if (!h) { est.alumnado = r; return r; }
       r.handle = h;
       if ((await g.Carpeta.permisoLectura(h)) !== 'granted') { r.estado = 'sinPermiso'; est.alumnado = r; return r; }
       var raiz = g.Carpeta.adaptador(h);
       if (!(await raiz.leerJSON('rubricas.json'))) { r.texto = FRASE_NO_ES; est.alumnado = r; return r; }
+      r.raiz = raiz;
       r.lista = await g.Alumnado.leerLista(raiz, est.ficha && est.ficha.ciclo);
       r.estado = r.lista.delCiclo.length ? 'ok' : 'vacia';
     } catch (e) { r.estado = 'error'; r.texto = 'No he podido leer la lista de alumnado: ' + ((e && e.message) || e); }

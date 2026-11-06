@@ -2,7 +2,7 @@
   "guia": [
     { "id": "carpeta", "titulo": "Elige tu carpeta ACTAS", "texto": "Elige la carpeta ACTAS de tu Drive. Ahí se guardan tus borradores y tus actas. Esa carpeta la crea el documento de actas de Google Docs la primera vez que lo usas. Si no tienes ese documento, pide que te lo instalen." },
     { "id": "colegio", "titulo": "Datos del colegio", "texto": "Escribe el nombre de tu colegio y, si quieres, su dirección, teléfono, correo y logo. Saldrán en la cabecera y en el pie de todos tus PDF y Word. Se guardan en tu carpeta ACTAS." },
-    { "id": "alumnado", "titulo": "Tu alumnado", "texto": "Tu alumnado se mete en la app Rúbricas, en «Mis grupos», con el listado de cada grupo bajado de Séneca. Después abre aquí la carpeta RÚBRICAS para que Mis actas lo lea." },
+    { "id": "alumnado", "titulo": "Tu alumnado, en Rúbricas", "texto": "Abre la pestaña Rúbricas. Si ya usabas la app de Rúbricas, pulsa «Pasar mis rúbricas»: copia a Mis actas tus grupos, tu alumnado y tus notas, y tu carpeta RÚBRICAS no se toca. Si empiezas de cero, crea tus grupos y sube el listado de cada uno, que bajas de Séneca. De ahí sale el alumnado de tus actas." },
     { "id": "datos-curso", "titulo": "Datos del curso", "texto": "Escribe el curso, el ciclo, la coordinadora y el profesorado del ciclo. Los asistentes de cada acta saldrán de aquí." },
     { "id": "clave", "soloCopia": true, "titulo": "Clave de Claude", "texto": "Pega tu clave de Claude. Si alguien te ha dado una, pégala aquí. Si no, créala en https://console.anthropic.com/settings/keys (necesitas una cuenta de Anthropic con saldo). Empieza por «sk-ant-». Solo se ve una vez al crearla: cópiala entera. Si ya la tienes en Rúbricas, pulsa «Usar la de Rúbricas»." },
     { "id": "acta", "titulo": "Tu primera acta", "texto": "Empieza tu primera acta, o prepara la convocatoria de la próxima reunión." }
@@ -10,8 +10,9 @@
   "guiaTodoListo": "Todo listo. Puedes volver a esta guía desde el botón ?",
   "pantallas": [
     { "id": "primeros-pasos", "titulo": "Primeros pasos", "texto": [
-      "Para usar la app en internet entras con tu cuenta de Google. La app está en prueba con un grupo cerrado de docentes: solo pasan las cuentas invitadas. Si tu cuenta del colegio no te deja entrar, prueba con tu cuenta personal de Google. La entrada se recuerda 30 días en ese navegador.", "Mis actas te ayuda a escribir las actas de tu ciclo y a llevar las entrevistas con las familias. Antes de empezar hay seis cosas que preparar. Se hacen una sola vez.",
-      "1. Elige tu carpeta ACTAS. 2. Rellena los datos de tu colegio. 3. Abre la carpeta RÚBRICAS, de donde sale tu alumnado. 4. Rellena los datos del curso. 5. Empieza tu primera acta. En la copia sin internet, antes de empezar pega tu clave de Claude en Ajustes.",
+      "Para usar la app en internet entras con tu cuenta de Google. La app está en prueba con un grupo cerrado de docentes: solo pasan las cuentas invitadas. Si tu cuenta del colegio no te deja entrar, prueba con tu cuenta personal de Google. La entrada se recuerda 30 días en ese navegador.",
+      "Mis actas te ayuda a escribir las actas de tu ciclo y a llevar las entrevistas con las familias. Antes de empezar hay seis cosas que preparar. Se hacen una sola vez.",
+      "1. Elige tu carpeta ACTAS. 2. Rellena los datos de tu colegio. 3. Pon tu alumnado en la pestaña Rúbricas, de donde sale para tus actas. 4. Rellena los datos del curso. 5. Empieza tu primera acta. En la copia sin internet, antes de empezar pega tu clave de Claude en Ajustes.",
       "La guía te marca ✓ lo que ya está hecho. Puedes abrirla otra vez con el botón «Ver la guía de primeros pasos» de esta página."
     ] },
     { "id": "carpeta", "titulo": "Elegir la carpeta ACTAS", "texto": [
@@ -81,8 +82,14 @@
       "A la derecha ves cómo queda la hoja, con el membrete de los datos del colegio. La autorización es una sola hoja igual para todas las familias: al pie lleva una línea para recortar y un talón con huecos para el nombre de quien firma y del alumno. «Crear PDF y Word» los guarda en la carpeta «Familias» del curso, y salen también en «Mis papeles». Si falta algo, te dice qué. Para sustituirlos, usa «Volver a crear PDF y Word».",
       "En una autorización ya creada puedes marcar quién ha entregado la autorización, con «N de M» y «Ver solo las que faltan». Pasada la fecha límite, las que faltan salen en ámbar. Si borras una comunicación, sus ficheros de la carpeta no se tocan."
     ] },
-    {"id": "evaluacion", "titulo": "Acta de evaluación", "texto": ["Sirve para preparar lo que hay que escribir en Séneca tras cada sesión de evaluación (inicial, primera, segunda o final). Eliges la clase, la sesión y la fecha, y pulsas «Nueva acta de evaluación». Si ya hay una de esa clase y sesión, se abre esa.", "Apunta notas cortas por área y por alumno. El «% con dificultades» de cada área sale solo de las notas de Rúbricas (alumnos de la clase con media por debajo de Suficiente, desde el inicio del periodo hasta la fecha de la sesión); debajo ves de dónde sale. Si lo cambias, manda tu número y al lado queda el de Rúbricas con «Usar el de Rúbricas». Si el área no tiene notas en Rúbricas, la casilla queda vacía para que la escribas. Solo saldrán en el acta los alumnos con algo apuntado. También hay cajas para la orientación, las observaciones y las conclusiones, y los datos del grupo (alumnas y alumnos). En la sesión inicial hay además una caja para los informes del curso anterior. Todo se guarda solo y se puede dictar.", "«Redactar con Claude» escribe a la vez las cinco cajas de Séneca y el anexo. En «Para Séneca» cada caja tiene su botón «Copiar» (texto plano, listo para pegar). En «Anexo» están las partes I a IV. Puedes cambiar cualquier texto a mano.", "Con «Enviar resumen al ciclo» copias el resumen de tu clase, con una primera línea que lo identifica, para pegarlo en un correo o mensaje a quien escribe el acta del equipo de ciclo.", "«Crear anexo» guarda el anexo en PDF y en Word, con el membrete oficial, en tu carpeta ACTAS, dentro de «documentos», del curso y de «Evaluación». «Abrir PDF» y «Abrir Word» los abren.",
-      "Junto a cada caja de Séneca y a cada parte del anexo hay botones para cambiar solo ese texto: «Más escueto», «Desarrolla más», «Más técnico» y «Más sencillo», y «Otro cambio…» para pedir lo que quieras. Claude parte del texto tal como está, con tus correcciones, y las cajas de Séneca no se pasan de su límite. «Deshacer» devuelve la versión anterior, también después de «Redactar de nuevo»."]},
+    { "id": "evaluacion", "titulo": "Acta de evaluación", "texto": [
+      "Sirve para preparar lo que hay que escribir en Séneca tras cada sesión de evaluación (inicial, primera, segunda o final). Eliges la clase, la sesión y la fecha, y pulsas «Nueva acta de evaluación». Si ya hay una de esa clase y sesión, se abre esa.",
+      "Apunta notas cortas por área y por alumno. El «% con dificultades» de cada área sale solo de las notas de Rúbricas (alumnos de la clase con media por debajo de Suficiente, desde el inicio del periodo hasta la fecha de la sesión); debajo ves de dónde sale. Si lo cambias, manda tu número y al lado queda el de Rúbricas con «Usar el de Rúbricas». Si el área no tiene notas en Rúbricas, la casilla queda vacía para que la escribas. Solo saldrán en el acta los alumnos con algo apuntado. También hay cajas para la orientación, las observaciones y las conclusiones, y los datos del grupo (alumnas y alumnos). En la sesión inicial hay además una caja para los informes del curso anterior. Todo se guarda solo y se puede dictar.",
+      "«Redactar con Claude» escribe a la vez las cinco cajas de Séneca y el anexo. En «Para Séneca» cada caja tiene su botón «Copiar» (texto plano, listo para pegar). En «Anexo» están las partes I a IV. Puedes cambiar cualquier texto a mano.",
+      "Con «Enviar resumen al ciclo» copias el resumen de tu clase, con una primera línea que lo identifica, para pegarlo en un correo o mensaje a quien escribe el acta del equipo de ciclo.",
+      "«Crear anexo» guarda el anexo en PDF y en Word, con el membrete oficial, en tu carpeta ACTAS, dentro de «documentos», del curso y de «Evaluación». «Abrir PDF» y «Abrir Word» los abren.",
+      "Junto a cada caja de Séneca y a cada parte del anexo hay botones para cambiar solo ese texto: «Más escueto», «Desarrolla más», «Más técnico» y «Más sencillo», y «Otro cambio…» para pedir lo que quieras. Claude parte del texto tal como está, con tus correcciones, y las cajas de Séneca no se pasan de su límite. «Deshacer» devuelve la versión anterior, también después de «Redactar de nuevo»."
+    ] },
     { "id": "diversidad", "titulo": "Atención a la diversidad", "texto": [
       "Aquí están las herramientas para el alumnado que necesita apoyo: el «Programa de refuerzo (PRA)» y la «Petición a orientación».",
       "Pulsa «Programa de refuerzo (PRA)» y verás los PRA de este curso. Con «Nuevo PRA» eliges al alumno entre todo el alumnado de Rúbricas, de cualquier clase (primero salen los de tu tutoría). Si ese alumno ya tiene un PRA este curso, se abre ese.",
@@ -108,10 +115,65 @@
       "Si cambias las notas o los datos del curso después de redactar, sale un aviso: las tablas del papel ya van al día y el texto se pone al día al pulsar «Rehacer con Claude». Si habías cambiado textos a mano, antes te pregunta si quieres «Sustituir» o «Dejar lo que hay». Cada texto se puede cambiar a mano, tiene «Copiar» y los botones para cambiar solo ese texto, con «Deshacer». «Crear PDF y Word» guarda la memoria, con membrete, cifras, apartados y línea de firma, como «<fecha> Memoria final de tutoría · <grupo>» en la carpeta «Evaluación» del curso, y sale en «Mis papeles». Si después cambia un texto, la fecha o un dato, vuelve a «Redactada» y al crearla de nuevo sustituye a la anterior.",
       "Antes de empezar, la app necesita saber cuál es tu grupo de tutoría (se cambia en Ajustes) y que hayas abierto la carpeta RÚBRICAS para ver a tu alumnado."
     ] },
+    { "id": "rubricas", "titulo": "Rúbricas", "texto": [
+      "La pestaña «Rúbricas» sirve para preparar situaciones de aprendizaje, crear la rúbrica de cada actividad y calificar en clase con un toque por fila y por alumno. Está dentro de Mis actas: no hay que abrir otra aplicación.",
+      "La primera vez que la abres, si ya usabas la app de Rúbricas, ves «Pasar tus rúbricas aquí». Pulsa «Pasar mis rúbricas»: se copian a tu carpeta ACTAS tus grupos, alumnado, situaciones, actividades y notas de todos los cursos. Solo se hace una vez, y tu carpeta RÚBRICAS no se toca: queda como copia de seguridad. Al terminar, un aviso te dice lo que ha llegado. Si algo falla, se quita lo copiado a medias y puedes pulsar «Volver a intentar».",
+      "Si empiezas de cero, la pestaña se abre directamente con la lista de grupos vacía. Si luego descubres que sí tenías una carpeta RÚBRICAS, en «Mis grupos» (mientras no hayas guardado trabajo) tienes el botón «Ya tenía una carpeta RÚBRICAS».",
+      "Arriba eliges el curso y ves el grupo y el área elegidos. Los cinco pasos van de «1 · Situación» a «5 · Calificar»; «Mis grupos» es la lista de tus grupos. Al volver de Inicio o de Ajustes, sigues donde estabas.",
+      "Séneca sigue siendo el registro oficial: aquí se prepara el listado y tú lo pasas a Séneca."
+    ] },
+    { "id": "rub-grupos", "titulo": "Rúbricas · Mis grupos", "texto": [
+      "Cada tarjeta es un grupo. Marca las áreas que das en él y cambia su nombre si hace falta.",
+      "Para cargar el alumnado, suelta en el grupo el listado que bajas de Séneca (CSV o XLS) o pulsa en la zona para elegirlo. Si no se reconoce, puedes escribir los nombres a mano, uno por línea.",
+      "Solo se guardan el nombre y el grupo de cada alumno. Los nombres nunca se envían a Claude.",
+      "Abajo puedes añadir un grupo nuevo y empezar el curso nuevo: el curso actual queda guardado solo para consultar."
+    ] },
+    { "id": "rub-situacion", "titulo": "Rúbricas · Situación", "texto": [
+      "Una situación de aprendizaje es un reto de la vida real con varias actividades, varios criterios y un producto final.",
+      "Pulsa «Nueva situación», cuenta el reto en una frase y pide a Claude una propuesta, o rellénala tú. Revisa siempre lo que propone.",
+      "Cada actividad de la situación se abre en el paso «Actividad».",
+      "Con «Preparar para Séneca» sale el texto por apartados, para copiarlo uno a uno en Séneca."
+    ] },
+    { "id": "rub-criterio", "titulo": "Rúbricas · Criterio", "texto": [
+      "Aquí ves los criterios de evaluación oficiales del área y el curso que has elegido, copiados de la norma.",
+      "Pulsa un criterio para ver las actividades y rúbricas que ya lo evalúan y si se queda sin evaluar.",
+      "«Crear actividad para este criterio» te lleva al paso siguiente con el criterio ya marcado."
+    ] },
+    { "id": "rub-actividad", "titulo": "Rúbricas · Actividad", "texto": [
+      "Una actividad tiene título, grupo, sesiones, materiales y producto final. Puede evaluar más de un criterio.",
+      "En «Pedir a Claude» cuentas tu idea en una o dos frases y Claude propone la actividad y su rúbrica. Es solo una propuesta: puedes editarla.",
+      "«Guardar y preparar la rúbrica» pasa al paso de la rúbrica.",
+      "«Hoja del alumno» prepara la ficha o prueba escrita para imprimir.",
+      "«Traer del curso pasado» copia una actividad de un curso anterior, sin notas."
+    ] },
+    { "id": "rub-rubrica", "titulo": "Rúbricas · Rúbrica", "texto": [
+      "La rúbrica tiene una fila por cada cosa que se mira, con cinco niveles: Insuficiente, Suficiente, Bien, Notable y Sobresaliente.",
+      "Cada fila tiene un peso. Puedes añadir filas, cambiar los textos y guardar la rúbrica en «Mis rúbricas» para usarla en otras actividades.",
+      "Cuando esté lista, pulsa «Usar para calificar»."
+    ] },
+    { "id": "rub-calificar", "titulo": "Rúbricas · Calificar", "texto": [
+      "Verás una tabla con los alumnos del grupo y las filas de la rúbrica. Pulsa un nivel por cada alumno y fila.",
+      "La nota es la media de los niveles, según la escala de Ajustes › Escala de las rúbricas. A la derecha, «Cómo va» muestra cuántos llevas calificados.",
+      "«Preparar listado para Séneca» saca las notas de un criterio en orden alfabético, para copiarlas o descargarlas. Séneca no admite que una aplicación le meta datos: las notas se pasan a mano."
+    ] },
+    { "id": "rub-hoja", "titulo": "Rúbricas · Hoja del alumno", "texto": [
+      "Claude propone una ficha o prueba escrita a partir de la actividad y su rúbrica. Hasta que la aceptes no se guarda nada.",
+      "Puedes pedir cambios, añadir o quitar ejercicios y empezar en blanco si prefieres escribirla tú.",
+      "Hay una versión adaptada, más sencilla, con letra más grande.",
+      "«Imprimir hoja» la prepara en A4; también sirve para guardarla como PDF. «Imprimir soluciones» saca las respuestas."
+    ] },
+    { "id": "rub-curso", "titulo": "Rúbricas · Cambiar de curso", "texto": [
+      "El selector «Curso» de arriba deja ver los cursos pasados. Se consultan, pero no se pueden cambiar.",
+      "En «Mis grupos», «Empezar curso nuevo» guarda el curso actual para consultarlo y propone los mismos grupos sin alumnado.",
+      "Si te equivocas y el curso nuevo aún no tiene trabajo, «Deshacer curso nuevo» lo quita.",
+      "Para reaprovechar trabajo viejo, usa «Traer del curso pasado» en una actividad o situación nueva."
+    ] },
     { "id": "ajustes", "titulo": "Ajustes", "texto": [
-      "Arriba ves con qué cuenta has entrado («Has entrado como…») y el botón «Salir». Quien administra la app ve además «Invitados»: escribe el correo de Google y pulsa «Invitar». En la lista puede cambiar el tope de redacciones de cada persona («Cambiar tope») o quitarla («Quitar»).", "«Datos del colegio»: el nombre, la dirección, el código postal y la localidad, el teléfono, el correo y el código de centro, más el logo («Subir logo» y «Quitar logo»). Salen en la cabecera y en el pie de todos los PDF y Word. Si tu colegio no usa el logo de la Junta de Andalucía, marca «Sin logo de la Junta». Sin el nombre del colegio la app no saca ningún documento: te avisa y te trae aquí.",
+      "Arriba ves con qué cuenta has entrado («Has entrado como…») y el botón «Salir». Quien administra la app ve además «Invitados»: escribe el correo de Google y pulsa «Invitar». En la lista puede cambiar el tope de redacciones de cada persona («Cambiar tope») o quitarla («Quitar»).",
+      "«Datos del colegio»: el nombre, la dirección, el código postal y la localidad, el teléfono, el correo y el código de centro, más el logo («Subir logo» y «Quitar logo»). Salen en la cabecera y en el pie de todos los PDF y Word. Si tu colegio no usa el logo de la Junta de Andalucía, marca «Sin logo de la Junta». Sin el nombre del colegio la app no saca ningún documento: te avisa y te trae aquí. También es el colegio que sale arriba en la hoja del alumno de Rúbricas.",
       "«Datos del curso»: el curso, el ciclo, la localidad, la coordinadora y la tabla del profesorado, con una fila por docente. Los asistentes de cada acta salen de esa tabla, en ese orden.",
-      "«Redacciones de Claude»: te dice cuántas redacciones te quedan este mes. No necesitas ninguna clave. En la copia sin internet esta tarjeta es «Clave de Claude»: pega tu clave y pulsa «Guardar la clave» (o «Usar la de Rúbricas»).",
+      "«Redacciones de Claude»: te dice cuántas redacciones te quedan este mes. No necesitas ninguna clave. En la copia sin internet esta tarjeta es «Clave de Claude»: pega tu clave y pulsa «Guardar la clave» (o «Usar la de Rúbricas», si aún no has pasado tus rúbricas a Mis actas).",
+      "«Escala de las rúbricas»: lo que vale cada nivel (Insuficiente, Suficiente, Bien, Notable y Sobresaliente) al calificar. Cambia las notas del curso actual de Rúbricas; los cursos pasados conservan la suya.",
       "«Estilo de redacción»: elige si quieres los textos escuetos, normales o desarrollados, y el lenguaje sencillo, normal o técnico. Si quieres, escribe tus propias instrucciones («di siempre el alumnado»). Vale para todo lo que redacta Claude y se guarda solo.",
       "«Mi tutoría»: tu grupo y tu nombre, para las entrevistas con las familias.",
       "«Actas del documento antiguo»: el botón «Traer actas del documento antiguo» te lleva a la pantalla para traer las actas de este curso que tengas en un documento de Word."
@@ -142,17 +204,18 @@
       { "p": "Me pide permiso cada vez", "r": "Cuando Chrome te pregunte por el permiso de la carpeta, pulsa «Dar permiso» y en su ventana elige «Permitir en cada visita». Así no te lo vuelve a pedir en ese dispositivo. Si elegiste «Permitir esta vez», te lo pedirá en cada visita: pulsa «Dar permiso» otra vez y elige la otra opción." },
       { "p": "¿Dónde consigo la clave de Claude?", "soloCopia": true, "r": "Si alguien te ha dado una, pégala en Ajustes. Si no, créala en https://console.anthropic.com/settings/keys (necesitas una cuenta de Anthropic con saldo). Empieza por «sk-ant-» y solo se ve una vez al crearla: cópiala entera." },
       { "p": "¿Cuántas redacciones puedo pedir a Claude?", "r": "Cada pulsación de un botón que pide un texto a Claude es una redacción. Cada invitado tiene 25 al mes y el día 1 vuelve a tener 25. En Ajustes ves cuántas te quedan, y la app te avisa cuando te quedan 5 o menos. Si se acaban, el resto de la app sigue funcionando y puedes escribir tú el texto." },
-      { "p": "¿De dónde sale el alumnado?", "r": "De la app Rúbricas: en «Mis grupos» se sube el listado de cada grupo bajado de Séneca. Después se abre aquí la carpeta RÚBRICAS, una sola vez. Mis actas solo la lee, nunca escribe en ella." },
+      { "p": "¿De dónde sale el alumnado?", "r": "De la pestaña Rúbricas: en «Mis grupos» se sube el listado de cada grupo bajado de Séneca. Si antes usabas la app Rúbricas, la primera vez que abras la pestaña pulsa «Pasar mis rúbricas»; hasta entonces, Mis actas lee tu carpeta RÚBRICAS (solo la lee, nunca escribe en ella)." },
       { "p": "¿Dónde queda el acta que creo?", "r": "En tu carpeta ACTAS, dentro de «documentos», del curso y de la subcarpeta de su tipo (por ejemplo, ACTAS › documentos › 2026-2027 › Actas de ciclo), en PDF y en Word. Con «Abrir PDF» y «Abrir Word», en el aviso al crearla o en «Actas hechas» del inicio, la abres sin buscarla. Si creas otra acta el mismo día, el nombre lleva (2), (3)…; nunca se borra un acta distinta." },
       { "p": "¿Dónde están mis papeles?", "r": "Cada PDF y cada Word que saca Mis actas va a su subcarpeta, dentro de ACTAS › documentos › el curso: «Actas de ciclo» (las actas y su libro), «Familias» (las reuniones con familias y su libro), «Evaluación» (los anexos de las actas de evaluación) y «Atención a la diversidad» (el acta de la reunión del equipo docente y la solicitud a orientación). El nombre lleva la fecha, el tipo de papel y el grupo o el alumno con su nombre y apellidos, así que puedes buscarlo por el nombre en el buscador de tu Drive. Los papeles que ya tenías se ordenan solos la primera vez que abres la carpeta, y te avisa con «He ordenado N papeles en sus carpetas.». Lo que hayas puesto tú a mano en esa carpeta no se toca. Para verlos todos juntos, pulsa «Mis papeles» en Inicio." },
       { "p": "¿Dónde está la política de privacidad?", "r": "En el enlace «Privacidad» del pie de la app, o directamente en https://mis-actas.vercel.app/privacidad.html. Cuenta qué datos se usan y dónde se guardan." },
       { "p": "¿Cómo aviso de un fallo o propongo una mejora?", "r": "Pulsa «Soporte», abajo a la derecha, en cualquier pantalla (también en Mis apps). Elige «Algo no funciona» o «Propongo una mejora», cuéntalo con tus palabras y, si quieres, pega una captura. Antes de enviarla, comprueba que no enseñe datos de personas. Si has entrado con Google, te avisaremos en tu correo." },
-      { "p": "¿Qué se envía a Claude?", "r": "Solo los títulos de los puntos, tus notas y las iniciales del alumnado (por ejemplo, M.S.P.). Nunca un nombre completo." },
+      { "p": "¿Qué se envía a Claude?", "r": "En las actas, solo los títulos de los puntos, tus notas y las iniciales del alumnado (por ejemplo, M.S.P.). En Rúbricas, solo el criterio, el área, el curso y las ideas que escribes. Nunca un nombre completo." },
       { "p": "¿Cómo paso a la app las actas que ya tenía en otro documento?", "r": "En «Ajustes» o en «Lo habitual», pulsa «Traer actas del documento antiguo» y elige el documento en Word. Se traen solo las actas de este curso, cada una en PDF y en Word." },
       { "p": "¿Se pierde lo que escribo si cierro?", "r": "No. Los borradores se guardan solos en tu carpeta ACTAS y puedes seguirlos desde el inicio." }
     ] }
   ],
-  "avisos": {"invitados": "Solo pueden entrar las cuentas de esta lista. Cada invitado nuevo puede pedir 25 redacciones a Claude al mes; puedes cambiarlo o dejarlo sin tope. Si quitas a alguien, no podrá volver a entrar.", "carpeta-actas": "Es la carpeta ACTAS de tu Drive (Mi unidad › ACTAS). La crea el documento de actas de Google Docs la primera vez que lo usas. Aquí se guardan tus borradores, tus datos y tus actas.",
+  "avisos": {"invitados": "Solo pueden entrar las cuentas de esta lista. Cada invitado nuevo puede pedir 25 redacciones a Claude al mes; puedes cambiarlo o dejarlo sin tope. Si quitas a alguien, no podrá volver a entrar.",
+    "carpeta-actas": "Es la carpeta ACTAS de tu Drive (Mi unidad › ACTAS). La crea el documento de actas de Google Docs la primera vez que lo usas. Aquí se guardan tus borradores, tus datos y tus actas.",
     "carpeta-rubricas": "Es la carpeta RÚBRICAS de tu Drive, la de la app Rúbricas. Solo se lee, nunca se escribe en ella. Se abre una sola vez y la app la recuerda. De ahí sale la lista de tu alumnado.",
     "colegio-sin-junta": "Márcala si tu colegio no usa el logo de la Junta de Andalucía (por ejemplo, un colegio concertado). Sin él, tampoco salen el escudo ni la línea de la Consejería.",
     "tabla-profesorado": "Una fila por docente, en el orden en que quieres que salgan en el acta. El cargo es lo que va delante del nombre (por ejemplo, «Tutora de 3.º A»). Los asistentes de cada acta salen de esta tabla.",
@@ -175,6 +238,11 @@
     "peticion-solicitud": "Lo observado y las medidas del acta ya vienen copiados. Solo cuentas cómo han ido las medidas. Si la haces antes de los tres meses, la app pide el motivo y lo escribe en la solicitud. A Claude solo viajan iniciales del alumnado, nunca un nombre.",
     "pra-claude": "Claude escribe sobre ese alumno y esa área, siempre como «el alumno» o «la alumna». A Claude solo viajan iniciales del alumnado, nunca un nombre. Si marcas un área más, solo escribe la nueva.",
     "final-curso": "Claude escribe cada apartado del informe de ese alumno, siempre como «el alumno» o «la alumna» (o sin marcar el género si no se sabe). A Claude solo viajan iniciales del alumnado, nunca un nombre. El texto lo revisas tú antes de copiarlo o de crear el PDF y el Word.",
-    "crear-acta": "Monta el acta con el membrete oficial y la guarda en tu carpeta ACTAS, en la subcarpeta de su tipo, en PDF y en Word. Si vuelves a crear la misma acta, sustituye sus ficheros."
+    "crear-acta": "Monta el acta con el membrete oficial y la guarda en tu carpeta ACTAS, en la subcarpeta de su tipo, en PDF y en Word. Si vuelves a crear la misma acta, sustituye sus ficheros.",
+    "rub-listado": "Baja el listado del grupo desde Séneca (CSV o XLS) y suéltalo aquí. Solo se guardan los nombres.",
+    "rub-cursoNuevo": "Guarda el curso actual solo para consultar y empieza otro con los mismos grupos, sin alumnado.",
+    "rub-traer": "Copia una actividad o situación de un curso pasado al actual, con su rúbrica y sin notas.",
+    "rub-seneca": "Prepara el texto por apartados para copiarlo uno a uno en Séneca. Séneca no admite que una aplicación le meta datos.",
+    "rub-claude": "Cuenta tu idea en una o dos frases y Claude propone la actividad y su rúbrica. Es una propuesta: revísala. No escribas nombres de alumnos."
   }
 }

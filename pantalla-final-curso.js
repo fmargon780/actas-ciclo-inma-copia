@@ -33,7 +33,7 @@
       return x < y ? -1 : x > y ? 1 : 0;
     });
     var hoy = hoyIso(), curso = g.cursoEscolar(hoy);
-    var raizRub = est.alumnado && est.alumnado.estado === 'ok' && est.alumnado.handle ? g.Carpeta.adaptador(est.alumnado.handle) : null;
+    var raizRub = est.alumnado && est.alumnado.estado === 'ok' && est.alumnado.raiz ? est.alumnado.raiz : null;
     var fuentes = await S.leerFuentes(est.raiz, raizRub, tut.grupo, curso, hoy), guardados = F.delCurso(await F.listar(est.raiz), curso), informes = {};
     var sel = alumnos.length ? 0 : -1;
 

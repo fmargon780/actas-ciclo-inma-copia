@@ -78,9 +78,9 @@
     var cambio = g.Autoguardado.crear(est, e, E.guardar).cambio, textos = null, lugarAreas = h('div', { class: 'dos-col', id: 'areasEvaluacion' });
     var hayRubricas = false, cifrasCambiadas = false;
     /* Fila 60: el % con dificultades sale de las notas de Rúbricas (solo se lee su carpeta). Una acta ya creada no se toca. */
-    if (lista && est.alumnado.handle && e.estado !== 'creada') {
+    if (lista && est.alumnado.raiz && e.estado !== 'creada') {
       try {
-        var res = await g.EvaluacionRubricas.leer(g.Carpeta.adaptador(est.alumnado.handle), e);
+        var res = await g.EvaluacionRubricas.leer(est.alumnado.raiz, e);
         hayRubricas = res.estado === 'ok';
         var antes = JSON.stringify(e.areas), ap = g.EvaluacionRubricas.aplicar(e, res);
         cifrasCambiadas = ap.cambiaron;
