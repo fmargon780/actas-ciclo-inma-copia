@@ -1,6 +1,6 @@
 {
   "version": "actas v40",
-  "commit": "91983e9",
+  "commit": "bb63ac8",
   "ficheros": {
     "ABRIR MIS ACTAS.html": "92e4cdf0e6d55ebc4c57453d77e71b8db251f8f7e248ab3fbc78ec81a39f0eb6",
     "acta-docx.js": "87f83d17b094ec864acbcc3a3c36fae3e46043efad1f53021995d61024192916",
@@ -23,7 +23,7 @@
     "carpeta.js": "40ca95b96deb9b2f62c63db8362dd9b45a1cdcd71896e00b493e778f1564cc1d",
     "claude.js": "ac65e571b21a4835f5e424af34725bf2e2ef8fb32a84a7407d79eedf32fb74c7",
     "colegio.js": "9646ab8e5798baf10b02a9a1c0788ea0d07e7863e3ff11dad9e57a50be34a5da",
-    "commit.js": "6c50634e77c2c7c7a68313fbcc28e70467a2209acf4207f96fce21e3f020d89b",
+    "commit.js": "b3b2b95be0059d1bada2ddb67357072b439e9374e1bb9e8719f826bfd9752725",
     "comunicacion-claude.js": "3b9234ca731c6347329671a4027c053fd9bb7ad383c7ef47cb79c6f8bbf8f056",
     "comunicacion-docs.js": "0a680905a8cd5fb23c3ecb696cf529853e93464bdddeed1c3b159eccc4f4ba5f",
     "comunicacion.js": "42f4763917aa815544b2580628dc46c6c40f19dbeb75f5c2e579855b0c8cb864",
