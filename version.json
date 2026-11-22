@@ -1,6 +1,6 @@
 {
-  "version": "actas v42",
-  "commit": "ff07e22",
+  "version": "actas v43",
+  "commit": "057f2c1",
   "ficheros": {
     "ABRIR MIS ACTAS.html": "92e4cdf0e6d55ebc4c57453d77e71b8db251f8f7e248ab3fbc78ec81a39f0eb6",
     "acta-docx.js": "87f83d17b094ec864acbcc3a3c36fae3e46043efad1f53021995d61024192916",
@@ -15,15 +15,15 @@
     "anonimizar.js": "9e99ae06cc2a00147ae26d2ccef06dffdf4f48bf8a8c666526bc9be70f92f045",
     "arranque.js": "89b53036aa06f08f9a8b250838cff52fa554f6f2cab079d51eb8e3330c51542b",
     "autoguardado.js": "cfdb928ecebf640442bcc33463e2b050753a248c027520d9c158c586901dae82",
-    "ayuda-datos.js": "67071fb6534b0f7535944f7266d51149d456994dd89d34b48fb60f7fe3a6370d",
+    "ayuda-datos.js": "979d4aeee442ce50fe326673d4e17a6609e57c2991d4329d89801ec3726e7dfd",
     "ayuda.js": "14123196712d7df745eace3c107fe05767ec40b9878bbf3275394e50cf5e8a6c",
-    "ayuda.json": "2c112c51f65c449a1d8abc59295e3513282660bf54d0ee698a878d71ddbd8410",
+    "ayuda.json": "a7c16ac5e89955ce63f2c3e548a33da30145edc39d477ef8d81dc49102833827",
     "borradores.js": "94802a327c9d2807bbbc9c6ed75eba9f342b1d24ccfaab4e1e663d55d731ab94",
     "buscador-alumno.js": "a6e28856f18ae11bf18a6f81c969135950271a1f5256cc2e472d30fb3282dd14",
     "carpeta.js": "02a772baebc9fb64b3736e5bb3b85908087f56e1296346d36473d6ab23f0dfef",
     "claude.js": "ac65e571b21a4835f5e424af34725bf2e2ef8fb32a84a7407d79eedf32fb74c7",
     "colegio.js": "9646ab8e5798baf10b02a9a1c0788ea0d07e7863e3ff11dad9e57a50be34a5da",
-    "commit.js": "26dc9b5da81b4f48607295e1c69b9f3992cb0cbee744875f92ad4228ff6b3c9c",
+    "commit.js": "5686d186108431b7160d888c8bba8e65485446aaf2e80ec39c7fc54cbfbb3d4f",
     "comunicacion-claude.js": "3b9234ca731c6347329671a4027c053fd9bb7ad383c7ef47cb79c6f8bbf8f056",
     "comunicacion-docs.js": "0a680905a8cd5fb23c3ecb696cf529853e93464bdddeed1c3b159eccc4f4ba5f",
     "comunicacion.js": "42f4763917aa815544b2580628dc46c6c40f19dbeb75f5c2e579855b0c8cb864",
@@ -61,7 +61,7 @@
     "icon-192.png": "e9f9ac775cbcddb9abd857d066e8c50a0afff892ed0c5185fa6f790a5fe244bd",
     "icon-512.png": "e64f89e97a5d40be574afa05805e10b6f87d1773a3cd57244c3d87650014d3a1",
     "index.html": "6b7d84543f2ed399ff6ab345d99d00a3520d566d242d210b3ed5a8e35fb9c19e",
-    "instalable.js": "22d572b9ed155c3952eff313ff35290d26d06306115d5e879722d0eee2972c81",
+    "instalable.js": "b6a036607060074ba50967dc482c1104dc1f2959d5997b95d24f26e9498d288b",
     "leer-fichero.js": "dbae04e39a19b3755b665333eedeb1023b65bc56259a6cff5478b4116ec8e5e0",
     "lib/pdf-lib.min.js": "0f9a5cad07941f0826586c94e089d89b918c46e5c17cf2d5a3c6f666e3bc694f",
     "libro.js": "7c52019ba265bd2f5429240bf35c62eabe95265d9682adbdde653458e996e99c",
@@ -163,7 +163,7 @@
     "soporte-app.js": "bb830d97da3711bd7804b4da74a21e7383c18aadc3da1466047402940eed7aae",
     "traer.js": "0d945e3835f82a69cfd93dc3dd8f92de600974442f124148aea345dd6048f893",
     "tutoria.js": "bdb20e920dfa584e855d31ec8d3dc4bdc6851956aa152377d278afcd423fbab3",
-    "version.js": "0b94d68f33f1fdee66e4deb6b2e387e62bde91891ec294807f742dceb51938e8",
+    "version.js": "0567e4478312878474753030fb436ebba3954255d1ec58be38aafbfefd9c36c4",
     "zip.js": "c0e82cb562f3d7a9607ce4ed0d94e699949d5e556e1691523930ff2ec6bd2e2a"
   }
 }

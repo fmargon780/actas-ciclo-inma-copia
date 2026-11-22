@@ -13,7 +13,8 @@
       "Para usar la app en internet entras con tu cuenta de Google. La app está en prueba con un grupo cerrado de docentes: solo pasan las cuentas invitadas. Si tu cuenta del colegio no te deja entrar, prueba con tu cuenta personal de Google. La entrada se recuerda 30 días en ese navegador.",
       "Mis actas te ayuda a escribir las actas de tu ciclo y a llevar las entrevistas con las familias. Antes de empezar hay seis cosas que preparar. Se hacen una sola vez.",
       "1. Elige tu carpeta ACTAS. 2. Rellena los datos de tu colegio. 3. Pon tu alumnado en la pestaña Rúbricas, de donde sale para tus actas. 4. Rellena los datos del curso. 5. Empieza tu primera acta. En la copia sin internet, antes de empezar pega tu clave de Claude en Ajustes.",
-      "La guía te marca ✓ lo que ya está hecho. Puedes abrirla otra vez con el botón «Ver la guía de primeros pasos» de esta página."
+      "La guía te marca ✓ lo que ya está hecho. Puedes abrirla otra vez con el botón «Ver la guía de primeros pasos» de esta página.",
+      "Si la app lleva tiempo abierta, avisa sola cuando hay una versión nueva: arriba sale «Hay versión nueva». No se recarga sin que lo pidas. Pulsa «Recargar» cuando te venga bien; lo que estabas escribiendo se guarda antes."
     ] },
     { "id": "carpeta", "titulo": "Elegir la carpeta ACTAS", "texto": [
       "La primera vez, Mis actas te pide la carpeta ACTAS de tu Drive (Mi unidad › ACTAS). Pulsa «Elegir mi carpeta ACTAS» y elígela.",
