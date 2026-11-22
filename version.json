@@ -1,6 +1,6 @@
 {
-  "version": "actas v43",
-  "commit": "057f2c1",
+  "version": "actas v44",
+  "commit": "45ffdd6",
   "ficheros": {
     "ABRIR MIS ACTAS.html": "92e4cdf0e6d55ebc4c57453d77e71b8db251f8f7e248ab3fbc78ec81a39f0eb6",
     "acta-docx.js": "87f83d17b094ec864acbcc3a3c36fae3e46043efad1f53021995d61024192916",
@@ -13,17 +13,17 @@
     "alumnado-claude.js": "96568926813de487dd25fa154120eb2a262eff7cc5f2e7777207c8ada10a5c8a",
     "alumnado.js": "cabac99052cdb08efd675b68f176358c5bf014fb2b5add7020da6ca600caa60b",
     "anonimizar.js": "9e99ae06cc2a00147ae26d2ccef06dffdf4f48bf8a8c666526bc9be70f92f045",
-    "arranque.js": "89b53036aa06f08f9a8b250838cff52fa554f6f2cab079d51eb8e3330c51542b",
+    "arranque.js": "43a1aab645392f7e90357694a3f2d4096ed3472532dc235375149a37c166bca0",
     "autoguardado.js": "cfdb928ecebf640442bcc33463e2b050753a248c027520d9c158c586901dae82",
-    "ayuda-datos.js": "979d4aeee442ce50fe326673d4e17a6609e57c2991d4329d89801ec3726e7dfd",
+    "ayuda-datos.js": "c61211294c53e8d26f1a21ccfd034a25d1ec3408a1e0de613073cdd6e94bd827",
     "ayuda.js": "14123196712d7df745eace3c107fe05767ec40b9878bbf3275394e50cf5e8a6c",
-    "ayuda.json": "a7c16ac5e89955ce63f2c3e548a33da30145edc39d477ef8d81dc49102833827",
+    "ayuda.json": "f9f71c1156413e785ef1022439a1f2410a7eb0009988bc8f46dcceca7bc31390",
     "borradores.js": "94802a327c9d2807bbbc9c6ed75eba9f342b1d24ccfaab4e1e663d55d731ab94",
     "buscador-alumno.js": "a6e28856f18ae11bf18a6f81c969135950271a1f5256cc2e472d30fb3282dd14",
     "carpeta.js": "02a772baebc9fb64b3736e5bb3b85908087f56e1296346d36473d6ab23f0dfef",
     "claude.js": "ac65e571b21a4835f5e424af34725bf2e2ef8fb32a84a7407d79eedf32fb74c7",
     "colegio.js": "9646ab8e5798baf10b02a9a1c0788ea0d07e7863e3ff11dad9e57a50be34a5da",
-    "commit.js": "5686d186108431b7160d888c8bba8e65485446aaf2e80ec39c7fc54cbfbb3d4f",
+    "commit.js": "1d7d6f1c2ade2007c2d2d4b7bc70a5025b1691603072c140a0bbc9155a0d48a1",
     "comunicacion-claude.js": "3b9234ca731c6347329671a4027c053fd9bb7ad383c7ef47cb79c6f8bbf8f056",
     "comunicacion-docs.js": "0a680905a8cd5fb23c3ecb696cf529853e93464bdddeed1c3b159eccc4f4ba5f",
     "comunicacion.js": "42f4763917aa815544b2580628dc46c6c40f19dbeb75f5c2e579855b0c8cb864",
@@ -109,7 +109,7 @@
     "pantalla-revision.js": "171c7db5e2ba1eaa79af37173cd36abdcebada9c7f4348cf671f887be7a3e88e",
     "pantalla-traer.js": "3075f9ed1461198de2183105985c77d21fe1d277a4c83baa89cacddb4b3875e9",
     "pantalla-tutoria.js": "18c0bdacce25784f8a488db70e8298c7b2055c7704cafa23bc8d4cae75bcc990",
-    "pantalla.js": "bda91bdb8add4d5f1187508da4c9f2bdca802fee6d8cba28e557f4089dd9c929",
+    "pantalla.js": "22f38d3b08812fda6b08d22cfb8fafc55c4920df468398f84955abd7c2bdc2ec",
     "papeles.js": "686e0b5c8430becf3fd4cef0b91703d537bfa663ee96e48e85b35705bbf472ee",
     "peticion-claude.js": "fd2846ac4b61a148f59a72efa66eebce917138e5f5d22ca345e7d5496250dff2",
     "peticion-docs.js": "8a7469b6941df75e9a27c618690bd48066778a8ac2146ca926400e2bd973ee96",
@@ -163,7 +163,7 @@
     "soporte-app.js": "bb830d97da3711bd7804b4da74a21e7383c18aadc3da1466047402940eed7aae",
     "traer.js": "0d945e3835f82a69cfd93dc3dd8f92de600974442f124148aea345dd6048f893",
     "tutoria.js": "bdb20e920dfa584e855d31ec8d3dc4bdc6851956aa152377d278afcd423fbab3",
-    "version.js": "0567e4478312878474753030fb436ebba3954255d1ec58be38aafbfefd9c36c4",
+    "version.js": "6d466bee75a6ce34d0d5048bf430ceb72423c45b612022d3544eeb6864026dde",
     "zip.js": "c0e82cb562f3d7a9607ce4ed0d94e699949d5e556e1691523930ff2ec6bd2e2a"
   }
 }

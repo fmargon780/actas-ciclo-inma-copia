@@ -21,6 +21,7 @@
       "Esa carpeta la crea el documento de actas de Google Docs la primera vez que usas su menú. Si no es la carpeta buena, te lo dice.",
       "Para abrir tus carpetas, Chrome te pide permiso. Pulsa «Dar permiso» y, en la ventana de Chrome, elige «Permitir en cada visita»: así no te lo volverá a pedir en ese dispositivo. En un dispositivo nuevo, o si borras los datos del navegador, te lo pedirá una vez más.",
       "Si Chrome tarda en confirmar el permiso, Mis actas no se queda en blanco: a los pocos segundos te enseña la pantalla para dar permiso, y si aun así Chrome no contesta, te deja elegir la carpeta otra vez.",
+      "Mientras falte el permiso o la carpeta, los botones de arriba (Inicio, Rúbricas y Ajustes) hacen lo mismo que el botón grande de la pantalla y, cuando Chrome lo concede, te llevan adonde pulsaste.",
       "Al abrirla, Mis actas ordena sola los PDF y Word que ya habías creado, cada uno en la subcarpeta de su tipo, y te avisa con «He ordenado N papeles en sus carpetas.». No borra nada ni toca lo que hayas puesto tú."
     ] },
     { "id": "inicio", "titulo": "Inicio", "texto": [

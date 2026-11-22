@@ -104,6 +104,9 @@
       await window.PantallaInicio.pintarInicio(est, refrescar);
     };
     est.refrescar = refrescar;
+    /* Fila 120: si se llegó pulsando Rúbricas o Ajustes sin carpeta, se abre esa pantalla en vez del inicio. */
+    var quiso = window.Pantalla.tomarDestino();
+    if (quiso === 'rubricas' || quiso === 'ajustes') est.paso = quiso;
     $('pasoInicio').onclick = async function () { await salir(); est.paso = 'inicio'; est.borrador = null; refrescar(); };
     $('pasoRubricas').onclick = function () { est.abrirRubricas(); };
     $('pasoAjustes').onclick = async function () { await salir(); est.paso = 'ajustes'; est.borrador = null; refrescar(); };
