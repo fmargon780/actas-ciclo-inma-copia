@@ -120,6 +120,7 @@
       "La primera vez que la abres, si tenías tus rúbricas en una carpeta RÚBRICAS, ves «Pasar tus rúbricas aquí». Pulsa «Pasar mis rúbricas»: se copian a tu carpeta ACTAS tus grupos, alumnado, situaciones, actividades y notas de todos los cursos. Solo se hace una vez, y tu carpeta RÚBRICAS no se toca: queda como copia de seguridad. Al terminar, un aviso te dice lo que ha llegado. Si algo falla, se quita lo copiado a medias y puedes pulsar «Volver a intentar».",
       "Si empiezas de cero, la pestaña se abre directamente con la lista de grupos vacía. Si luego descubres que sí tenías una carpeta RÚBRICAS, en «Mis grupos» (mientras no hayas guardado trabajo) tienes el botón «Ya tenía una carpeta RÚBRICAS».",
       "Arriba eliges el curso y ves el grupo y el área elegidos. Los cinco pasos van de «1 · Situación» a «5 · Calificar»; «Mis grupos» es la lista de tus grupos. Al volver de Inicio o de Ajustes, sigues donde estabas.",
+      "Si Rúbricas no se puede abrir, la pantalla ya no se queda como estaba: aparece un aviso rojo que empieza por «No he podido abrir Rúbricas.» y sigue con el motivo (por ejemplo, un permiso que falta o internet cortado). Con ese motivo se sabe qué arreglar.",
       "Séneca sigue siendo el registro oficial: aquí se prepara el listado y tú lo pasas a Séneca."
     ] },
     { "id": "rub-grupos", "titulo": "Rúbricas · Mis grupos", "texto": [

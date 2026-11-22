@@ -42,7 +42,7 @@
     var salir = async function () { if (est.alSalir) { var f = est.alSalir; est.alSalir = null; await f(); } };
     est.salir = salir; app.est = est;
     est.abrirBorrador = function (b) { est.borrador = b; est.paso = 'formulario'; refrescar(); };
-    est.abrirRubricas = async function () { await salir(); est.paso = 'rubricas'; est.borrador = null; refrescar(); };
+    est.abrirRubricas = async function () { try { await salir(); } catch (e) { window.RubTab.avisoNoAbre(e); return; } est.paso = 'rubricas'; est.borrador = null; refrescar(); };
     est.abrirFichas = function () { est.paso = 'fichas'; est.borrador = null; refrescar(); };
     est.abrirEntrevista = function (id) { est.paso = 'entrevista'; est.entrevistaId = id || null; est.entrevistaActual = null; est.borrador = null; refrescar(); };
     est.abrirReunion = function (id) { est.paso = 'reunion'; est.reunionId = id || null; est.reunionActual = null; est.borrador = null; refrescar(); };
@@ -105,7 +105,7 @@
     };
     est.refrescar = refrescar;
     $('pasoInicio').onclick = async function () { await salir(); est.paso = 'inicio'; est.borrador = null; refrescar(); };
-    $('pasoRubricas').onclick = async function () { await salir(); est.paso = 'rubricas'; est.borrador = null; refrescar(); };
+    $('pasoRubricas').onclick = function () { est.abrirRubricas(); };
     $('pasoAjustes').onclick = async function () { await salir(); est.paso = 'ajustes'; est.borrador = null; refrescar(); };
     window.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden' && est.alSalir) est.alSalir(); });
     await refrescar();

@@ -44,8 +44,16 @@
       [boton('Volver a intentar', 'reintentar', function () { pintarPuerta(est, handle, '', true); })]);
   }
 
+  /* Fila 118: si Rúbricas no se puede abrir, la pantalla dice el motivo (antes el fallo se perdía y el botón parecía no hacer nada). */
+  function avisoNoAbre(e) {
+    montar([h('div', { class: 'vacio' }, [h('div', { class: 'aviso error', id: 'errorRubricas', texto: 'No he podido abrir Rúbricas. ' + ((e && e.message) || String(e)) })])]);
+  }
+
   /* Entrada de la pestaña. */
   async function pintar(est) {
+    try { await entrar(est); } catch (e) { avisoNoAbre(e); }
+  }
+  async function entrar(est) {
     if (est.rub && est.rub.montar) { await est.rub.montar(); return; }
     var marca = await g.RubPasar.leerMarca(est, true); /* siempre del disco: otro dispositivo puede haberla puesto */
     var handle = await g.Carpeta.rubricasRecordada();
@@ -181,5 +189,5 @@
     await rub.montar();
   }
 
-  g.RubTab = { pintar: pintar, seccionAyuda: seccionAyuda, TEXTO_PASAR: TEXTO_PASAR };
+  g.RubTab = { pintar: pintar, avisoNoAbre: avisoNoAbre, seccionAyuda: seccionAyuda, TEXTO_PASAR: TEXTO_PASAR };
 })(window);

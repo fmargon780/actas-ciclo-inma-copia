@@ -1,6 +1,6 @@
 {
-  "version": "actas v40",
-  "commit": "1a87c37",
+  "version": "actas v41",
+  "commit": "4ae1504",
   "ficheros": {
     "ABRIR MIS ACTAS.html": "92e4cdf0e6d55ebc4c57453d77e71b8db251f8f7e248ab3fbc78ec81a39f0eb6",
     "acta-docx.js": "87f83d17b094ec864acbcc3a3c36fae3e46043efad1f53021995d61024192916",
@@ -13,17 +13,17 @@
     "alumnado-claude.js": "96568926813de487dd25fa154120eb2a262eff7cc5f2e7777207c8ada10a5c8a",
     "alumnado.js": "cabac99052cdb08efd675b68f176358c5bf014fb2b5add7020da6ca600caa60b",
     "anonimizar.js": "9e99ae06cc2a00147ae26d2ccef06dffdf4f48bf8a8c666526bc9be70f92f045",
-    "arranque.js": "13fe53ac43f911c2509542f831ef5596152d35cda531aab5cd80cdedffa7cdaf",
+    "arranque.js": "89b53036aa06f08f9a8b250838cff52fa554f6f2cab079d51eb8e3330c51542b",
     "autoguardado.js": "cfdb928ecebf640442bcc33463e2b050753a248c027520d9c158c586901dae82",
-    "ayuda-datos.js": "9c454780155d5eed3d6e3287979d78b16ac26f4fadb2124e60cd69a8a6b806cb",
+    "ayuda-datos.js": "81b56e4ab34be3c07fe1c9b5df9400da06c90fb460f98db6573161e376f33db4",
     "ayuda.js": "14123196712d7df745eace3c107fe05767ec40b9878bbf3275394e50cf5e8a6c",
-    "ayuda.json": "884100b3b0c850664d9df04ba9f33de619c9a2c18d6c659ff6da39fa6d8f028f",
+    "ayuda.json": "00a14ed3852586290e9e3a32493a38c7046e56bbe0e97b16b827120973d08bf5",
     "borradores.js": "94802a327c9d2807bbbc9c6ed75eba9f342b1d24ccfaab4e1e663d55d731ab94",
     "buscador-alumno.js": "a6e28856f18ae11bf18a6f81c969135950271a1f5256cc2e472d30fb3282dd14",
     "carpeta.js": "40ca95b96deb9b2f62c63db8362dd9b45a1cdcd71896e00b493e778f1564cc1d",
     "claude.js": "ac65e571b21a4835f5e424af34725bf2e2ef8fb32a84a7407d79eedf32fb74c7",
     "colegio.js": "9646ab8e5798baf10b02a9a1c0788ea0d07e7863e3ff11dad9e57a50be34a5da",
-    "commit.js": "061607fd33ba6e3c2cb5617ae982d5e953ae06f68dd3a5afb8e62aab19e9580f",
+    "commit.js": "c68938ecd573f4a176ef2c4e72df7de5fed8b98b0148e350db3b9292db2eaf36",
     "comunicacion-claude.js": "3b9234ca731c6347329671a4027c053fd9bb7ad383c7ef47cb79c6f8bbf8f056",
     "comunicacion-docs.js": "0a680905a8cd5fb23c3ecb696cf529853e93464bdddeed1c3b159eccc4f4ba5f",
     "comunicacion.js": "42f4763917aa815544b2580628dc46c6c40f19dbeb75f5c2e579855b0c8cb864",
@@ -152,7 +152,7 @@
     "rubricas/pantalla-traer.js": "7e9d843d8f9d6fadd6389b53eb76ad585bccf508e7ed62e5bdea42f3ab411fd7",
     "rubricas/pantalla.js": "78a72fd27df22b2103177e6ac95416be2f008e29b734d2b682b40014a0b96b62",
     "rubricas/pasar.js": "41d74d054d2f6c0bf389f42d7dbac984163686cd552b78a2154499a577d0bacf",
-    "rubricas/pestana.js": "afeb80fd72875aa062dc0b4a39919bd445b3d70e64fdf1f3d16ff47840ebcbca",
+    "rubricas/pestana.js": "45c5d25cc303edfbf54d3ab3d01b38cd869b4039daa56d2c84bb2d1d3f273531",
     "rubricas/rubrica.js": "6a7223f32e863ed4473925725fbda8c4be18672548f71ca4267d9ba52b1b9386",
     "rubricas/seneca.js": "b4da9a2cce1b5fee88021aa71a662af9de95910ea1bf737d1074fed8b2eae001",
     "rubricas/situacion.js": "31a0081d1b8f805e82f018462b2d02b78edb6134cd8e3c3844cee0ff25e2b91d",
@@ -163,7 +163,7 @@
     "soporte-app.js": "bb830d97da3711bd7804b4da74a21e7383c18aadc3da1466047402940eed7aae",
     "traer.js": "0d945e3835f82a69cfd93dc3dd8f92de600974442f124148aea345dd6048f893",
     "tutoria.js": "bdb20e920dfa584e855d31ec8d3dc4bdc6851956aa152377d278afcd423fbab3",
-    "version.js": "76a53040b3fec900f58af1f17819898529f1c8cf0e953030ca5ee575a1030426",
+    "version.js": "2f9403e35718ad5997a5f58f08e758ffb112ee0afacfe4c3bd00f15ed168a380",
     "zip.js": "c0e82cb562f3d7a9607ce4ed0d94e699949d5e556e1691523930ff2ec6bd2e2a"
   }
 }
