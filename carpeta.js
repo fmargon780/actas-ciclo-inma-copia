@@ -175,9 +175,16 @@
   async function recordada() {
     try { return (await usarBD('readonly', function (s) { return s.get(CLAVE); })) || null; } catch (e) { return null; }
   }
-  /* 'granted' si se puede usar ya; si no, hace falta un clic de Inma (pedirPermiso). */
-  async function permiso(h) { try { return await h.queryPermission({ mode: 'readwrite' }); } catch (e) { return 'prompt'; } }
-  async function pedirPermiso(h) { try { return (await h.requestPermission({ mode: 'readwrite' })) === 'granted'; } catch (e) { return false; } }
+  /* Si Chrome no contesta a tiempo (a veces no contesta nunca), se sigue como si hiciera falta un clic. */
+  function conLimite(promesa, ms, siSePasa) {
+    return new Promise(function (resolver) {
+      var t = g.setTimeout(function () { resolver(siSePasa); }, ms);
+      Promise.resolve(promesa).then(function (v) { g.clearTimeout(t); resolver(v); }, function () { g.clearTimeout(t); resolver(siSePasa); });
+    });
+  }
+  /* 'granted' si se puede usar ya; si no, hace falta un clic de Inma (pedirPermiso). Chrome sin contestar en 5 s = 'prompt'. */
+  async function permiso(h) { try { return await conLimite(h.queryPermission({ mode: 'readwrite' }), 5000, 'prompt'); } catch (e) { return 'prompt'; } }
+  async function pedirPermiso(h) { try { return (await conLimite(h.requestPermission({ mode: 'readwrite' }), 15000, 'sin respuesta')) === 'granted'; } catch (e) { return false; } }
   async function olvidar() { try { await usarBD('readwrite', function (s) { return s.delete(CLAVE); }); } catch (e) { /* nada */ } }
 
   /* La carpeta RÚBRICAS de siempre (solo se lee): la usan solo «Pasar tus rúbricas aquí» y «Ya tenía una carpeta RÚBRICAS», en la pestaña Rúbricas. */
